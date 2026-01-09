@@ -5,8 +5,8 @@ class CreateGames < ActiveRecord::Migration[8.1]
       t.integer :turn_count
       t.string :finish_reason
       t.datetime :finished_at
-      t.references :winner, null: false, foreign_key: true
-      t.references :loser, null: false, foreign_key: true
+      t.references :winner, null: true, foreign_key: { to_table: :users }
+      t.references :loser, null: true, foreign_key: { to_table: :users }
       t.integer :seed
 
       t.timestamps
