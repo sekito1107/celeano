@@ -128,17 +128,8 @@ class GameCard < ApplicationRecord
       timing: timing
     )
 
-    # 狂気状態なら狂気版を優先
-    insane_timing = "#{timing}_insane".to_sym
-    actual_timing = if context.insane? && effect_definition.has_timing?(insane_timing)
-      log_effect_trigger(insane_timing, target, is_insane: true)
-      insane_timing
-    elsif effect_definition.has_timing?(timing)
-      log_effect_trigger(timing, target, is_insane: false)
-      timing
-    else
-      return
-    end
+    actual_timing = resolve_actual_timing(timing, context, effect_definition)
+    return unless actual_timing
 
     effect_definition.execute(actual_timing, context)
   end
@@ -169,6 +160,19 @@ class GameCard < ApplicationRecord
       is_insane: is_insane,
       target_id: target&.id
     })
+  end
+
+  # 狂気状態なら狂気版タイミングを優先して返す
+  def resolve_actual_timing(timing, context, effect_definition)
+    insane_timing = "#{timing}_insane".to_sym
+
+    if context.insane? && effect_definition.has_timing?(insane_timing)
+      log_effect_trigger(insane_timing, context.target, is_insane: true)
+      insane_timing
+    elsif effect_definition.has_timing?(timing)
+      log_effect_trigger(timing, context.target, is_insane: false)
+      timing
+    end
   end
 
   def initialize_stats

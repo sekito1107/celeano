@@ -8,10 +8,18 @@ class ResolveDamage
     game = context.game
     calculator = DamageCalculator.new(game)
 
-    damage_results = build_damage_results(attack_plan, calculator)
-    apply_all_damage(damage_results)
+    ActiveRecord::Base.transaction do
+      # Phase 1: 攻撃時効果の発動（バフ等）
+      trigger_attack_effects(attack_plan)
 
-    context.damage_results = damage_results
+      # Phase 2: ダメージ計算（バフ適用後の状態で計算）
+      damage_results = build_damage_results(attack_plan, calculator)
+
+      # Phase 3: ダメージ適用
+      apply_all_damage(damage_results)
+
+      context.damage_results = damage_results
+    end
   end
 
   private
@@ -29,29 +37,45 @@ class ResolveDamage
     end
   end
 
+  def trigger_attack_effects(attack_plan)
+    attack_plan.each do |attack|
+      attacker = attack[:attacker]
+      target = attack[:target]
+      attacker.trigger(:on_attack, target)
+    end
+  end
+
+
   def apply_all_damage(damage_results)
-    ActiveRecord::Base.transaction do
-      damage_results.each do |result|
-        break if context.game.reload.finished?
+    damage_results.each do |result|
+      break if context.game.reload.finished?
+      apply_single_attack(result)
+    end
+  end
 
-        attacker = result[:attacker]
-        target = result[:target]
-        damage = result[:damage]
-        target_type = result[:target_type]
+  def apply_single_attack(result)
+    attacker = result[:attacker]
+    target = result[:target]
+    damage = result[:damage]
+    target_type = result[:target_type]
 
-        target_info = target_type == :player ?
-          { target_type: "player", target_player_id: target.id } :
-          { target_type: "unit", target_card_id: target.id, target_card_name: target.card.name }
+    target_info = build_target_info(target, target_type)
 
-        attacker.log_event!(:attack, {
-          attacker_id: attacker.id,
-          attacker_name: attacker.card.name,
-          damage: damage
-        }.merge(target_info))
+    attacker.log_event!(:attack, {
+      attacker_id: attacker.id,
+      attacker_name: attacker.card.name,
+      damage: damage
+    }.merge(target_info))
 
-        target.take_damage!(damage)
-        context.game.check_player_death!(target) if target.is_a?(GamePlayer)
-      end
+    target.take_damage!(damage)
+    context.game.check_player_death!(target) if target.is_a?(GamePlayer)
+  end
+
+  def build_target_info(target, target_type)
+    if target_type == :player
+      { target_type: "player", target_player_id: target.id }
+    else
+      { target_type: "unit", target_card_id: target.id, target_card_name: target.card.name }
     end
   end
 end
