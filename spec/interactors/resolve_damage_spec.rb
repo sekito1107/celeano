@@ -148,5 +148,75 @@ RSpec.describe ResolveDamage, type: :interactor do
         expect(BattleLog.exists?(event_type: 'game_finish')).to be true
       end
     end
+
+    context '攻撃時効果（on_attack）の発動' do
+      let!(:attacker) do
+        create(:game_card, game: game, user: user, game_player: player,
+               card: unit_card, location: :board, position: :center, current_attack: "3")
+      end
+      let!(:target) do
+        create(:game_card, game: game, user: opponent_user, game_player: opponent,
+               card: unit_card, location: :board, position: :center, current_hp: 10)
+      end
+
+      let(:attack_plan) do
+        [ { attacker: attacker, target: target, target_type: :unit } ]
+      end
+
+      it '攻撃時にtrigger(:on_attack)が呼び出される' do
+        expect(attacker).to receive(:trigger).with(:on_attack, target)
+
+        described_class.call(attack_plan: attack_plan, game: game, turn: turn)
+      end
+
+      it '攻撃時バフがダメージ計算に反映される' do
+        # 攻撃前にバフを付与するモック
+        allow(attacker).to receive(:trigger).with(:on_attack, target) do
+          attacker.modifiers.create!(
+            effect_type: :attack_buff,
+            modification_type: :temporary,
+            value: 5,
+            duration: 1
+          )
+        end
+
+        result = described_class.call(attack_plan: attack_plan, game: game, turn: turn)
+
+        # ダメージが基本攻撃力(3) + バフ(5) = 8 になること
+        expect(result.damage_results.first[:damage]).to eq(8)
+      end
+    end
+
+    context '狂気状態での攻撃時効果' do
+      let(:madness_card) { create(:card, :unit, key_code: "test_madness", attack: "2", hp: 5, threshold_san: 10) }
+      let!(:attacker) do
+        create(:game_card, game: game, user: user, game_player: player,
+               card: madness_card, location: :board, position: :center, current_attack: "2")
+      end
+      let!(:target) do
+        create(:game_card, game: game, user: opponent_user, game_player: opponent,
+               card: unit_card, location: :board, position: :center, current_hp: 10)
+      end
+
+      let(:attack_plan) do
+        [ { attacker: attacker, target: target, target_type: :unit } ]
+      end
+
+      it '正常時はon_attackが呼ばれる' do
+        player.update!(san: 15) # 閾値(10)より上
+
+        expect(attacker).to receive(:trigger).with(:on_attack, target)
+
+        described_class.call(attack_plan: attack_plan, game: game, turn: turn)
+      end
+
+      it '狂気時もon_attackが呼ばれる（内部でon_attack_insaneに分岐）' do
+        player.update!(san: 5) # 閾値(10)以下
+
+        expect(attacker).to receive(:trigger).with(:on_attack, target)
+
+        described_class.call(attack_plan: attack_plan, game: game, turn: turn)
+      end
+    end
   end
 end
