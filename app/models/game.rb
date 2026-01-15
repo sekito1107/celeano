@@ -1,18 +1,64 @@
 class Game < ApplicationRecord
-  # ゲームの状態
+  include Loggable
+
   enum :status, { matching: 0, playing: 1, finished: 2 }, default: :matching
 
-  # 勝者・敗者
+  FINISH_REASONS = {
+    san_death: "SAN_DEATH",
+    hp_death: "HP_DEATH",
+    deck_death: "DECK_DEATH"
+  }.freeze
+
   belongs_to :winner, class_name: "User", optional: true
   belongs_to :loser, class_name: "User", optional: true
 
-  # 参加プレイヤー
   has_many :game_players, dependent: :destroy
 
-  # 参加ユーザー一覧
   has_many :users, through: :game_players
 
-  # 盤面のカードとターン履歴
   has_many :game_cards, dependent: :destroy
   has_many :turns, dependent: :destroy
+  has_many :battle_logs, through: :turns
+
+  def current_turn_number
+    turns.maximum(:turn_number) || 1
+  end
+
+  def finish_game!(loser, reason)
+    winner = game_players.where.not(id: loser.id).first
+
+    transaction do
+      update!(
+        status: :finished,
+        finish_reason: reason,
+        winner_id: winner&.user_id,
+        loser_id: loser.user_id,
+        finished_at: Time.current
+      )
+
+      log_event!(:game_finish, {
+        reason: reason,
+        winner_player_id: winner&.user_id,
+        loser_player_id: loser.user_id
+      })
+    end
+  end
+
+  def check_player_death!(player)
+    return if finished?
+
+    if player.san <= 0
+      finish_game!(player, FINISH_REASONS[:san_death])
+    elsif player.hp <= 0
+      finish_game!(player, FINISH_REASONS[:hp_death])
+    end
+  end
+
+  def check_deck_death!(player)
+    return if finished?
+    return unless player.deck.empty?
+
+    player.log_event!(:deck_empty, {})
+    finish_game!(player, FINISH_REASONS[:deck_death])
+  end
 end

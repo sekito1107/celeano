@@ -1,0 +1,31 @@
+# 黄衣の狂気 (Madness of the Yellow King) - ハスターデッキ
+# db/data/cards/*.yml で定義されたカードの key_code を指定
+
+name: 黄衣の狂気
+description: 相手のSAN値を削り、行動を阻害する
+
+cards:
+  # 低コストユニット (6枚)
+  - yellow_cultist
+  - yellow_cultist
+  - pallid_mask
+  - pallid_mask
+  - tattered_king_servant
+  - carcosa_dreamer
+  # 中コストユニット (5枚)
+  - byakhee
+  - byakhee
+  - yellow_sign_bearer
+  - king_in_yellow_actor
+  - carcosa_herald
+  # 高コストユニット (4枚)
+  - phantom_of_truth
+  - unspeakable_one
+  - the_pallid_king
+  - hastur_avatar
+  # スペル (5枚)
+  - yellow_sign
+  - madness_whisper
+  - carcosa_vision
+  - kings_presence
+  - unspeakable_oath

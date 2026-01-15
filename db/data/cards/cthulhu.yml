@@ -1,0 +1,159 @@
+deep_one_scout:
+  key_code: deep_one_scout
+  name: 深きもの斥候
+  card_type: unit
+  cost: "1"
+  hp: 2
+  attack: "2"
+  keywords: []
+  description: ルルイエの門番。水中から這い上がり、敵を見つける。
+
+cthulhu_cultist:
+  key_code: cthulhu_cultist
+  name: クトゥルフ信者
+  card_type: unit
+  cost: "2"
+  hp: 3
+  attack: "2"
+  keywords: []
+  description: 「いあ！いあ！」と叫びながら突撃する狂気の信者。
+
+shoggoth_spawn:
+  key_code: shoggoth_spawn
+  name: ショゴスの幼体
+  card_type: unit
+  cost: "1d4"
+  hp: 4
+  attack: "2"
+  keywords: []
+  description: 不定形の恐怖。まだ小さいが、その力は侮れない。
+
+star_spawn:
+  key_code: star_spawn
+  name: 星の落とし子
+  card_type: unit
+  cost: "2"
+  hp: 3
+  attack: "3"
+  keywords: [haste]
+  description: 星間から召喚された存在。素早く敵を襲う。
+
+deep_one_warrior:
+  key_code: deep_one_warrior
+  name: 深きもの戦士
+  card_type: unit
+  cost: "3"
+  hp: 4
+  attack: "4"
+  keywords: []
+  description: 海底の戦士。鋭い爪で敵を引き裂く。
+
+dagon_priest:
+  key_code: dagon_priest
+  name: ダゴンの司祭
+  card_type: unit
+  cost: "4"
+  hp: 3
+  attack: "3"
+  keywords: [guardian]
+  description: 深海の神に仕える者。味方を守護する力を持つ。
+
+mother_hydra_offspring:
+  key_code: mother_hydra_offspring
+  name: ハイドラの落とし子
+  card_type: unit
+  cost: "1d6"
+  hp: 5
+  attack: "3"
+  keywords: []
+  description: 深海の母神ハイドラの子。生命力が高い。
+
+shoggoth:
+  key_code: shoggoth
+  name: ショゴス
+  card_type: unit
+  cost: "5"
+  hp: 6
+  attack: "5"
+  keywords: []
+  description: 「テケリ・リ！」無定形の巨大な怪物。
+
+deep_one_lord:
+  key_code: deep_one_lord
+  name: 深きものの長
+  card_type: unit
+  cost: "6"
+  hp: 6
+  attack: "5"
+  keywords: [guardian]
+  description: インスマスを支配する深きものの首領。
+
+cthulhu_spawn:
+  key_code: cthulhu_spawn
+  name: クトゥルフの落とし子
+  card_type: unit
+  cost: "1d6+2"
+  hp: 7
+  attack: "6"
+  keywords: []
+  description: 偉大なるクトゥルフの血を引く存在。
+
+dagon:
+  key_code: dagon
+  name: ダゴン
+  card_type: unit
+  cost: "7"
+  hp: 8
+  attack: "6"
+  keywords: [guardian]
+  description: 深海の父神。その威容は見る者を圧倒する。
+
+hydra:
+  key_code: hydra
+  name: ハイドラ
+  card_type: unit
+  cost: "7"
+  hp: 7
+  attack: "7"
+  keywords: []
+  description: 深海の母神。ダゴンと共に深きものを率いる。
+
+call_of_the_deep:
+  key_code: call_of_the_deep
+  name: 深淵の呼び声
+  card_type: spell
+  cost: "2"
+  keywords: []
+  description: 対象のユニットに3ダメージを与える。
+
+rlyeh_rising:
+  key_code: rlyeh_rising
+  name: ルルイエ浮上
+  card_type: spell
+  cost: "3"
+  keywords: []
+  description: 自分の全ユニットの攻撃力を+2する（このターンのみ）。
+
+ocean_embrace:
+  key_code: ocean_embrace
+  name: 海の抱擁
+  card_type: spell
+  cost: "2"
+  keywords: []
+  description: 対象のユニットのHPを3回復する。
+
+tidal_wave:
+  key_code: tidal_wave
+  name: 津波
+  card_type: spell
+  cost: "4"
+  keywords: []
+  description: 敵の全ユニットに2ダメージを与える。
+
+cthulhu_dream:
+  key_code: cthulhu_dream
+  name: クトゥルフの夢
+  card_type: spell
+  cost: "1d4"
+  keywords: []
+  description: 対象のユニットをスタン状態にする。

@@ -1,14 +1,25 @@
 class User < ApplicationRecord
-  enum :role, { general: 0, admin: 1 }, default: :general
-  # --- 参加記録 (詳細データ: HP/デッキなど) ---
-  has_many :participations, class_name: "GamePlayer", dependent: :destroy
+  # コールバックは定義順に実行されるため、dependent: :destroy より前に定義する
+  before_destroy :ensure_not_playing_active_game
 
-  # --- 対戦したゲーム (ゲーム本体: 勝敗/ターン数など) ---
-  has_many :played_games, through: :participations, source: :game
+  has_many :game_players, dependent: :destroy
+  has_many :games, through: :game_players
 
-  # 勝敗履歴
-  has_many :won_games, class_name: "Game", foreign_key: "winner_id"
-  has_many :lost_games, class_name: "Game", foreign_key: "loser_id"
+  has_many :won_games, class_name: "Game", foreign_key: "winner_id", dependent: :nullify
+  has_many :lost_games, class_name: "Game", foreign_key: "loser_id", dependent: :nullify
+
+  has_many :game_cards, dependent: :destroy
+
+  has_many :moves, dependent: :destroy
 
   validates :name, presence: true
+
+  private
+
+  def ensure_not_playing_active_game
+    if games.where(status: [ :matching, :playing ]).exists?
+      errors.add(:base, "アクティブなゲームに参加中のユーザーは削除できません")
+      throw :abort
+    end
+  end
 end

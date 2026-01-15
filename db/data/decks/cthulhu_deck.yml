@@ -1,0 +1,31 @@
+# ルルイエの覚醒 (Awakening of R'lyeh) - クトゥルフデッキ
+# db/data/cards/*.yml で定義されたカードの key_code を指定
+
+name: ルルイエの覚醒
+description: 深きものどもを展開し、圧倒的な力で押しつぶす
+
+cards:
+  # 低コストユニット (6枚)
+  - deep_one_scout
+  - deep_one_scout
+  - cthulhu_cultist
+  - cthulhu_cultist
+  - shoggoth_spawn
+  - star_spawn
+  # 中コストユニット (5枚)
+  - deep_one_warrior
+  - deep_one_warrior
+  - dagon_priest
+  - mother_hydra_offspring
+  - shoggoth
+  # 高コストユニット (4枚)
+  - deep_one_lord
+  - cthulhu_spawn
+  - dagon
+  - hydra
+  # スペル (5枚)
+  - call_of_the_deep
+  - rlyeh_rising
+  - ocean_embrace
+  - tidal_wave
+  - cthulhu_dream

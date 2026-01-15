@@ -1,0 +1,168 @@
+# 黄衣の狂気 (Madness of the Yellow King) - ハスターデッキ
+# コンセプト: 相手のSAN値を削り、行動を阻害する
+
+# === ユニットカード (12枚) ===
+
+# 低コストユニット
+yellow_cultist:
+  key_code: yellow_cultist
+  name: 黄衣の信者
+  card_type: unit
+  cost: "1"
+  hp: 2
+  attack: "1"
+  keywords: []
+  description: 黄の印を纏う信者。その存在は狂気を呼ぶ。
+
+pallid_mask:
+  key_code: pallid_mask
+  name: 蒼白の仮面
+  card_type: unit
+  cost: "2"
+  hp: 2
+  attack: "2"
+  keywords: [haste]
+  description: カルコサの仮面舞踏会から来た謎の存在。
+
+tattered_king_servant:
+  key_code: tattered_king_servant
+  name: 襤褸の王の従者
+  card_type: unit
+  cost: "1d4"
+  hp: 3
+  attack: "2"
+  keywords: []
+  description: ハスターに仕える者。その黄衣は風になびく。
+
+carcosa_dreamer:
+  key_code: carcosa_dreamer
+  name: カルコサの夢見人
+  card_type: unit
+  cost: "2"
+  hp: 3
+  attack: "1"
+  keywords: []
+  description: 夢と現実の狭間を彷徨う者。
+
+# 中コストユニット
+byakhee:
+  key_code: byakhee
+  name: ビヤーキー
+  card_type: unit
+  cost: "3"
+  hp: 3
+  attack: "3"
+  keywords: [haste]
+  description: 星間を飛ぶ怪物。ハスターの眷属として知られる。
+
+yellow_sign_bearer:
+  key_code: yellow_sign_bearer
+  name: 黄の印の伝道者
+  card_type: unit
+  cost: "4"
+  hp: 4
+  attack: "2"
+  keywords: [guardian]
+  description: 黄の印を広める者。見た者の精神を蝕む。
+
+king_in_yellow_actor:
+  key_code: king_in_yellow_actor
+  name: 黄衣の王の演者
+  card_type: unit
+  cost: "1d6"
+  hp: 4
+  attack: "4"
+  keywords: []
+  description: 禁断の劇の演者。その演技は狂気を伝染させる。
+
+carcosa_herald:
+  key_code: carcosa_herald
+  name: カルコサの使者
+  card_type: unit
+  cost: "5"
+  hp: 5
+  attack: "4"
+  keywords: []
+  description: 黒い星の都市から来た使者。
+
+# 高コストユニット
+phantom_of_truth:
+  key_code: phantom_of_truth
+  name: 真実の幻影
+  card_type: unit
+  cost: "6"
+  hp: 5
+  attack: "5"
+  keywords: [haste]
+  description: 真実を見た者にしか見えない恐怖の幻影。
+
+unspeakable_one:
+  key_code: unspeakable_one
+  name: 名状しがたきもの
+  card_type: unit
+  cost: "6"
+  hp: 6
+  attack: "4"
+  keywords: [guardian]
+  description: その名を口にすることすら許されない存在。
+
+the_pallid_king:
+  key_code: the_pallid_king
+  name: 蒼白の王
+  card_type: unit
+  cost: "7"
+  hp: 7
+  attack: "5"
+  keywords: [guardian]
+  description: ハスターの化身の一つ。その姿は見る者を狂わせる。
+
+hastur_avatar:
+  key_code: hastur_avatar
+  name: ハスターの化身
+  card_type: unit
+  cost: "1d6+3"
+  hp: 8
+  attack: "7"
+  keywords: []
+  description: 黄衣の王ハスターの顕現。その存在は現実を歪める。
+
+# === スペルカード (5枚) ===
+yellow_sign:
+  key_code: yellow_sign
+  name: 黄の印
+  card_type: spell
+  cost: "2"
+  keywords: []
+  description: 対象のユニットをスタン状態にする。
+
+madness_whisper:
+  key_code: madness_whisper
+  name: 狂気の囁き
+  card_type: spell
+  cost: "3"
+  keywords: []
+  description: 相手プレイヤーのSAN値を3減少させる。
+
+carcosa_vision:
+  key_code: carcosa_vision
+  name: カルコサの幻視
+  card_type: spell
+  cost: "1d4"
+  keywords: []
+  description: 対象のユニットに毒(2)を付与する。
+
+kings_presence:
+  key_code: kings_presence
+  name: 王の威光
+  card_type: spell
+  cost: "4"
+  keywords: []
+  description: 敵の全ユニットをスタン状態にする。
+
+unspeakable_oath:
+  key_code: unspeakable_oath
+  name: 名状しがたき誓い
+  card_type: spell
+  cost: "3"
+  keywords: []
+  description: 対象のユニットを破壊する。
