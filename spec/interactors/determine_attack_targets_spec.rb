@@ -108,5 +108,49 @@ RSpec.describe DetermineAttackTargets, type: :interactor do
         expect(result.attack_plan).to be_empty
       end
     end
+
+    context '複数の守護持ちがいる場合' do
+      let(:guardian_card) { create(:card, :unit, :with_guardian) }
+      let!(:attacker) do
+        create(:game_card, game: game, user: user, game_player: player,
+               card: unit_card, location: :board, position: :center, summoned_turn: 0)
+      end
+
+      context 'HPが異なる場合' do
+        let!(:guardian_high_hp) do
+          create(:game_card, game: game, user: opponent_user, game_player: opponent,
+                 card: guardian_card, location: :board, position: :right, current_hp: 5, summoned_turn: 1)
+        end
+        let!(:guardian_low_hp) do
+          create(:game_card, game: game, user: opponent_user, game_player: opponent,
+                 card: guardian_card, location: :board, position: :left, current_hp: 3, summoned_turn: 1)
+        end
+
+        it 'HPが高い守護がターゲットになる' do
+          result = described_class.call(game: game)
+
+          attacker_plan = result.attack_plan.find { |p| p[:attacker] == attacker }
+          expect(attacker_plan[:target]).to eq guardian_high_hp
+        end
+      end
+
+      context 'HPが同じ場合' do
+        let!(:guardian_right) do
+          create(:game_card, game: game, user: opponent_user, game_player: opponent,
+                 card: guardian_card, location: :board, position: :right, current_hp: 4, summoned_turn: 1)
+        end
+        let!(:guardian_left) do
+          create(:game_card, game: game, user: opponent_user, game_player: opponent,
+                 card: guardian_card, location: :board, position: :left, current_hp: 4, summoned_turn: 1)
+        end
+
+        it '左側のポジションにいる守護がターゲットになる' do
+          result = described_class.call(game: game)
+
+          attacker_plan = result.attack_plan.find { |p| p[:attacker] == attacker }
+          expect(attacker_plan[:target]).to eq guardian_left
+        end
+      end
+    end
   end
 end

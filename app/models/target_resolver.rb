@@ -32,7 +32,7 @@ class TargetResolver
                         .includes(:card)
                         .where(location: :board, keywords: { name: GUARDIAN_KEYWORD })
                         .where("current_hp > 0")
-    guardians.order(:id).first
+    guardians.order(current_hp: :desc, position: :asc).first
   end
 
   def player
