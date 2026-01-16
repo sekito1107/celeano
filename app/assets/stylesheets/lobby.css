@@ -16,16 +16,23 @@
   width: 100%; /* Will be larger for scroll */
   height: 100%;
   background-image: 
-    radial-gradient(circle at center, rgba(255, 200, 120, 0.15) 0%, rgba(0, 0, 0, 0) 50%),
-    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.99)),
+    radial-gradient(circle at center, rgba(255, 200, 120, 0.1) 0%, rgba(0, 0, 0, 0) 50%),
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.95)),
     url("lobby/background.png");
-  background-size: cover; /* Or auto/contain depending on image aspect ratio, cover is safe */
-  background-position: center;
+  background-size: cover, cover, auto 110%;
+  background-repeat: no-repeat, no-repeat, repeat-x;
+  background-position: center, center, 0 50%;
   z-index: -1;
-  /* Simple slow pan animation or just static for MVP if image isn't seamless loop compatible */
-  /* Assuming the image is wide and we want to scroll it horizontally */
-  /* For now, just cover. If specific scroll required: */
-  /* animation: panBackground 60s linear infinite; */
+  animation: bgScroll 120s linear infinite;
+}
+
+@keyframes bgScroll {
+  0% {
+    background-position: center, center, 0 50%;
+  }
+  100% {
+    background-position: center, center, -1920px 50%; /* Assuming roughly 1920px width or adequate shift */
+  }
 }
 
 /* Header & User Profile */
