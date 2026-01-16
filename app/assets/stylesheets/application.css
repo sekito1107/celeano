@@ -1,150 +1,451 @@
 /*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
+ * Celeano - Call of Celeano: Archive of the Great Old Ones
+ * CSS Strategy: Vanilla CSS + CSS Variables (no Tailwind)
+ * Theme: Abyssal Library (Final Refinement) - Fog Animation & Logo Tweaks
  */
 
 /* ===========================================
-   CSS Variables
+   CSS Variables - Abyssal Dark Theme
    =========================================== */
 :root {
-  --color-primary: #4f46e5;
-  --color-primary-hover: #4338ca;
-  --color-success: #059669;
-  --color-error: #dc2626;
-  --color-bg: #f9fafb;
-  --color-text: #111827;
-  --color-text-muted: #6b7280;
-  --color-border: #d1d5db;
-  --font-family: system-ui, -apple-system, sans-serif;
+  /* Colors */
+  --color-void-black: #000000;
+  --color-deep-teal: #042f2e;
+  --color-muted-teal: #115e59;
+  --color-faint-cyan: #2dd4bf;
+  --color-text-main: #d1d5db;
+  --color-text-dim: #6b7280;
+  --color-text-logo: #e5e7eb;
+
+  /* Semantic Colors */
+  --color-primary: var(--color-muted-teal);
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  
+  /* Form Colors */
+  --color-form-bg: rgba(5, 12, 12, 0.6);
+  --color-input-bg: rgba(0, 0, 0, 0.8);
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+
+  /* Fonts */
+  --font-logo: 'Cinzel Decorative', cursive;
+  --font-display: 'Shippori Mincho', serif;
+  --font-family: var(--font-display);
+
+  /* Spacing & Radius */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
-  --border-radius: 0.375rem;
+  --border-radius: 6px;
+
+  /* Animations */
+  --duration-normal: 300ms;
 }
 
 /* ===========================================
-   Base Styles
+   Base Styles & Fog Animation
    =========================================== */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Prevent global scrollbar */
+}
+
 body {
   font-family: var(--font-family);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  line-height: 1.5;
+  background-color: var(--color-void-black);
+  color: var(--color-text-main);
+  line-height: 1.6;
   margin: 0;
-  padding: var(--spacing-md);
+  padding: 0;
+  position: relative;
+  
+  background-image:
+    radial-gradient(circle at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.95) 90%),
+    url('backgrounds/ancient_library_dark.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  
+  /* Mobile fallback - prevent jittery scrolling on iOS */
+  @supports (-webkit-touch-callout: none) {
+    background-attachment: scroll;
+  }
+}
+
+/* Fog Animation Layers */
+body::before, body::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Layer 1: Slow drifting deep fog */
+body::before {
+  background: 
+    linear-gradient(20deg, transparent 40%, rgba(4, 47, 46, 0.4) 100%),
+    url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.1"/%3E%3C/svg%3E');
+  mix-blend-mode: overlay;
+  animation: drift 60s infinite linear alternate;
+}
+
+/* Layer 2: Moving mist near the bottom */
+body::after {
+  background: 
+    radial-gradient(ellipse at bottom, rgba(45, 212, 191, 0.15) 0%, transparent 60%);
+  filter: blur(40px);
+  animation: pulse-mist 10s infinite ease-in-out;
+}
+
+@keyframes drift {
+  0% { transform: scale(1.0) translate(0, 0); opacity: 0.5; }
+  100% { transform: scale(1.1) translate(-20px, 10px); opacity: 0.7; }
+}
+
+@keyframes pulse-mist {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 0.6; transform: translateY(-20px); }
 }
 
 /* ===========================================
-   Flash Messages
+   Logo (CSS Implementation)
    =========================================== */
-.flash {
+.auth-page {
+  position: relative;
+  z-index: 10; /* Above fog */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
   padding: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
-  border-radius: var(--border-radius);
-  border: 1px solid transparent;
+  backdrop-filter: blur(2px);
+  overflow-y: auto;
 }
 
-.flash--alert {
-  background-color: #fef2f2;
-  border-color: var(--color-error);
-  color: var(--color-error);
+.auth-logo {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  user-select: none;
 }
 
-.flash--notice {
-  background-color: #ecfdf5;
-  border-color: var(--color-success);
-  color: var(--color-success);
+.logo-title {
+  font-family: var(--font-logo);
+  font-size: 4rem; /* Larger */
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.0;
+  
+  /* Metallic Gradient: Pinkish White top -> Cyan bottom */
+  color: #fff; /* Fallback for browsers without background-clip support */
+  background: linear-gradient(180deg, #ffe4e6 10%, #fff 40%, #a5f3fc 60%, #2dd4bf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  filter: drop-shadow(0 0 15px rgba(45, 212, 191, 0.4));
+  position: relative;
+}
+
+/* Reflection / Glow effect */
+.logo-title::after {
+  content: attr(data-text); /* Requires data-text attribute in HTML */
+  position: absolute;
+  left: 0; top: 0; width: 100%; height: 100%;
+  z-index: -1;
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: blur(10px);
+  opacity: 0.5;
+  /* Dependent on data-text attribute provided by AuthLogoComponent */
+}
+
+.logo-subtitle {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--color-muted-teal);
+  margin-top: var(--spacing-md);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(17, 94, 89, 0.4);
+  border-bottom: 1px solid rgba(17, 94, 89, 0.4);
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(90deg, transparent, rgba(17, 94, 89, 0.1), transparent);
 }
 
 /* ===========================================
-   Authentication Forms
+   Forms
    =========================================== */
 .auth-form {
-  max-width: 24rem;
-  margin: var(--spacing-xl) auto;
-  padding: var(--spacing-lg);
-  background: white;
+  width: 100%;
+  max-width: 440px;
+  padding: 2.5rem;
+  background: var(--color-form-bg);
+  border: 1px solid var(--color-border-subtle);
   border-radius: var(--border-radius);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 60px rgba(0,0,0,0.8);
+  position: relative;
 }
 
+/* Header with Sanity Indicator */
+.auth-form__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding-bottom: var(--spacing-sm);
+}
+
+.auth-form__title {
+  margin: 0;
+  color: var(--color-text-main);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.3rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.sanity-indicator {
+  font-size: 0.7rem;
+  color: var(--color-faint-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.sanity-indicator::before {
+  content: "●";
+  font-size: 0.6rem;
+  animation: blink-sanity 4s infinite;
+}
+
+@keyframes blink-sanity {
+  0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--color-faint-cyan); }
+  50% { opacity: 0.5; text-shadow: none; }
+}
+
+/* Form Groups */
 .form-group {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .form-group label {
   display: block;
   margin-bottom: var(--spacing-xs);
-  font-weight: 500;
-  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  color: var(--color-gray-600);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--color-gray-600);
+  font-size: 1rem;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .form-group input {
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  font-size: 1rem;
-  box-sizing: border-box;
+  padding: 14px 16px 14px 40px;
+  background-color: var(--color-input-bg);
+  border: 1px solid var(--color-gray-800);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-family: var(--font-display);
+  color: var(--color-text-main);
+  transition: all var(--duration-normal);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  border-color: var(--color-muted-teal);
+  box-shadow: 0 0 0 1px var(--color-muted-teal);
+  color: #fff;
+  background-color: rgba(0,0,0,0.95);
+}
+
+.form-group input::placeholder {
+  color: var(--color-gray-700);
+  font-style: italic;
 }
 
 /* ===========================================
    Buttons
    =========================================== */
-.btn {
-  display: inline-block;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: none;
-  border-radius: var(--border-radius);
-  font-size: 1rem;
-  font-weight: 500;
+.btn-primary {
+  width: 100%;
+  margin-top: var(--spacing-xl);
+  padding: 14px;
+  background: linear-gradient(to bottom, #0f172a, #030712);
+  border: 1px solid var(--color-muted-teal);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-family: var(--font-display);
   cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.15s ease;
+  transition: all var(--duration-normal);
+  font-size: 0.9rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.btn-primary {
-  background-color: var(--color-primary);
-  color: white;
-  width: 100%;
+.btn-primary::before {
+  content: "⬡";
+  color: var(--color-faint-cyan);
+  font-size: 1.2rem;
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-hover);
-}
-
-.btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+  background: var(--color-deep-teal);
+  border-color: var(--color-faint-cyan);
+  box-shadow: 0 0 20px rgba(17, 94, 89, 0.6);
+  text-shadow: 0 0 5px rgba(255,255,255,0.5);
 }
 
 /* ===========================================
-   Auth Links
+   Links & Footer
    =========================================== */
 .auth-links {
-  text-align: center;
   margin-top: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
 }
 
 .auth-links a {
-  color: var(--color-primary);
-  text-decoration: none;
+  color: var(--color-gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.3s;
+}
+.auth-links a:hover {
+  color: var(--color-faint-cyan);
 }
 
-.auth-links a:hover {
-  text-decoration: underline;
+.auth-footer {
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  font-family: var(--font-display);
+  color: var(--color-muted-teal);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-text:hover {
+  color: var(--color-faint-cyan);
+  text-shadow: 0 0 8px rgba(45, 212, 191, 0.4);
+}
+
+.btn-text:focus-visible {
+  outline: 2px solid var(--color-faint-cyan);
+  outline-offset: 2px;
+}
+
+/* ===========================================
+   Flash Messages
+   =========================================== */
+#flash-messages {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  max-width: 300px;
+  width: 100%;
+}
+
+.flash {
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  background: rgba(0,0,0,0.9);
+  border-left: 3px solid;
+  color: #d1d5db;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  animation: slide-in 0.5s ease-out;
+}
+
+@keyframes slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.flash--alert { border-color: #991b1b; }
+.flash--notice { border-color: #166534; }
+.flash--spaced { margin-bottom: 1rem; }
+
+/* ===========================================
+   Auth Links Variants
+   =========================================== */
+.auth-links--centered {
+  display: block;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.auth-remember {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-gray-600);
+  cursor: pointer;
+}
+
+.auth-remember__checkbox {
+  width: auto;
+  margin: 0;
+}
+
+.auth-remember__checkbox:focus-visible {
+  outline: 2px solid var(--color-faint-cyan);
+  outline-offset: 2px;
+}
+
+.auth-attribution {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.65rem;
+  color: var(--color-gray-700);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }

@@ -1,25 +1,37 @@
-<%# パスワード更新画面 %>
+<div class="auth-page">
+  <%= render AuthLogoComponent.new %>
 
-<h1>パスワードを更新</h1>
+  <%= form_with url: password_path(params[:token]), method: :put, class: "auth-form" do |form| %>
+    <%= render AuthFormHeaderComponent.new(title: "Forge New Key") %>
 
-<%= form_with url: password_path(params[:token]), method: :put, class: "auth-form" do |form| %>
-  <div class="form-group">
-    <%= form.label :password, "新しいパスワード" %>
-    <%= form.password_field :password,
-                            required: true,
-                            autocomplete: "new-password",
-                            placeholder: "新しいパスワードを入力",
-                            maxlength: 72 %>
-  </div>
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :password,
+      label: "New Passphrase",
+      icon: "🔑",
+      type: :password,
+      required: true,
+      autocomplete: "new-password",
+      placeholder: "••••••••",
+      maxlength: 72
+    ) %>
 
-  <div class="form-group">
-    <%= form.label :password_confirmation, "パスワード（確認）" %>
-    <%= form.password_field :password_confirmation,
-                            required: true,
-                            autocomplete: "new-password",
-                            placeholder: "もう一度入力",
-                            maxlength: 72 %>
-  </div>
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :password_confirmation,
+      label: "Confirm Passphrase",
+      icon: "🔑",
+      type: :password,
+      required: true,
+      autocomplete: "new-password",
+      placeholder: "••••••••",
+      maxlength: 72
+    ) %>
 
-  <%= form.submit "パスワードを更新", class: "btn btn-primary" %>
-<% end %>
+    <%= render ButtonComponent.new(text: "Update Credentials") %>
+
+    <div class="auth-links auth-links--centered">
+      <%= link_to "Return to Archive", new_session_path %>
+    </div>
+  <% end %>
+</div>

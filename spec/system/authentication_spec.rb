@@ -8,9 +8,9 @@ RSpec.describe "Authentication", type: :system do
       it "ログインできること" do
         visit new_session_path
 
-        fill_in "メールアドレス", with: user.email_address
-        fill_in "パスワード", with: "password123" # User factory default
-        click_on "ログイン"
+        fill_in "Identifier", with: user.email_address
+        fill_in "Passphrase", with: "password123" # User factory default
+        click_on "Access Archive"
 
         expect(page).to have_content("ログインしました") # フラッシュメッセージ等は実装依存、一旦パスだけ確認
         # ログイン後のリダイレクト先（ルートなど）を確認
@@ -22,11 +22,11 @@ RSpec.describe "Authentication", type: :system do
       it "ログインできずエラーが表示されること" do
         visit new_session_path
 
-        fill_in "メールアドレス", with: user.email_address
-        fill_in "パスワード", with: "wrong_password"
-        click_on "ログイン"
+        fill_in "Identifier", with: user.email_address
+        fill_in "Passphrase", with: "wrong_password"
+        click_on "Access Archive"
 
-        expect(page).to have_content("メールアドレスまたはパスワードが正しくありません")
+        expect(page).to have_content("メールアドレスまたはパスワードが正しくありません。")
       end
     end
   end
@@ -42,7 +42,7 @@ RSpec.describe "Authentication", type: :system do
       visit root_path
       click_on "ログアウト"
       expect(page).to have_content("ログアウトしました")
-      expect(page).to have_content("ログイン")
+      expect(page).to have_content("INVESTIGATOR LOGIN")
     end
   end
 end

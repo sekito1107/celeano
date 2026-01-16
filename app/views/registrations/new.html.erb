@@ -1,0 +1,68 @@
+<div class="auth-page">
+  <%= render AuthLogoComponent.new %>
+
+  <%= form_with model: @user, url: registration_path, class: "auth-form" do |form| %>
+    <%= render AuthFormHeaderComponent.new(title: "Request Clearance", sanity_indicator: "New Investigator") %>
+
+    <% if @user.errors.any? %>
+      <div class="flash flash--alert flash--spaced" role="alert">
+        <% @user.errors.full_messages.each do |message| %>
+          <div><%= message %></div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :name,
+      label: "Codename",
+      icon: "👤",
+      type: :text,
+      required: true,
+      autofocus: true,
+      autocomplete: "name",
+      placeholder: "Enter your codename..."
+    ) %>
+
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :email_address,
+      label: "Identifier",
+      icon: "📧",
+      type: :email,
+      required: true,
+      autocomplete: "email",
+      placeholder: "your@email.com"
+    ) %>
+
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :password,
+      label: "Passphrase",
+      icon: "🔑",
+      type: :password,
+      required: true,
+      autocomplete: "new-password",
+      placeholder: "••••••••",
+      maxlength: 72
+    ) %>
+
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :password_confirmation,
+      label: "Confirm Passphrase",
+      icon: "🔑",
+      type: :password,
+      required: true,
+      autocomplete: "new-password",
+      placeholder: "••••••••",
+      maxlength: 72
+    ) %>
+
+    <%= render ButtonComponent.new(text: "Begin Investigation") %>
+
+    <div class="auth-links auth-links--centered">
+      <%= link_to "Already an Investigator?", new_session_path %>
+    </div>
+  <% end %>
+</div>

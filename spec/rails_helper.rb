@@ -25,4 +25,6 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include AuthenticationHelper, type: :request
   config.include AuthenticationHelper, type: :system
+  config.include ViewComponent::TestHelpers, type: :component
+  config.include Capybara::RSpecMatchers, type: :component
 end

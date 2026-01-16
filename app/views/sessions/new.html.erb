@@ -1,28 +1,49 @@
-<h1>ログイン</h1>
+<div class="auth-page">
+  <%= render AuthLogoComponent.new %>
 
-<%= form_with url: session_path, class: "auth-form" do |form| %>
-  <div class="form-group">
-    <%= form.label :email_address, "メールアドレス" %>
-    <%= form.email_field :email_address,
-                         required: true,
-                         autofocus: true,
-                         autocomplete: "username",
-                         placeholder: "example@mail.com",
-                         value: params[:email_address] %>
+  <%= form_with url: session_path, class: "auth-form" do |form| %>
+    <%= render AuthFormHeaderComponent.new(title: "Investigator Login", sanity_indicator: "Sanity Stable") %>
+
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :email_address,
+      label: "Identifier",
+      icon: "👤",
+      type: :email,
+      required: true,
+      autofocus: true,
+      autocomplete: "username",
+      placeholder: "your@email.com",
+      value: params[:email_address]
+    ) %>
+
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :password,
+      label: "Passphrase",
+      icon: "🔑",
+      type: :password,
+      required: true,
+      autocomplete: "current-password",
+      placeholder: "••••••••",
+      maxlength: 72
+    ) %>
+
+    <div class="auth-links">
+      <label class="auth-remember">
+        <%= form.check_box :remember_me, class: "auth-remember__checkbox" %> Keep Gate Open
+      </label>
+      <%= link_to "Lost Knowledge?", new_password_path %>
+    </div>
+
+    <%= render ButtonComponent.new(text: "Access Archive") %>
+    
+    <div class="auth-attribution">
+      Miskatonic University Network
+    </div>
+  <% end %>
+
+  <div class="auth-footer">
+    <%= link_to "Request New Clearance", new_registration_path, class: "btn-text" %>
   </div>
-
-  <div class="form-group">
-    <%= form.label :password, "パスワード" %>
-    <%= form.password_field :password,
-                            required: true,
-                            autocomplete: "current-password",
-                            placeholder: "パスワードを入力",
-                            maxlength: 72 %>
-  </div>
-
-  <%= form.submit "ログイン", class: "btn btn-primary" %>
-<% end %>
-
-<div class="auth-links">
-  <%= link_to "パスワードをお忘れですか？", new_password_path %>
 </div>
