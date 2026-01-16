@@ -167,7 +167,7 @@ RSpec.describe GamePlayer, type: :model do
       game.reload
 
       expect(game).to be_finished
-      expect(game.finish_reason).to eq('SURRENDER')
+      expect(game.finish_reason).to eq(Game::FINISH_REASONS[:surrender])
       expect(game.loser_id).to eq(user.id)
     end
   end
