@@ -14,7 +14,7 @@ RSpec.describe "Lobbies", type: :request do
 
       it "displays the user profile" do
         get lobby_path
-        expect(response.body).to include(user.email_address.split('@').first.upcase)
+        expect(response.body).to include(user.name)
       end
 
       it "displays the forbidden library mode" do

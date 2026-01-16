@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["slide"]
-  static classes = ["active", "inactive"]
+  static classes = ["active"]
 
   connect() {
     this.currentIndex = 0
