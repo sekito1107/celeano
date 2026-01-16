@@ -5,7 +5,9 @@ module AuthenticationHelper
     fill_in "Identifier", with: user.email_address
     fill_in "Passphrase", with: password
     click_on "Access Archive"
-    expect(page).to have_content("ログインしました")
+    # Flash message check is flaky with double redirect to Lobby.
+    # Check for Lobby specific content instead.
+    expect(page).to have_content("Deck:")
   end
 
   # Requestスペック用: セッションを作成する

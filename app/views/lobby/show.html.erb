@@ -8,7 +8,9 @@
   
   <div class="lobby-header">
     <%= render Lobby::UserProfileComponent.new(user: current_user) %>
-    <!-- Settings button can go here later -->
+    <div class="lobby-header__controls">
+      <%= render Lobby::DeckSelectorComponent.new(user: current_user) %>
+    </div>
   </div>
 
   <div class="lobby-content" data-controller="lobby-carousel">

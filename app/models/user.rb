@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
 
+  AVAILABLE_DECKS = %w[cthulhu hastur].freeze
+
   # メールアドレスの正規化（小文字化、前後空白除去）
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
@@ -34,6 +36,7 @@ class User < ApplicationRecord
                             uniqueness: { case_sensitive: false },
                             format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, length: { minimum: 8 }, allow_nil: true
+  validates :selected_deck, inclusion: { in: AVAILABLE_DECKS }
 
   private
 

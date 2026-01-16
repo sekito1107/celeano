@@ -1,0 +1,10 @@
+<div class="deck-selector" data-controller="deck-selection" data-deck-selection-url-value="<%= api_deck_path %>">
+  <label for="deck-select" class="deck-selector__label">Deck:</label>
+  <select id="deck-select" class="deck-selector__input" data-action="change->deck-selection#select">
+    <% available_decks.each do |deck_type| %>
+      <option value="<%= deck_type %>" <%= "selected" if selected_deck == deck_type %>>
+        <%= deck_type.humanize %>
+      </option>
+    <% end %>
+  </select>
+</div>
