@@ -1,8 +1,5 @@
 <div class="auth-page">
-  <div class="auth-logo">
-    <h1 class="logo-title" data-text="Call of Celeano">Call of Celeano</h1>
-    <p class="logo-subtitle">— Archive of the Great Old Ones —</p>
-  </div>
+  <%= render AuthLogoComponent.new %>
 
   <%= form_with url: passwords_path, class: "auth-form" do |form| %>
     <div class="auth-form__header">
