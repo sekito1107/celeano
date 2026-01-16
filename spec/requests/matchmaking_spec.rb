@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Matchmaking", type: :request do
+RSpec.describe "マッチメイキング機能", type: :request do
   describe "POST /matchmaking (参加)" do
     let(:user) { create(:user, selected_deck: "cthulhu") }
 
@@ -44,7 +44,7 @@ RSpec.describe "Matchmaking", type: :request do
     it "待機画面を表示すること" do
       get matchmaking_path
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("対戦相手を探しています")
+      expect(response.body).to include("探索中")
     end
   end
 

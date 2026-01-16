@@ -7,7 +7,8 @@ class LobbyController < ApplicationController
         description: "ランク変動なし。新しいデッキを試すのに最適です。",
         image_path: "lobby/forbidden_library.jpg",
         action_text: "儀式を始める",
-        badge: "CASUAL"
+        badge: "CASUAL",
+        url: matchmaking_path
       },
       {
         id: "mountains_of_madness",

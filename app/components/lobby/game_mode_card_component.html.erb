@@ -15,10 +15,17 @@
     </div>
     
     <div class="game_mode_card__action-container">
-      <button class="game_mode_card__action-button" type="button">
-        <span class="game_mode_card__action-icon">⬟</span>
-        <%= action_text %>
-      </button>
+      <% if url %>
+        <%= link_to url, data: { turbo_method: :post }, class: "game_mode_card__action-button" do %>
+          <span class="game_mode_card__action-icon">⬟</span>
+          <%= action_text %>
+        <% end %>
+      <% else %>
+        <button class="game_mode_card__action-button" type="button">
+          <span class="game_mode_card__action-icon">⬟</span>
+          <%= action_text %>
+        </button>
+      <% end %>
     </div>
   </div>
 </div>
