@@ -1,0 +1,24 @@
+<div class="card-component border border-gray-600 rounded bg-gray-900 text-white w-48 h-64 flex flex-col p-2 relative">
+  <div class="card-header flex justify-between items-center mb-2">
+    <span class="card-cost bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+      <%= cost %>
+    </span>
+    <span class="card-name text-sm font-serif truncate">
+      <%= name %>
+    </span>
+  </div>
+
+  <div class="card-art bg-gray-800 flex-grow mb-2 flex items-center justify-center text-gray-500 text-xs">
+    <!-- Image Placeholder -->
+    <span>Art Placeholder</span>
+  </div>
+
+  <div class="card-stats flex justify-between items-end mt-auto">
+    <div class="stat-attack bg-red-900 border border-red-700 px-2 py-1 rounded text-sm font-bold">
+      <%= attack %>
+    </div>
+    <div class="stat-hp bg-green-900 border border-green-700 px-2 py-1 rounded text-sm font-bold">
+      <%= hp %>
+    </div>
+  </div>
+</div>
