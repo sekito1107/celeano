@@ -28,7 +28,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="<%= controller_path.gsub('/', '-') %>-<%= action_name %>">
     <%= render FlashComponent.new(flash: flash) %>
     <%= yield %>
   </body>

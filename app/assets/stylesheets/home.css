@@ -8,19 +8,128 @@
   width: 100%;
   position: relative;
   z-index: 10;
+  z-index: 10;
   color: #e5e5e5;
   text-align: center;
+  transition: all 0.5s ease;
+}
+
+/* ==============================
+   Madness Effect Implementation
+   ============================== */
+
+/* 1. Context Trigger: When hovering 'Sanity', text changes */
+.sanity-trigger {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+  transition: color 0.1s;
+  color: inherit;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.sanity-trigger:hover {
+  color: transparent; /* Hide "正気" */
+  text-shadow: none;
+  border-bottom: none;
+}
+
+.sanity-trigger::after {
+  content: attr(data-alt); /* Show "狂気" */
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #ef4444; /* Bright Red */
+  opacity: 0;
+  pointer-events: none;
+  font-weight: bold;
+  transform: scale(1.2);
+}
+
+.sanity-trigger:hover::after {
+  opacity: 1;
+  text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000; /* Outline */
+  animation: glitch-text 0.1s infinite random;
+}
+
+/* 2. Global Screen Effect using :has() */
+body:has(.sanity-trigger:hover) {
+  /* Darken and Tint Red (Deep Blood Red) */
+  /* Sepia base is yellow-orange (~40deg). -50deg shift moves it to Red/Magenta border. High saturation ensures vibrancy. */
+  filter: contrast(1.4) brightness(0.6) sepia(1) saturate(5) hue-rotate(-50deg);
+  overflow: hidden; /* Lock scroll during madness */
+  cursor: none; /* Hide cursor for immersion */
+}
+
+/* Add a red vignette overlay + Cracked Glass when triggered */
+body:has(.sanity-trigger:hover)::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  
+  /* Red Vignette Only - Narrower spread */
+  background: 
+    radial-gradient(circle, transparent 65%, rgba(139, 0, 0, 0.8) 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: normal; /* Normal for glass to show white cracks */
+  animation: pulse-vignette 0.1s infinite;
+}
+
+/* Shake the Container */
+body:has(.sanity-trigger:hover) .lp-container {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) infinite both;
+  filter: blur(0.5px);
+}
+
+/* Distort the Title specifically */
+body:has(.sanity-trigger:hover) .lp-title {
+  color: #330000;
+  text-shadow: 4px 0 rgba(255, 0, 0, 0.8), -4px 0 rgba(0, 0, 255, 0.8);
+}
+
+/* Animations */
+@keyframes shake {
+  10%, 90% { transform: translate3d(-0.5px, 0, 0); }
+  20%, 80% { transform: translate3d(1px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-1.5px, 0, 0); }
+  40%, 60% { transform: translate3d(1.5px, 0, 0); }
+}
+
+@keyframes glitch-text {
+  0% { transform: translate(0) scale(1.1); }
+  25% { transform: translate(-2px, 2px) scale(1.2); }
+  50% { transform: translate(2px, -2px) scale(1.0); }
+  75% { transform: translate(-1px, 1px) scale(1.3); }
+  100% { transform: translate(0) scale(1.1); }
+}
+
+@keyframes pulse-vignette {
+  0% { opacity: 0.8; transform: scale(1.0); }
+  50% { opacity: 1; transform: scale(1.02); }
+  100% { opacity: 0.8; transform: scale(1.0); }
 }
 
 /* Override body background for Home Page only */
 /* Note: This relies on the background image being present in asset path */
-body {
+/* Override body background for Home Page only */
+/* Note: This relies on the background image being present in asset path */
+body.home-index {
   background-image: 
-    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+    linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95)),
     url("lp_background.png") !important; 
   background-position: center bottom !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;
+  
+  /* Disable Fog Animation on LP */
+  &::before, &::after {
+    display: none !important;
+  }
 }
 
 .lp-content {
@@ -31,28 +140,55 @@ body {
 
 .lp-subtitle {
   font-family: 'Shippori Mincho', serif;
-  font-size: 1.1rem;
-  letter-spacing: 0.4em;
-  color: #94a3b8; /* Muted silver */
-  margin-bottom: 1.5rem;
+  font-size: 1.0rem;
+  letter-spacing: 0.6em;
+  color: #bf9e68; /* Golden muted */
+  margin-bottom: 2rem;
   text-transform: uppercase;
   text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
 
 .lp-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-family: 'Prata', 'Shippori Mincho', serif;
-  font-size: 5rem;
   font-weight: 400;
+  line-height: 1.0;
+  margin: 0 0 1.5rem 0;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.9);
+}
+
+.title-prefix {
+  font-size: 3.5rem;
   letter-spacing: 0.1em;
-  line-height: 1.1;
-  margin: 0 0 2rem 0;
-  color: #f1f5f9;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.9);
-  position: relative;
-  background: linear-gradient(to bottom, #f8fafc 40%, #94a3b8 100%);
+  color: #e5e5e5;
+  margin-bottom: 0.5rem;
+}
+
+.title-main {
+  font-size: 7rem;
+  letter-spacing: 0.05em;
+  color: #bf9e68; /* Gold */
+  background: linear-gradient(to bottom, #f3eace 20%, #bf9e68 80%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  position: relative;
+  /* Ensure padding for the line */
+  padding-bottom: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.title-main::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(191, 158, 104, 0.8), transparent);
+  box-shadow: 0 0 10px rgba(191, 158, 104, 0.5);
 }
 
 .lp-description {
@@ -80,9 +216,9 @@ body {
   align-items: center;
   gap: 12px;
   padding: 16px 48px;
-  background-color: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #fff;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e5e5e5;
   font-family: 'Shippori Mincho', serif;
   font-size: 1.1rem;
   letter-spacing: 0.2em;
