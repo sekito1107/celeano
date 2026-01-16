@@ -15,7 +15,7 @@
   left: 0;
   width: 100%; /* Will be larger for scroll */
   height: 100%;
-  background-image: url("lobby/background.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("lobby/background.png");
   background-size: cover; /* Or auto/contain depending on image aspect ratio, cover is safe */
   background-position: center;
   z-index: -1;
