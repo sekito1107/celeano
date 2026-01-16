@@ -28,7 +28,7 @@ RSpec.describe "Surrenders", type: :request do
 
       it "does not effect the game and redirects to lobby with alert" do
         post game_surrender_path(other_game)
-        
+
         expect(response).to redirect_to(lobby_path)
         expect(flash[:alert]).to eq("ゲームに参加していません。")
       end
