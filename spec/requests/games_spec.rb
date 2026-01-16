@@ -28,7 +28,7 @@ RSpec.describe "Games", type: :request do
 
       context "when game does not exist" do
         it "redirects to root path with alert" do
-          get game_path("non-existent-id")
+          get game_path(id: 0)
           expect(response).to redirect_to(root_path)
           expect(flash[:alert]).to eq("指定されたゲームは見つかりませんでした。")
         end
