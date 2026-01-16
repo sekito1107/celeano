@@ -1,0 +1,20 @@
+<div class="<%= card_classes %>">
+  <div class="player-card__image-wrapper">
+    <% if image_path %>
+      <%= image_tag image_path, class: "player-card__image", alt: name %>
+    <% else %>
+      <div class="player-card__unknown-avatar">
+        <span class="unknown-icon">?</span>
+      </div>
+    <% end %>
+    
+    <div class="<%= status_classes %>">
+      <%= status_indicator %> <%= status_text %>
+    </div>
+  </div>
+  
+  <div class="player-card__info">
+    <h3 class="player-card__name"><%= name %></h3>
+    <p class="player-card__title"><%= title %></p>
+  </div>
+</div>

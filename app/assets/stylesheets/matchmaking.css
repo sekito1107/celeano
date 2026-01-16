@@ -1,69 +1,294 @@
+/* Matchmaking Container */
 .matchmaking-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: calc(100vh - 60px); /* Adjust based on header/footer */
-  color: var(--text-primary);
-  text-align: center;
-}
-
-.matchmaking-content {
-  background: rgba(0, 0, 0, 0.7);
-  padding: 3rem;
-  border-radius: 12px;
-  border: 1px solid var(--border-color, #444);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-}
-
-.matchmaking-loader {
-  margin-bottom: 2rem;
-  display: flex;
   justify-content: center;
+  color: var(--text-primary, #e0e0e0);
+  font-family: 'Zen Old Mincho', serif;
 }
 
-.loader-spinner {
-  width: 60px;
-  height: 60px;
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--accent-color, #a29bfe);
+/* Background with Pulse */
+.matchmaking-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("matchmaking_bg.png");
+  background-size: cover;
+  background-position: center;
+  z-index: -2;
+  animation: pulse-dark 4s ease-in-out infinite alternate;
+}
+
+.matchmaking-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 90%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes pulse-dark {
+  0% { filter: brightness(0.8) contrast(1.1); }
+  100% { filter: brightness(0.5) contrast(1.2); }
+}
+
+/* Matchmaking Content (Cards & Center) */
+.matchmaking-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+  width: 100%;
+  max-width: 1200px;
+  /* Removed margin-bottom to center evenly */
+}
+
+
+
+/* Player Cards */
+.player-card {
+  width: 280px;
+  height: 420px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.player-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+.player-card__image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 280px; /* Square-ish top */
+  background: #111;
+}
+
+.player-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.player-card__unknown-avatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, #222 0%, #000 100%);
+  color: #333;
+}
+
+.unknown-icon {
+  font-size: 5rem;
+  font-family: 'Cinzel', serif;
+  opacity: 0.5;
+}
+
+/* Card Status Badge */
+.player-card__status {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.1em;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.player-card__status--ready {
+  color: #4cd964;
+  border-top: 1px solid rgba(76, 217, 100, 0.3);
+}
+
+.player-card__status--connecting {
+  color: #ff6b6b;
+  border-top: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.status-dot, .status-spinner {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
+  margin-right: 6px;
+}
+
+.status-dot {
+  background-color: currentColor;
+  box-shadow: 0 0 5px currentColor;
+}
+
+.status-spinner {
+  border: 2px solid currentColor;
+  border-top-color: transparent;
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+/* Card Info */
+.player-card__info {
+  flex: 1;
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.matchmaking-status {
-  font-size: 1.5rem;
+.player-card__name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: #fff;
   margin-bottom: 0.5rem;
-  font-weight: 600;
   letter-spacing: 0.05em;
 }
 
-.matchmaking-subtext {
-  color: var(--text-secondary, #888);
+.player-card__title {
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* Center Animation (Infinity Loader attempt) */
+.matchmaking-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+}
+
+.infinity-loader {
+  position: relative;
+  width: 100px;
+  height: 60px;
   margin-bottom: 2rem;
 }
 
+/* Let's simplify the center simply to a pulsing nebula orb or something, 
+   since "CSS Infinity" is tricky to make look like the image (which is a thin glowing line). 
+   Let's standardise on a "Sonar/Portal" ring effect. */
+.infinity-loop {
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  position: relative;
+  animation: sonar 3s infinite ease-out;
+}
+
+@keyframes sonar {
+  0% { transform: scale(0.5); opacity: 0.8; box-shadow: 0 0 0 rgba(212, 175, 55, 0.5); }
+  100% { transform: scale(1.5); opacity: 0; box-shadow: 0 0 50px rgba(212, 175, 55, 0); }
+}
+
+.matchmaking-status-text {
+  text-align: center;
+  opacity: 0.8;
+}
+
+.status-title {
+  font-size: 1.2rem;
+  color: #d4af37; /* Gold */
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.status-subtitle {
+  font-size: 0.8rem;
+  color: #bbb;
+  letter-spacing: 0.1em;
+}
+
+/* Flavor Text */
+.matchmaking-flavor {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  justify-content: center;
+  margin: 3rem 0; /* Add space above and below */
+}
+
+.flavor-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.flavor-text {
+  font-size: 1rem;
+  color: #aaa;
+  font-style: italic;
+  text-align: center;
+  min-height: 1.5em; /* Prevent jump */
+  transition: opacity 0.5s ease;
+  padding: 0 1rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+/* Footer / Cancel Button */
+
 .matchmaking-cancel-btn {
   background: transparent;
-  border: 1px solid var(--error-color, #ff6b6b);
-  color: var(--error-color, #ff6b6b);
-  padding: 0.75rem 2rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #bbb;
+  padding: 0.75rem 3rem;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
 }
 
 .matchmaking-cancel-btn:hover {
-  background: rgba(255, 107, 107, 0.1);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #fff;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
-.matchmaking-cancel-btn:active {
-  transform: translateY(0);
+@media (max-width: 768px) {
+  .matchmaking-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .player-card {
+    width: 240px;
+    height: 360px;
+  }
+  
+  .matchmaking-flavor {
+    width: 90%;
+  }
 }

@@ -1,11 +1,50 @@
-<div class="matchmaking-container">
-  <div class="matchmaking-content">
-    <div class="matchmaking-loader">
-      <div class="loader-spinner"></div>
-    </div>
-    <h2 class="matchmaking-status">対戦相手を探しています...</h2>
-    <p class="matchmaking-subtext">まもなく探索が開始されます</p>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "matchmaking", "data-turbo-track": "reload" %>
+<% end %>
 
-    <%= button_to "探索をキャンセル", matchmaking_path, method: :delete, class: "matchmaking-cancel-btn" %>
+<div class="matchmaking-container">
+  <div class="matchmaking-background"></div>
+  <div class="matchmaking-overlay"></div>
+
+  <div class="matchmaking-content">
+    
+    <!-- Left: Player Card -->
+    <%= render Matchmaking::PlayerCardComponent.new(
+      name: current_user.name,
+      title: "SEEKER OF TRUTH",
+      status: :ready,
+      type: :user,
+      image_path: "lobby/default_avatar.jpg"
+    ) %>
+
+    <!-- Center: Animation & Status -->
+    <div class="matchmaking-center">
+      <div class="infinity-loader">
+        <div class="infinity-loop"></div>
+        <div class="infinity-glow"></div>
+      </div>
+      
+      <div class="matchmaking-status-text">
+        <h2 class="status-title">探索中...</h2>
+        <p class="status-subtitle">深淵の住人を探しています</p>
+      </div>
+    </div>
+
+    <!-- Right: Enemy Card (Placeholder) -->
+    <%= render Matchmaking::PlayerCardComponent.new(
+      name: "UNKNOWN",
+      title: "CULTIST",
+      status: :connecting,
+      type: :enemy
+    ) %>
+
+  </div>
+
+  <!-- Bottom: Flavor Text -->
+  <%= render Matchmaking::FlavorTextComponent.new %>
+
+  <!-- Footer: Cancel Button -->
+  <div class="matchmaking-footer">
+    <%= button_to "儀式を中断する", matchmaking_path, method: :delete, class: "matchmaking-cancel-btn" %>
   </div>
 </div>
