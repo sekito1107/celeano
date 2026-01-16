@@ -1,0 +1,23 @@
+<% content_for :head do %>
+  <%= stylesheet_link_tag "lobby", "data-turbo-track": "reload" %>
+<% end %>
+
+<div class="lobby-container">
+  <div class="lobby-background"></div>
+  
+  <div class="lobby-header">
+    <%= render Lobby::UserProfileComponent.new(user: current_user) %>
+    <!-- Settings button can go here later -->
+  </div>
+
+  <div class="lobby-content">
+    <div class="lobby-carousel">
+      <%= render Lobby::GameModeCardComponent.new(
+        title: "禁断の書庫",
+        description: "ランク変動なし。新しいデッキを試すのに最適です。",
+        image_path: "lobby/forbidden_library.jpg",
+        action_text: "儀式を始める"
+      ) %>
+    </div>
+  </div>
+</div>

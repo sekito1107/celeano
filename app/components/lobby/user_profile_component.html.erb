@@ -1,0 +1,9 @@
+<div class="user_profile">
+  <div class="user_profile__avatar-container">
+    <%= image_tag "lobby/default_avatar.jpg", class: "user_profile__avatar", alt: "User Avatar" %>
+    <div class="user_profile__status-indicator"></div>
+  </div>
+  <div class="user_profile__info">
+    <div class="user_profile__name"><%= user.email_address.split('@').first.upcase %></div> <!-- Temporarily using email as name -->
+  </div>
+</div>

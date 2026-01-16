@@ -1,0 +1,17 @@
+<div class="game_mode_card">
+  <div class="game_mode_card__image-container">
+    <%= image_tag image_path, class: "game_mode_card__image", alt: title %>
+    <div class="game_mode_card__overlay"></div>
+    <div class="game_mode_card__badge">CASUAL</div>
+  </div>
+  
+  <div class="game_mode_card__content">
+    <h2 class="game_mode_card__title"><%= title %></h2>
+    <p class="game_mode_card__description"><%= description %></p>
+    
+    <button class="game_mode_card__action-button">
+      <span class="game_mode_card__action-icon">⬟</span>
+      <%= action_text %>
+    </button>
+  </div>
+</div>
