@@ -37,7 +37,7 @@
 
     <div class="auth-links">
       <label style="display: flex; align-items: center; gap: 4px; color: #4b5563; cursor: pointer;">
-        <input type="checkbox" style="width: auto; margin: 0;"> Keep Gate Open
+        <%= form.check_box :remember_me, style: "width: auto; margin: 0;" %> Keep Gate Open
       </label>
       <%= link_to "Lost Knowledge?", new_password_path %>
     </div>
