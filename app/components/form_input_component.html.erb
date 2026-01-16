@@ -1,0 +1,7 @@
+<div class="form-group">
+  <%= form.label field, label %>
+  <div class="input-wrapper">
+    <span class="input-icon" aria-hidden="true"><%= icon %></span>
+    <%= form.send(input_method, field, **options) %>
+  </div>
+</div>

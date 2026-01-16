@@ -7,30 +7,30 @@
       <div class="sanity-indicator">Sanity Stable</div>
     </div>
 
-    <div class="form-group">
-      <%= form.label :email_address, "Identifier" %>
-      <div class="input-wrapper">
-        <span class="input-icon" aria-hidden="true">👤</span>
-        <%= form.email_field :email_address,
-                             required: true,
-                             autofocus: true,
-                             autocomplete: "username",
-                             placeholder: "your@email.com",
-                             value: params[:email_address] %>
-      </div>
-    </div>
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :email_address,
+      label: "Identifier",
+      icon: "👤",
+      type: :email,
+      required: true,
+      autofocus: true,
+      autocomplete: "username",
+      placeholder: "your@email.com",
+      value: params[:email_address]
+    ) %>
 
-    <div class="form-group">
-      <%= form.label :password, "Passphrase" %>
-      <div class="input-wrapper">
-        <span class="input-icon" aria-hidden="true">🔑</span>
-        <%= form.password_field :password,
-                                required: true,
-                                autocomplete: "current-password",
-                                placeholder: "••••••••",
-                                maxlength: 72 %>
-      </div>
-    </div>
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :password,
+      label: "Passphrase",
+      icon: "🔑",
+      type: :password,
+      required: true,
+      autocomplete: "current-password",
+      placeholder: "••••••••",
+      maxlength: 72
+    ) %>
 
     <div class="auth-links">
       <label style="display: flex; align-items: center; gap: 4px; color: #4b5563; cursor: pointer;">

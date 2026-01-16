@@ -6,29 +6,29 @@
       <h2 class="auth-form__title">Forge New Key</h2>
     </div>
 
-    <div class="form-group">
-      <%= form.label :password, "New Passphrase" %>
-      <div class="input-wrapper">
-        <span class="input-icon" aria-hidden="true">🔑</span>
-        <%= form.password_field :password,
-                                required: true,
-                                autocomplete: "new-password",
-                                placeholder: "••••••••",
-                                maxlength: 72 %>
-      </div>
-    </div>
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :password,
+      label: "New Passphrase",
+      icon: "🔑",
+      type: :password,
+      required: true,
+      autocomplete: "new-password",
+      placeholder: "••••••••",
+      maxlength: 72
+    ) %>
 
-    <div class="form-group">
-      <%= form.label :password_confirmation, "Confirm Passphrase" %>
-      <div class="input-wrapper">
-        <span class="input-icon" aria-hidden="true">🔑</span>
-        <%= form.password_field :password_confirmation,
-                                required: true,
-                                autocomplete: "new-password",
-                                placeholder: "••••••••",
-                                maxlength: 72 %>
-      </div>
-    </div>
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :password_confirmation,
+      label: "Confirm Passphrase",
+      icon: "🔑",
+      type: :password,
+      required: true,
+      autocomplete: "new-password",
+      placeholder: "••••••••",
+      maxlength: 72
+    ) %>
 
     <%= form.submit "Update Credentials", class: "btn btn-primary" %>
 

@@ -6,18 +6,18 @@
       <h2 class="auth-form__title">Lost Knowledge?</h2>
     </div>
 
-    <div class="form-group">
-      <%= form.label :email_address, "Identifier" %>
-      <div class="input-wrapper">
-        <span class="input-icon" aria-hidden="true">👤</span>
-        <%= form.email_field :email_address,
-                             required: true,
-                             autofocus: true,
-                             autocomplete: "username",
-                             placeholder: "your@email.com",
-                             value: params[:email_address] %>
-      </div>
-    </div>
+    <%= render FormInputComponent.new(
+      form: form,
+      field: :email_address,
+      label: "Identifier",
+      icon: "👤",
+      type: :email,
+      required: true,
+      autofocus: true,
+      autocomplete: "username",
+      placeholder: "your@email.com",
+      value: params[:email_address]
+    ) %>
 
     <%= form.submit "Send Recovery Sigil", class: "btn btn-primary" %>
 
