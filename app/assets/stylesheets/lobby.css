@@ -435,6 +435,12 @@
   outline: none;
 }
 
+.deck-selector__input:focus-visible {
+  outline: 2px solid var(--color-faint-cyan, #00ffff);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 .deck-selector__input option {
   background: #050505;
   color: #e0e0e0;
