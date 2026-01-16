@@ -289,7 +289,6 @@ body::after {
    Buttons
    =========================================== */
 .btn-primary {
-  display: block;
   width: 100%;
   margin-top: var(--spacing-xl);
   padding: 14px;
@@ -303,7 +302,6 @@ body::after {
   transition: all var(--duration-normal);
   font-size: 0.9rem;
   border-radius: 4px;
-  
   display: flex;
   align-items: center;
   justify-content: center;
