@@ -27,6 +27,7 @@ class User < ApplicationRecord
 
   has_many :game_cards, dependent: :destroy
   has_many :moves, dependent: :destroy
+  has_one :matchmaking_queue, dependent: :destroy
 
   # ===========================================
   # Validations
@@ -37,6 +38,15 @@ class User < ApplicationRecord
                             format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, length: { minimum: 8 }, allow_nil: true
   validates :selected_deck, inclusion: { in: AVAILABLE_DECKS }
+
+  def join_matchmaking!(deck_type)
+    result = JoinMatchmaking.call(user: self, deck_type: deck_type)
+    result.game
+  end
+
+  def leave_matchmaking!
+    matchmaking_queue&.destroy!
+  end
 
   private
 

@@ -154,4 +154,21 @@ RSpec.describe GamePlayer, type: :model do
       expect(player).not_to be_insane
     end
   end
+
+  describe '#surrender!' do
+    let(:opponent) { create(:game_player, game: game) }
+
+    before do
+      opponent
+    end
+
+    it '降伏理由でゲームが終了すること' do
+      player.surrender!
+      game.reload
+
+      expect(game).to be_finished
+      expect(game.finish_reason).to eq('SURRENDER')
+      expect(game.loser_id).to eq(user.id)
+    end
+  end
 end

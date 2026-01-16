@@ -3,10 +3,13 @@ class Game < ApplicationRecord
 
   enum :status, { matching: 0, playing: 1, finished: 2 }, default: :matching
 
+  before_validation :set_seed, on: :create
+
   FINISH_REASONS = {
     san_death: "SAN_DEATH",
     hp_death: "HP_DEATH",
-    deck_death: "DECK_DEATH"
+    deck_death: "DECK_DEATH",
+    surrender: "SURRENDER"
   }.freeze
 
   belongs_to :winner, class_name: "User", optional: true
@@ -59,5 +62,11 @@ class Game < ApplicationRecord
 
     player.log_event!(:deck_empty, {})
     finish_game!(player, FINISH_REASONS[:deck_death])
+  end
+
+  private
+
+  def set_seed
+    self.seed ||= rand(1..2_147_483_647)
   end
 end

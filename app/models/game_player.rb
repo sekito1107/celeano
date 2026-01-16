@@ -66,4 +66,8 @@ class GamePlayer < ApplicationRecord
       })
     end
   end
+
+  def surrender!
+    game.finish_game!(self, Game::FINISH_REASONS[:surrender])
+  end
 end
