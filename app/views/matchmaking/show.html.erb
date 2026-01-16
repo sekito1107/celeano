@@ -1,0 +1,11 @@
+<div class="matchmaking-container">
+  <div class="matchmaking-content">
+    <div class="matchmaking-loader">
+      <div class="loader-spinner"></div>
+    </div>
+    <h2 class="matchmaking-status">対戦相手を探しています...</h2>
+    <p class="matchmaking-subtext">まもなく探索が開始されます</p>
+
+    <%= button_to "探索をキャンセル", matchmaking_path, method: :delete, class: "matchmaking-cancel-btn" %>
+  </div>
+</div>

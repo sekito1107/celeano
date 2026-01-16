@@ -33,4 +33,18 @@ RSpec.describe "Matchmaking", type: :request do
       end
     end
   end
+
+  describe "GET /matchmaking" do
+    let(:user) { create(:user) }
+
+    before do
+      post session_path, params: { email_address: user.email_address, password: user.password }
+    end
+
+    it "renders the waiting screen" do
+      get matchmaking_path
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("対戦相手を探しています")
+    end
+  end
 end
