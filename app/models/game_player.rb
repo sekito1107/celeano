@@ -68,6 +68,10 @@ class GamePlayer < ApplicationRecord
   end
 
   def surrender!
-    game.finish_game!(self, Game::FINISH_REASONS[:surrender])
+    game.with_lock do
+      return if game.finished?
+
+      game.finish_game!(self, Game::FINISH_REASONS[:surrender])
+    end
   end
 end
