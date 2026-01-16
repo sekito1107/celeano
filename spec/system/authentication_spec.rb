@@ -8,8 +8,8 @@ RSpec.describe "Authentication", type: :system do
       it "ログインできること" do
         visit new_session_path
 
-        fill_in "email_address", with: user.email_address
-        fill_in "password", with: "password123" # User factory default
+        fill_in "Identifier", with: user.email_address
+        fill_in "Passphrase", with: "password123" # User factory default
         click_on "Access Archive"
 
         expect(page).to have_content("ログインしました") # フラッシュメッセージ等は実装依存、一旦パスだけ確認
@@ -22,8 +22,8 @@ RSpec.describe "Authentication", type: :system do
       it "ログインできずエラーが表示されること" do
         visit new_session_path
 
-        fill_in "email_address", with: user.email_address
-        fill_in "password", with: "wrong_password"
+        fill_in "Identifier", with: user.email_address
+        fill_in "Passphrase", with: "wrong_password"
         click_on "Access Archive"
 
         expect(page).to have_content("メールアドレスまたはパスワードが正しくありません。")

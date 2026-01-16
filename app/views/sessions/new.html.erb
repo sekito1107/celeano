@@ -30,15 +30,15 @@
     ) %>
 
     <div class="auth-links">
-      <label style="display: flex; align-items: center; gap: 4px; color: #4b5563; cursor: pointer;">
-        <%= form.check_box :remember_me, style: "width: auto; margin: 0;" %> Keep Gate Open
+      <label class="auth-remember">
+        <%= form.check_box :remember_me, class: "auth-remember__checkbox" %> Keep Gate Open
       </label>
       <%= link_to "Lost Knowledge?", new_password_path %>
     </div>
 
     <%= render ButtonComponent.new(text: "Access Archive") %>
     
-    <div style="margin-top: 1rem; text-align: center; font-size: 0.65rem; color: #374151; letter-spacing: 0.1em; text-transform: uppercase;">
+    <div class="auth-attribution">
       Miskatonic University Network
     </div>
   <% end %>

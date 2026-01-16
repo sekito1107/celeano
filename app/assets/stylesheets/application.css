@@ -31,6 +31,7 @@
   --font-family: var(--font-display);
 
   /* Spacing & Radius */
+  --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
@@ -401,4 +402,26 @@ body::after {
   display: block;
   text-align: center;
   margin-top: 2rem;
+}
+
+.auth-remember {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.auth-remember__checkbox {
+  width: auto;
+  margin: 0;
+}
+
+.auth-attribution {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.65rem;
+  color: #374151;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
