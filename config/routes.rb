@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "home#index"
   resource :lobby, only: [ :show ], controller: :lobby
+  resource :matchmaking, only: %i[create show destroy], controller: :matchmaking
+  resources :games, only: %i[show]
 
   namespace :api do
     resource :deck, only: [ :update ]
