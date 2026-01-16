@@ -42,6 +42,11 @@
   100% { filter: brightness(0.5) contrast(1.2); }
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Matchmaking Content (Cards & Center) */
 .matchmaking-content {
   display: flex;
