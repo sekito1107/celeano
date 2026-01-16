@@ -47,6 +47,9 @@ class JoinMatchmaking
     # ゲーム開始処理
     StartGame.call!(game: game)
 
+    # 対戦相に通知
+    MatchmakingChannel.broadcast_to(opponent, action: "matched", game_id: game.id)
+
     context.game = game
   end
 
