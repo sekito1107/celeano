@@ -19,6 +19,8 @@ RSpec.describe "Api::Decks", type: :request do
     end
 
     context "無効なパラメータの場合" do
+      before { user.update!(selected_deck: "cthulhu") }
+
       it "無効な値ではデッキを更新しないこと" do
         patch api_deck_path, params: { user: { selected_deck: "invalid_deck" } }
         expect(response).to have_http_status(:unprocessable_entity)
