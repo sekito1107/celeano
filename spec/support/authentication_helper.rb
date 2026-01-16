@@ -6,8 +6,8 @@ module AuthenticationHelper
     fill_in "Passphrase", with: password
     click_on "Access Archive"
     # Flash message check is flaky with double redirect to Lobby.
-    # Check for Lobby specific content instead.
-    expect(page).to have_content("Deck:")
+    # Check for Lobby path instead of content to avoid race conditions.
+    expect(page).to have_current_path("/lobby")
   end
 
   # Requestスペック用: セッションを作成する
