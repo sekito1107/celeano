@@ -127,14 +127,14 @@ body::after {
   align-items: center;
   justify-content: center;
   height: 100vh; /* viewportにフィット */
-  padding: var(--spacing-md);
+  padding: var(--spacing-lg);
   backdrop-filter: blur(2px);
   overflow-y: auto; /* 内容がはみ出した場合は内部スクロール */
 }
 
 .auth-logo {
   text-align: center;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
   user-select: none;
 }
 
@@ -192,7 +192,7 @@ body::after {
 .auth-form {
   width: 100%;
   max-width: 440px;
-  padding: 2rem;
+  padding: 2.5rem;
   background: var(--color-form-bg);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--border-radius);
@@ -205,7 +205,7 @@ body::after {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
   border-bottom: 1px solid var(--color-border-subtle);
   padding-bottom: var(--spacing-sm);
 }
@@ -301,7 +301,7 @@ body::after {
    =========================================== */
 .btn-primary {
   width: 100%;
-  margin-top: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
   padding: 14px;
   background: linear-gradient(to bottom, #0f172a, #030712);
   border: 1px solid var(--color-muted-teal);
@@ -353,7 +353,7 @@ body::after {
 }
 
 .auth-footer {
-  margin-top: 2rem;
+  margin-top: 4rem;
   text-align: center;
 }
 
