@@ -24,7 +24,7 @@ RSpec.describe "新規登録", type: :system do
       visit new_registration_path
 
       fill_in "user[name]", with: "Test Investigator"
-      fill_in "user[email_address]", with: "new_user@example.com"
+      fill_in "user[email_address]", with: "password_mismatch_user@example.com"
       fill_in "user[password]", with: "secure_password123"
       fill_in "user[password_confirmation]", with: "different_password"
       click_button "Begin Investigation"
