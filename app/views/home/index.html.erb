@@ -1,0 +1,8 @@
+<h1>Celeano</h1>
+<p>Welcome to the game.</p>
+
+<% if authenticated? %>
+  <%= button_to "ログアウト", session_path, method: :delete %>
+<% else %>
+  <%= link_to "ログイン", new_session_path %>
+<% end %>

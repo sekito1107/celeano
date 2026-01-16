@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_13_090300) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_15_233109) do
   create_table "battle_logs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.json "details", default: {}, null: false
@@ -134,6 +134,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_13_090300) do
     t.index ["user_id"], name: "index_moves_on_user_id"
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "ip_address"
+    t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
   create_table "turns", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "game_id", null: false
@@ -146,8 +155,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_13_090300) do
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "email_address", default: "", null: false
     t.string "name", null: false
+    t.string "password_digest", default: "", null: false
     t.datetime "updated_at", null: false
+    t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
   add_foreign_key "battle_logs", "turns"
@@ -167,5 +179,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_13_090300) do
   add_foreign_key "moves", "game_players", column: "target_player_id"
   add_foreign_key "moves", "turns"
   add_foreign_key "moves", "users"
+  add_foreign_key "sessions", "users"
   add_foreign_key "turns", "games"
 end
