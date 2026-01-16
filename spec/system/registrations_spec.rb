@@ -31,7 +31,7 @@ RSpec.describe "新規登録", type: :system do
 
       # エラーが表示される（ページに残る）
       # expect(page).to have_current_path(registration_path) # Renderの場合はこちらだが、Turbo等で挙動が変わる可能性があるため緩和
-      expect(page).to have_css(".auth-form") # フォームが表示されているか確認
+      expect(page).to have_button("Begin Investigation") # フォームが表示されているか確認
       # expect(page).to have_css(".flash--alert")
     end
 
