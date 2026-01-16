@@ -24,6 +24,9 @@
   /* Form Colors */
   --color-form-bg: rgba(5, 12, 12, 0.6);
   --color-input-bg: rgba(0, 0, 0, 0.8);
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
 
   /* Fonts */
   --font-logo: 'Cinzel Decorative', cursive;
@@ -166,6 +169,7 @@ body::after {
   background-clip: text;
   filter: blur(10px);
   opacity: 0.5;
+  /* Dependent on data-text attribute provided by AuthLogoComponent */
 }
 
 .logo-subtitle {
@@ -246,7 +250,7 @@ body::after {
   margin-bottom: var(--spacing-xs);
   font-family: var(--font-display);
   font-size: 0.75rem;
-  color: #4b5563;
+  color: var(--color-gray-600);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   font-weight: 700;
@@ -261,7 +265,7 @@ body::after {
 .input-icon {
   position: absolute;
   left: 12px;
-  color: #4b5563;
+  color: var(--color-gray-600);
   font-size: 1rem;
   pointer-events: none;
   z-index: 2;
@@ -271,7 +275,10 @@ body::after {
   width: 100%;
   padding: 14px 16px 14px 40px;
   background-color: var(--color-input-bg);
-  border: 1px solid #1f2937;
+  padding: 14px 16px 14px 40px;
+  background-color: var(--color-input-bg);
+  border: 1px solid var(--color-gray-800);
+  border-radius: 4px;
   border-radius: 4px;
   font-size: 0.95rem;
   font-family: var(--font-display);
@@ -288,7 +295,7 @@ body::after {
 }
 
 .form-group input::placeholder {
-  color: #374151;
+  color: var(--color-gray-700);
   font-style: italic;
 }
 
@@ -339,7 +346,7 @@ body::after {
 }
 
 .auth-links a {
-  color: #4b5563;
+  color: var(--color-gray-600);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   transition: color 0.3s;
@@ -369,6 +376,11 @@ body::after {
   text-shadow: 0 0 8px rgba(45, 212, 191, 0.4);
 }
 
+.btn-text:focus-visible {
+  outline: 2px solid var(--color-faint-cyan);
+  outline-offset: 2px;
+}
+
 /* ===========================================
    Flash Messages
    =========================================== */
@@ -377,7 +389,9 @@ body::after {
   top: 20px;
   right: 20px;
   z-index: 1000;
-  width: 300px;
+  z-index: 1000;
+  max-width: 300px;
+  width: 100%;
 }
 
 .flash {
@@ -414,7 +428,7 @@ body::after {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #4b5563;
+  color: var(--color-gray-600);
   cursor: pointer;
 }
 
@@ -423,11 +437,16 @@ body::after {
   margin: 0;
 }
 
+.auth-remember__checkbox:focus-visible {
+  outline: 2px solid var(--color-faint-cyan);
+  outline-offset: 2px;
+}
+
 .auth-attribution {
   margin-top: 1rem;
   text-align: center;
   font-size: 0.65rem;
-  color: #374151;
+  color: var(--color-gray-700);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
