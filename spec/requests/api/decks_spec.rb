@@ -23,7 +23,7 @@ RSpec.describe "Api::Decks", type: :request do
 
       it "無効な値ではデッキを更新しないこと" do
         patch api_deck_path, params: { user: { selected_deck: "invalid_deck" } }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(user.reload.selected_deck).to eq("cthulhu") # Default
       end
     end
