@@ -17,7 +17,7 @@
 
     <div class="lp-actions">
       <% if authenticated? %>
-        <%= button_to "探索を再開する", lobby_path, method: :get, class: "lp-button" %>
+        <%= link_to "探索を再開する", lobby_path, class: "lp-button" %>
       <% else %>
         <%= link_to new_session_path, class: "lp-button" do %>
           <span class="icon">❖</span> 探索を開始する
