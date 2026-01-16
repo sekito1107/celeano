@@ -33,7 +33,7 @@ RSpec.describe "パスワードリセット", type: :system do
       # 新しいパスワードを入力して送信
       fill_in "password", with: "new_secure_password123"
       fill_in "password_confirmation", with: "new_secure_password123"
-      first(:button).click
+      click_button "Update Credentials"
 
       # ログインページにリダイレクトされる
       expect(page).to have_current_path(new_session_path)
