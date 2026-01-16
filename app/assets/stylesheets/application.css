@@ -395,3 +395,13 @@ body::after {
 
 .flash--alert { border-color: #991b1b; }
 .flash--notice { border-color: #166534; }
+.flash--spaced { margin-bottom: 1rem; }
+
+/* ===========================================
+   Auth Links Variants
+   =========================================== */
+.auth-links--centered {
+  display: block;
+  text-align: center;
+  margin-top: 2rem;
+}
