@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :matchmaking_queue do
-    user { nil }
-    deck_type { "MyString" }
+    association :user
+    deck_type { "cthulhu" }
   end
 end
