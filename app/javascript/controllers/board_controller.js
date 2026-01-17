@@ -7,6 +7,9 @@ export default class extends Controller {
     const previewContainer = document.getElementById("card-preview-container")
     if (!previewContainer) return
 
+    // Do not clear if clicking inside the detail panel
+    if (previewContainer.contains(event.target)) return
+
     delete previewContainer.dataset.pinnedBy
     previewContainer.classList.remove("active")
     previewContainer.classList.remove("pinned")

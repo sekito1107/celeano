@@ -4,6 +4,11 @@ export default class extends Controller {
   static targets = ["modal"]
 
   connect() {
+    if (!this.hasModalTarget) {
+      console.warn("card-list-modal: modal target not found")
+      return
+    }
+
     // Store reference to the element
     this.modalElement = this.modalTarget
     this.closeButtonElement = this.modalElement.querySelector(".modal-close-btn")
