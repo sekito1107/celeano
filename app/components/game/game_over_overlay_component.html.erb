@@ -1,0 +1,21 @@
+<div class="<%= container_classes %>">
+  <% if sanity_death? %>
+    <div class="shatter-layer"></div>
+    <div class="overlay-content">
+      <h1 class="game-over-title insane-title">DESCENDED INTO MADNESS</h1>
+      <p class="game-over-message">Your mind has fractured beyond repair...</p>
+      
+      <div class="game-over-actions">
+        <%= link_to "Return to Void", lobby_path, class: "btn-insane" %>
+      </div>
+    </div>
+  <% else %>
+    <div class="overlay-content">
+      <h1 class="game-over-title"><%= title %></h1>
+      
+      <div class="game-over-actions">
+        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
+      </div>
+    </div>
+  <% end %>
+</div>
