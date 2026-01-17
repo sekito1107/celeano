@@ -81,38 +81,6 @@
 
 /* --- Stats Orbs (Text Containers Only) --- */
 /* The graphic is now part of the frame image. These are just for positioning numbers. */
-.stat-orb {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Cinzel Decorative', cursive;
-  font-weight: bold;
-  font-size: 1.4rem;
-  color: #fff;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.9);
-  z-index: 5;
-}
-
-.cost-orb {
-  top: 4%;
-  left: 4%;
-  /* No background image */
-}
-
-.attack-orb {
-  bottom: 5%;
-  left: 5%;
-  /* No background image */
-}
-
-.hp-orb {
-  bottom: 5%;
-  right: 5%;
-  /* No background image */
-}
 
 /* Value modifiers */
 .text-buffed { color: #86efac; text-shadow: 0 0 8px #22c55e; }
