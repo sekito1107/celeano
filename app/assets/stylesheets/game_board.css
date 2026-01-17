@@ -14,7 +14,10 @@
 /* 全体の背景設定 */
 /* View側でクラスを適用する必要がありますが、ここでは変数を定義 */
 .game-board {
-  background: url("game_background.png") no-repeat center center fixed;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("game_background.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
   background-size: cover;
   position: relative;
   overflow-y: auto; /* Allow vertical scrolling if content overflows */
