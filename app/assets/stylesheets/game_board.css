@@ -218,3 +218,19 @@
   font-size: 0.75rem;
   font-family: monospace;
 }
+
+/* Status Bar Positioning */
+.status-bar-wrapper {
+  position: absolute;
+  z-index: 20;
+}
+
+.opponent-status {
+  top: 2rem;
+  left: 2rem;
+}
+
+.player-status {
+  bottom: 2rem;
+  left: 2rem;
+}
