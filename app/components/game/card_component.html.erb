@@ -1,54 +1,137 @@
-<div class="card-wrapper card-interactive" data-controller="card">
-  <div class="<%= frame_class %>">
-    
-    <%# --- Cost Orb --- %>
-    <div class="stat-orb cost-orb">
-      <%= cost %>
-    </div>
+<div class="card-wrapper <%= (variant_hand? || variant_field?) ? 'card-simple' : 'card-detail' %> <%= 'card-field' if variant_field? %>" 
+     <% if variant_hand? || variant_field? %>
+       data-controller="card-hover"
+       data-action="mouseenter->card-hover#showDetail mouseleave->card-hover#hideDetail <%= 'click->card-hover#pinDetail' if interactive? %>"
+       data-card-hover-id-value="<%= @card_entity&.id || 'preview' %>"
+       data-card-hover-detail-html-value="<%= render(Game::CardComponent.new(card_entity: @card_entity, variant: :detail)).to_str %>"
+     <% end %>>
   
-    <%# --- Card Art --- %>
-    <div class="card-art">
-      <% if image_name.present? %>
-        <%#= image_tag "cards/#{image_name}", class: "art-image" %>
-        <div class="art-placeholder"><%= image_name %></div>
-      <% else %>
-        <div class="art-placeholder">画像なし</div>
-      <% end %>
-
-      <%# Poison Effect Overlay %>
-      <% if poisoned? %>
-        <div class="status-effect-overlay effect-poison"></div>
-      <% end %>
-    </div>
-
-    <%# --- Text Box --- %>
-    <div class="card-textbox">
-      <div class="card-name"><%= name %></div>
-      <div class="card-description">
-        <%= simple_format(text) %>
-      </div>
-    </div>
-
-    <%# --- Badges (Keywords) --- %>
-    <div class="badges-container">
-      <% if guardian? %>
-        <div class="keyword-badge">🛡️</div>
-      <% end %>
-      <% if haste? %>
-        <div class="keyword-badge">⚡</div>
-      <% end %>
-    </div>
-
-    <%# --- Stats Orbs (Unit Only) --- %>
-    <% if unit? %>
-      <div class="stat-orb attack-orb <%= attack_buffed? ? 'text-buffed' : '' %>">
-        <%= total_attack %>
-      </div>
+  <% if variant_hand? || variant_field? %>
+    <%# --- SIMPLE HAND VIEW (Mockup Style) --- %>
+    <div class="simple-frame mockup-style">
+      <%# Full Art %>
+      <%= image_tag "cards/#{image_name}", class: "simple-art" %>
       
-      <div class="stat-orb hp-orb <%= damaged? ? 'text-damaged' : '' %>">
-        <%= hp %>
+      <%# Top Left: Cost %>
+      <div class="simple-cost-circle">
+        <%= cost %>
       </div>
-    <% end %>
 
-  </div>
+      <%# Top Right: Badges %>
+      <div class="simple-badges">
+        <% if guardian? %><span class="badge-icon">🛡️</span><% end %>
+        <% if haste? %><span class="badge-icon">⚡</span><% end %>
+        <% if stunned? %><span class="badge-icon">💫</span><% end %>
+      </div>
+
+      <%# Middle-Low: Name Strip %>
+      <div class="simple-name-strip">
+        <span class="name-text"><%= name %></span>
+      </div>
+
+      <%# Bottom: Stats %>
+      <% if unit? %>
+        <div class="simple-stats-row">
+          <div class="stat-group attack-group <%= attack_buffed? ? 'text-buffed' : '' %>">
+            <span class="stat-icon">⚔️</span>
+            <span class="stat-value"><%= total_attack %></span>
+          </div>
+
+          <% if has_threshold? %>
+            <div class="stat-group threshold-group">
+              <span class="stat-icon threshold-icon">👁️</span>
+              <span class="stat-value"><%= threshold %></span>
+            </div>
+          <% end %>
+
+          <div class="stat-group hp-group <%= damaged? ? 'text-damaged' : '' %>">
+            <span class="stat-icon">♥️</span>
+            <span class="stat-value"><%= hp %></span>
+          </div>
+        </div>
+      <% end %>
+      
+      <%# Status Effect Overlay %>
+      <% if poisoned? %>
+        <div class="simple-poison-overlay"></div>
+      <% end %>
+
+    </div>
+
+  <% else %>
+    <%# --- DETAIL VIEW (Sidebar Panel Style) --- %>
+    <div class="detail-panel">
+      
+      <%# Header: Name and Cost %>
+      <div class="detail-header">
+        <div class="detail-cost"><%= cost %></div>
+        <div class="detail-name"><%= name %></div>
+        <div class="detail-type-icon"><%= unit? ? 'Monster' : 'Spell' %></div>
+      </div>
+
+      <%# Art Area %>
+      <div class="detail-art-container">
+        <%= image_tag "cards/#{image_name}", class: "detail-art-image" %>
+        <% if poisoned? %>
+          <div class="detail-status-overlay status-poison">POISON</div>
+        <% end %>
+      </div>
+
+      <%# Stats Row (Unit Only) %>
+      <% if unit? %>
+        <div class="detail-stats-row">
+          <div class="detail-stat stat-atk <%= attack_buffed? ? 'buffed' : '' %>">
+            <span class="label">ATK</span>
+            <span class="value"><%= total_attack %></span>
+          </div>
+
+          <% if has_threshold? %>
+            <div class="detail-stat stat-threshold">
+              <span class="label">INSIGHT</span>
+              <span class="value"><%= threshold %></span>
+              <span class="icon">👁️</span>
+            </div>
+          <% end %>
+
+          <div class="detail-stat stat-hp <%= damaged? ? 'damaged' : '' %>">
+            <span class="label">HP</span>
+            <span class="value"><%= hp %></span>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Description Area %>
+      <div class="detail-body">
+        <div class="detail-description-box">
+          <%= simple_format(text) %>
+        </div>
+
+        <% if description_insane.present? %>
+          <div class="detail-insane-box">
+            <div class="insane-header">
+              <span class="insane-icon">👁️</span>
+              <span class="insane-label">INSANITY (Threshold <%= threshold %>)</span>
+            </div>
+            <div class="insane-text">
+              <%= simple_format(description_insane) %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if flavor_text.present? %>
+          <div class="detail-flavor-text">
+            <%= simple_format(flavor_text) %>
+          </div>
+        <% end %>
+      </div>
+
+      <%# Footer / Badges %>
+      <div class="detail-footer">
+        <% if guardian? %><span class="detail-badge">🛡️ Guardian</span><% end %>
+        <% if haste? %><span class="detail-badge">⚡ Haste</span><% end %>
+        <% if stunned? %><span class="detail-badge">💫 Stunned</span><% end %>
+      </div>
+
+    </div>
+  <% end %>
 </div>

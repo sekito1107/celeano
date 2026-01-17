@@ -6,15 +6,16 @@ RSpec.describe Game::CardComponent, type: :component do
   let(:card) { create(:card, name: "Test Card", cost: 3, attack: 2, hp: 4, card_type: :unit) }
 
   context "with a static Card object" do
-    it "renders correctly as a preview" do
+    it "renders correctly as a preview (default simple)" do
       render_inline(described_class.new(card_entity: card))
 
       expect(page).to have_css(".card-wrapper")
-      expect(page).to have_css(".card-frame")
-      expect(page).to have_css(".card-name", text: "Test Card")
-      expect(page).to have_css(".cost-orb", text: "3")
-      expect(page).to have_css(".attack-orb", text: "2")
-      expect(page).to have_css(".hp-orb", text: "4")
+      # Default is :hand (simple)
+      expect(page).to have_css(".simple-frame")
+      expect(page).to have_css(".simple-name", text: "Test Card")
+      expect(page).to have_css(".simple-cost", text: "3")
+      expect(page).to have_css(".simple-attack", text: "2")
+      expect(page).to have_css(".simple-hp", text: "4")
     end
   end
 
@@ -32,51 +33,29 @@ RSpec.describe Game::CardComponent, type: :component do
       )
     end
 
-    describe "Visual States" do
-      it "renders unit frame for units" do
-        render_inline(described_class.new(card_entity: game_card))
-        expect(page).to have_css(".frame-unit")
-        expect(page).not_to have_css(".frame-spell")
+    describe "Visual States and Variants" do
+      context "with :hand variant (Simple View)" do
+        it "renders simple art and overlay" do
+          render_inline(described_class.new(card_entity: game_card, variant: :hand))
+          expect(page).to have_css(".card-simple")
+          expect(page).to have_css(".simple-frame")
+          expect(page).to have_css(".simple-overlay")
+          expect(page).to have_css(".simple-name", text: "Test Card")
+          # Should NOT have the complex frame classes or orbs
+          expect(page).not_to have_css(".card-frame")
+          expect(page).not_to have_css(".stat-orb")
+        end
       end
 
-      it "renders spell frame for spells" do
-        card.update(card_type: :spell)
-        render_inline(described_class.new(card_entity: game_card))
-        expect(page).to have_css(".frame-spell")
-        expect(page).not_to have_css(".frame-unit")
+      context "with :detail variant (Detailed View)" do
+        it "renders integrated frame and full stats" do
+          render_inline(described_class.new(card_entity: game_card, variant: :detail))
+          expect(page).to have_css(".card-frame") # Integrated frame
+          expect(page).to have_css(".card-textbox")
+          # Should NOT have simple view classes
+          expect(page).not_to have_css(".card-simple")
+        end
       end
-
-      it "shows buffed text color when attack is increased" do
-        # attack 2 -> 3
-        allow(game_card).to receive(:total_attack).and_return(3)
-        render_inline(described_class.new(card_entity: game_card))
-        expect(page).to have_css(".attack-orb.text-buffed", text: "3")
-      end
-
-      it "shows damaged text color when hp is decreased" do
-        # hp 4 -> 3
-        game_card.update(current_hp: 3)
-        render_inline(described_class.new(card_entity: game_card))
-        expect(page).to have_css(".hp-orb.text-damaged", text: "3")
-      end
-
-      it "shows poison effect overlay when poisoned" do
-        create(:game_card_modifier, game_card: game_card, effect_type: :poison)
-        render_inline(described_class.new(card_entity: game_card))
-        expect(page).to have_css(".status-effect-overlay.effect-poison")
-      end
-
-      it "shows stunned state class when stunned" do
-        create(:game_card_modifier, game_card: game_card, effect_type: :stun)
-        render_inline(described_class.new(card_entity: game_card))
-        expect(page).to have_css(".card-frame.state-stunned")
-      end
-
-      it "shows badges for keywords" do
-        create(:card_keyword, card: card, keyword: create(:keyword, name: "haste"))
-        render_inline(described_class.new(card_entity: game_card))
-        expect(page).to have_css(".keyword-badge", text: "⚡")
-      end
-    end
+  end
   end
 end

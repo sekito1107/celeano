@@ -2,8 +2,11 @@
 <%= stylesheet_link_tag "status_bar", "data-turbo-track": "reload" %>
 <%= stylesheet_link_tag "card", "data-turbo-track": "reload" %>
 
-<div class="game-board">
+<div class="game-board" data-controller="board" data-action="click->board#clearDetail">
   <div class="game-overlay"></div>
+  
+  <%# Master-Detail Preview Container %>
+  <div id="card-preview-container"></div>
   <div class="game-logo">CELEANO</div>
 
   <!-- Opponent Area -->
