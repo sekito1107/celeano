@@ -51,13 +51,15 @@
   z-index: 2;
   backdrop-filter: blur(2px);
   flex-shrink: 0; /* Prevent shrinking */
+  margin-bottom: 0;
 }
 
 .play-mat-opponent {
   border-bottom: none;
   border-top: 1px solid var(--game-border-color);
   transform: rotate(180deg);
-  padding: 2rem 0; /* Normal padding for opponent */
+  padding: 4rem 0 2rem 0; /* Adjusted padding to account for top edge/logo area */
+  margin-top: -1px; /* Ensure logical overlap if needed, but flex should handle */
 }
 
 .play-mat-opponent .field-slots-area {
