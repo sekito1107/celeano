@@ -5,6 +5,9 @@ class GamePlayer < ApplicationRecord
   belongs_to :user
   has_many :game_cards, dependent: :destroy
 
+  MAX_HP = 20
+  MAX_SAN = 20
+
   enum :role, { host: 0, guest: 1 }
 
   def opponent
