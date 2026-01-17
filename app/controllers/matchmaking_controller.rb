@@ -13,6 +13,11 @@ class MatchmakingController < ApplicationController
   def show
     @matched = params[:matched] == "true"
     @game_id = params[:game_id]
+
+    if @game_id
+      game = Game.find_by(id: @game_id)
+      @opponent = game&.game_players&.where&.not(user_id: current_user.id)&.first&.user
+    end
   end
 
   def destroy

@@ -8,7 +8,7 @@ export default class extends Controller {
     matched: Boolean,
     gameId: Number
   }
-  static targets = ["searchingState", "matchedState"]
+  static targets = ["searchingState", "matchedState", "opponentName", "opponentStatus", "opponentAvatarContainer"]
 
   connect() {
     this.consumer = createConsumer()
@@ -36,6 +36,21 @@ export default class extends Controller {
   handleMessage(data) {
     if (data.action === "matched" && !this.matched) {
       this.matched = true
+      
+      // 対戦相手情報の更新
+      if (this.hasOpponentNameTarget) {
+        this.opponentNameTarget.textContent = data.opponent_name
+      }
+      
+      if (this.hasOpponentStatusTarget) {
+        this.opponentStatusTarget.className = "player-card__status player-card__status--ready"
+        this.opponentStatusTarget.innerHTML = '<span class="status-dot"></span> Ready'
+      }
+
+      if (this.hasOpponentAvatarContainerTarget) {
+        this.opponentAvatarContainerTarget.innerHTML = `<img src="${data.opponent_image}" class="player-card__image" alt="${data.opponent_name}">`
+      }
+
       this.triggerEncounterAnimation(data.game_id)
     }
   }
