@@ -22,6 +22,8 @@ RSpec.describe Game::FieldComponent, type: :component do
     let!(:left_card) { create(:game_card, :board, position: :left, game: game, game_player: game_player, user: user) }
     let!(:center_card) { create(:game_card, :board, position: :center, game: game, game_player: game_player, user: user) }
 
+    before { game_player.reload }
+
     it "正しいスロットにカードが表示されること" do
       render_inline(described_class.new(game_player: game_player))
 
@@ -42,6 +44,8 @@ RSpec.describe Game::FieldComponent, type: :component do
 
   context "墓地にカードがある場合" do
     let!(:graveyard_card) { create(:game_card, :graveyard, game_player: game_player, game: game, user: user) }
+
+    before { game_player.reload }
 
     it "墓地の一番上のカードが表示されること" do
       render_inline(described_class.new(game_player: game_player))
