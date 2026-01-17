@@ -27,7 +27,7 @@ RSpec.describe Game::FieldComponent, type: :component do
     it "正しいスロットにカードが表示されること" do
       render_inline(described_class.new(game_player: game_player))
 
-      expect(page).to have_css(".field-slot.left-slot .card-component") # CardComponentが.card-componentのような識別可能な要素を描画すると仮定
+      expect(page).to have_css(".field-slot.left-slot .card-wrapper") # CardComponent renders a wrapper
       # 実際にはCardComponentの出力には特定のクラスがないかもしれません。
       # しかし、コンテンツを描画するかどうかは確認できます。
       # そのスロットに.empty-slotが表示されていなければ、CardComponentが描画されていると仮定します。

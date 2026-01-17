@@ -17,14 +17,9 @@ RSpec.describe Game::StatusBarComponent, type: :component do
     it "HPとSANが正しく表示されること" do
       render_inline(described_class.new(game_player: game_player))
 
-      expect(page).to have_css(".status-bar-container")
-      expect(page).to have_css(".hp-row .status-text", text: "20 / 20")
-      expect(page).to have_css(".san-row .status-text", text: "20 / 20")
-    end
-
-    it "HPバーの幅が100%であること" do
-      render_inline(described_class.new(game_player: game_player))
-      expect(page).to have_css(".hp-fill[style*='width: 100.0%']")
+      expect(page).to have_css(".hero-status-container")
+      expect(page).to have_css(".hp-badge .stat-value", text: "20")
+      expect(page).to have_css(".san-badge .stat-value", text: "20")
     end
   end
 
@@ -33,16 +28,8 @@ RSpec.describe Game::StatusBarComponent, type: :component do
 
     it "数値が正しく更新されていること" do
       render_inline(described_class.new(game_player: game_player))
-      expect(page).to have_css(".hp-row .status-text", text: "10 / 20")
-      expect(page).to have_css(".san-row .status-text", text: "5 / 20")
-    end
-
-    it "バーの幅が正しく計算されていること" do
-      render_inline(described_class.new(game_player: game_player))
-      # 10/20 = 50%
-      expect(page).to have_css(".hp-fill[style*='width: 50.0%']")
-      # 5/20 = 25%
-      expect(page).to have_css(".san-fill[style*='width: 25.0%']")
+      expect(page).to have_css(".hp-badge .stat-value", text: "10")
+      expect(page).to have_css(".san-badge .stat-value", text: "5")
     end
   end
 
@@ -51,7 +38,8 @@ RSpec.describe Game::StatusBarComponent, type: :component do
 
     it "insaneクラスが付与されていること" do
       render_inline(described_class.new(game_player: game_player))
-      expect(page).to have_css(".status-bar-container.insane")
+      # sanity_level_class returns "sanity-critical" for san <= 5
+      expect(page).to have_css(".hero-status-container.sanity-critical")
     end
   end
 end

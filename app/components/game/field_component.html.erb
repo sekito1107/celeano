@@ -8,7 +8,7 @@
   <div class="field-slots-area">
     <div class="field-slot left-slot">
       <% if left_slot_card %>
-        <%= render Game::CardComponent.new(card_entity: left_slot_card) %>
+        <%= render Game::CardComponent.new(card_entity: left_slot_card, variant: :field) %>
       <% else %>
         <div class="empty-slot"></div>
       <% end %>
@@ -16,7 +16,7 @@
 
     <div class="field-slot center-slot">
       <% if center_slot_card %>
-        <%= render Game::CardComponent.new(card_entity: center_slot_card) %>
+        <%= render Game::CardComponent.new(card_entity: center_slot_card, variant: :field) %>
       <% else %>
         <div class="empty-slot"></div>
       <% end %>
@@ -24,18 +24,78 @@
 
     <div class="field-slot right-slot">
       <% if right_slot_card %>
-        <%= render Game::CardComponent.new(card_entity: right_slot_card) %>
+        <%= render Game::CardComponent.new(card_entity: right_slot_card, variant: :field) %>
       <% else %>
         <div class="empty-slot"></div>
       <% end %>
     </div>
   </div>
 
-  <div class="field-graveyard-area">
-    <% if graveyard_top_card %>
-      <%= render Game::CardComponent.new(card_entity: graveyard_top_card) %>
-    <% else %>
-      <div class="empty-graveyard"></div>
-    <% end %>
+  <div class="field-right-stack">
+    <!-- Graveyard -->
+    <div class="field-area-wrapper" data-controller="card-list-modal">
+      <div class="field-graveyard-area" data-action="click->card-list-modal#open">
+        <div class="field-label">Grave</div>
+        <% if graveyard_top_card %>
+          <%= render Game::CardComponent.new(card_entity: graveyard_top_card, variant: :field) %>
+        <% else %>
+          <div class="empty-graveyard">
+            <span class="icon">💀</span>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="game-modal-overlay hidden" data-card-list-modal-target="modal" data-action="click->card-list-modal#close">
+        <div class="game-modal">
+          <div class="modal-content <%= 'modal-opponent' if opponent? %>">
+            <div class="modal-header">
+              <h2><%= opponent? ? "Opponent Graveyard" : "Graveyard" %> (<%= graveyard_cards.count %>)</h2>
+              <button class="modal-close-btn" data-action="click->card-list-modal#closeButton">×</button>
+            </div>
+            <div class="modal-grid">
+              <% graveyard_cards.each do |card| %>
+                <%= render Game::CardComponent.new(card_entity: card, variant: :field) %>
+              <% end %>
+              <% if graveyard_cards.empty? %>
+                <div class="modal-empty-msg">No cards in Graveyard.</div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Banished -->
+    <div class="field-area-wrapper" data-controller="card-list-modal">
+      <div class="field-banished-area" data-action="click->card-list-modal#open">
+        <div class="field-label">Void</div>
+        <% if banished_top_card %>
+          <%= render Game::CardComponent.new(card_entity: banished_top_card, variant: :field) %>
+        <% else %>
+          <div class="empty-banished">
+            <span class="icon">🌀</span>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="game-modal-overlay hidden" data-card-list-modal-target="modal" data-action="click->card-list-modal#close">
+        <div class="game-modal">
+          <div class="modal-content <%= 'modal-opponent' if opponent? %>">
+            <div class="modal-header">
+              <h2><%= opponent? ? "Opponent Banished" : "Banished Zone" %> (<%= banished_cards.count %>)</h2>
+              <button class="modal-close-btn" data-action="click->card-list-modal#closeButton">×</button>
+            </div>
+            <div class="modal-grid">
+              <% banished_cards.each do |card| %>
+                <%= render Game::CardComponent.new(card_entity: card, variant: :field) %>
+              <% end %>
+              <% if banished_cards.empty? %>
+                <div class="modal-empty-msg">No banished cards.</div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

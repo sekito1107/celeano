@@ -33,8 +33,10 @@ ActiveRecord::Base.transaction do
         cost: attrs["cost"].to_s,
         attack: attrs["attack"].to_s,
         hp: attrs["hp"].to_i,
-        threshold_san: attrs["threshold_san"].to_i,
+        threshold_san: attrs["threshold"].to_i, # YAMLのthresholdをthreshold_sanとして保存
         description: attrs["description"],
+        description_insane: attrs["description_insane"],
+        flavor_text: attrs["flavor_text"],
         image_name: attrs["image_name"]
       )
       card.save!

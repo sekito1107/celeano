@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_16_235514) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_17_133209) do
   create_table "battle_logs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.json "details", default: {}, null: false
@@ -37,6 +37,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_16_235514) do
     t.string "cost", default: "0", null: false
     t.datetime "created_at", null: false
     t.text "description"
+    t.text "description_insane"
+    t.text "flavor_text"
     t.integer "hp", default: 0, null: false
     t.string "image_name"
     t.string "key_code", null: false

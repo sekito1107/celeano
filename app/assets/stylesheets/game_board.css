@@ -9,14 +9,37 @@
   --game-border-color: rgba(255, 255, 255, 0.15);
   --game-slot-bg: rgba(0, 0, 0, 0.4);
   --game-glow: 0 0 10px rgba(139, 0, 0, 0.3);
+  --game-bg-overlay: rgba(0, 0, 0, 0.6);
 }
 
 /* 全体の背景設定 */
 /* View側でクラスを適用する必要がありますが、ここでは変数を定義 */
 .game-board {
-  background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
-  position: relative;
-  overflow: hidden;
+  background-image: linear-gradient(var(--game-bg-overlay), var(--game-bg-overlay)), url("game_background.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto; /* Allow vertical scrolling if content overflows */
+  /* Height is determined by absolute positioning */
+  display: flex;
+  flex-direction: column;
+  /* padding-bottom removed as requested */
+  gap: 1rem; /* Ensure visual separation between mats */
+}
+
+/* Remove utility divs from flex flow to prevent unwanted gaps at the top */
+.game-overlay,
+#card-preview-container {
+  position: absolute;
+  width: 100%;
+  height: 0;
+  pointer-events: none;
 }
 
 /* 雰囲気出しのためのビネット効果 (疑似要素で実装可能だが今回は親コンテナに適用想定) */
@@ -38,35 +61,68 @@
   border-top: 1px solid var(--game-border-color);
   border-bottom: 1px solid var(--game-border-color);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-  padding: 2rem 0;
+  padding: 2rem 0 4rem 0; /* Increase bottom padding for hand cards */
   position: relative;
   z-index: 2;
   backdrop-filter: blur(2px);
+  flex-shrink: 0; /* Prevent shrinking */
+  margin-bottom: 0;
 }
 
 .play-mat-opponent {
   border-bottom: none;
   border-top: 1px solid var(--game-border-color);
   transform: rotate(180deg);
+  padding: 2rem 0; /* padding reset */
+  margin-top: 0;
 }
+
+.play-mat-opponent .field-slots-area {
+  flex-direction: row-reverse;
+}
+
+/* Opponent Field Cards: Rotate Upright */
+.play-mat-opponent .field-slot .card-wrapper {
+  transform: rotate(180deg);
+}
+/* Opponent Field Hover: Maintain Rotation */
+.play-mat-opponent .field-slot:hover .card-wrapper {
+  transform: rotate(180deg) translateY(-20px) scale(1.1) !important;
+  z-index: 100;
+}
+
+/* Fix orientation for opponent's deck and field areas (Labels & Numbers) */
+.play-mat-opponent .deck-placeholder,
+.play-mat-opponent .field-graveyard-area,
+.play-mat-opponent .field-banished-area {
+  transform: rotate(180deg) !important;
+}
+
+
 
 /* 手札コンポーネント */
 .hand-container {
+  /* Update local variables for container calculations */
+  --card-height: 224px;
+  
   display: flex;
   justify-content: center;
   align-items: flex-end; /* カードを下揃え */
   gap: 0; /* 重ねるために gap を 0 に */
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   min-height: calc(var(--card-height) + 2rem);
   width: 100%;
   perspective: 1000px;
 }
 
 .hand-card-wrapper {
+  /* Explicitly larger size for hand cards */
+  --card-width: 160px;
+  --card-height: 224px;
   width: var(--card-width);
   height: var(--card-height);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  margin-left: -15px; /* カードを少し重ねる */
+  margin-left: -5px; /* Cards overlap slightly less */
   position: relative;
   box-shadow: -2px 0 5px rgba(0,0,0,0.5); /* 重なりの影 */
 }
@@ -97,31 +153,80 @@
 
 /* フィールドコンポーネント */
 .field-container {
+  /* Slightly larger to fit detailed card design better */
+  --card-width: 140px;
+  --card-height: 196px;
+  --slot-gap: 1rem; /* Reduced gap */
+
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 300px 1fr 300px; /* Symmetric columns (300px fits Grave+Void) */
+  justify-items: center;
+  gap: 1rem;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px; /* Increased to prevent overflow misalignment */
   margin: 0 auto;
   padding: 1rem;
   align-items: center;
 }
 
-.field-deck-area,
-.field-graveyard-area {
+.field-deck-area {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: var(--card-width);
+  height: var(--card-height);
+}
+
+.field-right-stack {
+  display: flex;
+  flex-direction: row; /* Horizontal */
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  /* Width will be 2 * card-width + gap */
+}
+
+.field-graveyard-area,
+.field-banished-area {
+  width: var(--card-width);
+  height: var(--card-height);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.field-label {
+  position: absolute;
+  top: -1.2rem;
+  width: 100%;
+  text-align: center;
+  font-family: serif;
+  font-size: 0.8rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .field-slots-area {
   display: flex;
   justify-content: center;
   gap: var(--slot-gap);
-  padding: 1rem;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
-  border-radius: 50%; /* 楕円形の光 */
+  padding: 1.5rem; /* Increased padding */
+  background: rgba(0, 0, 0, 0.3); /* Distinct background */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6); /* Lift it off the mat */
+  position: relative;
+  /* Removed margin to save space */
+}
+/* Shine effect for the stage */
+.field-slots-area::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
 }
 
 /* スロットの共通スタイル */
@@ -130,7 +235,7 @@
   height: var(--card-height);
   border: 1px solid var(--game-border-color);
   background-color: var(--game-slot-bg);
-  border-radius: 4px; /* 少し角ばらせる */
+  border-radius: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -140,7 +245,6 @@
 }
 
 .field-slot::after {
-  /* 魔法陣のような装飾枠 (簡易版) */
   content: "";
   position: absolute;
   top: 5px; left: 5px; right: 5px; bottom: 5px;
@@ -151,12 +255,13 @@
 
 .field-slot:hover {
   border-color: rgba(255,255,255,0.3);
-  box-shadow: inset 0 0 15px rgba(139, 0, 0, 0.2); /* 少し赤く光る */
+  box-shadow: inset 0 0 15px rgba(139, 0, 0, 0.2);
 }
 
 /* プレースホルダー */
 .deck-placeholder,
 .empty-graveyard,
+.empty-banished,
 .empty-slot {
   width: 100%;
   height: 100%;
@@ -169,42 +274,52 @@
   text-shadow: 0 1px 2px black;
 }
 
-/* デッキの山札感 */
-.deck-placeholder {
-  background: repeating-linear-gradient(
-    -45deg,
-    #2a2a2a,
-    #2a2a2a 2px,
-    #333 2px,
-    #333 4px
-  );
-  border: 2px solid #444;
-  box-shadow: 2px 2px 0 #111, 4px 4px 0 #111; /* 簡易的な厚み */
+.empty-graveyard {
+  border: 1px dashed #4b5563;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
 }
 
-/* カード裏面 (よりリッチに) */
+.empty-banished {
+  border: 1px dashed #6366f1; /* Indigo for banished */
+  border-radius: 4px;
+  background: rgba(10, 10, 30, 0.4);
+}
+
+.empty-graveyard .icon,
+.empty-banished .icon {
+  font-size: 2rem;
+  opacity: 0.5;
+}
+
+/* デッキの山札感 */
+.deck-placeholder {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("cards/card_back_ancient.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative; /* Ensure deck count is positioned relative to this */
+  border-radius: 8px; /* Match card radius */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    2px 2px 0 #111, 
+    4px 4px 0 #111,
+    0 0 10px rgba(0,0,0,0.5); /* 簡易的な厚み + 影 */
+}
+
+/* カード裏面 */
 .card-back {
   width: 100%;
   height: 100%;
-  background-color: #0a0a0a;
-  border: 1px solid #444;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-image: 
-    radial-gradient(circle at center, #1a0505 0%, transparent 70%),
-    repeating-linear-gradient(45deg, #111, #111 10px, #151515 10px, #151515 20px);
+  border-radius: 8px; /* Match card wrapper radius */
   box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("cards/card_back_ancient.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
 }
 
-.card-back::before {
-  /* 中央のシンボル的なもの */
-  content: "👁️"; 
-  font-size: 1.5rem;
-  opacity: 0.2;
-  filter: grayscale(100%);
-}
 
 /* デッキ枚数バッジ */
 .deck-count {
@@ -219,18 +334,265 @@
   font-family: monospace;
 }
 
+
+
+/* --- Hero Portrait Status (Obsidian Frame) --- */
+
+.hero-status-container {
+  position: relative;
+  width: 170px;
+  height: 170px;
+}
+
+.hero-portrait-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-avatar {
+  position: absolute;
+  width: 65%; /* Adjusted for obsidian frame */
+  height: 65%;
+  border-radius: 50%;
+  object-fit: cover;
+  z-index: 1;
+  box-shadow: inset 0 0 20px #000;
+  background: #000;
+}
+
+.hero-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,1.0)); /* Stronger shadow */
+}
+
+.stat-badge {
+  position: absolute;
+  bottom: 9px; /* Precise pixel alignment (-1px from ~6%) */
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  text-align: center;
+  z-index: 10;
+  
+  color: #e0e0e0;
+  font-family: var(--font-display), serif;
+  font-weight: bold;
+  font-size: 1.5rem; /* Reduced by ~1-2px */
+  line-height: 1;
+  
+  text-shadow: 
+    0 -1px 0 rgba(0,0,0,0.9), 
+    0 2px 4px rgba(0,0,0,0.8), 
+    0 0 10px rgba(0,0,0,0.5);
+}
+
+.hp-badge {
+  left: 3%; /* Final micro-adjustment */
+  color: #ffdddd;
+  text-shadow: 0 -1px 0 #500, 0 0 8px #f00, 0 2px 4px #000;
+}
+
+.san-badge {
+  right: 3%; /* Final micro-adjustment */
+  color: #ddeeff;
+  text-shadow: 0 -1px 0 #005, 0 0 8px #0af, 0 2px 4px #000;
+}
+
+
+/* --- Sanity Animations (Progressive) --- */
+
+/* Normal (16+) - No effect */
+
+/* Warning (11-15) - Slight Pulse */
+.sanity-warning .hero-avatar {
+  animation: sanity-pulse-weak 3s infinite alternate;
+}
+@keyframes sanity-pulse-weak {
+  from { filter: sepia(0.2); }
+  to { filter: sepia(0.4) saturate(1.2); }
+}
+
+/* Low (6-10) - Noticeable Shake & Color Shift */
+.sanity-low .hero-avatar {
+  animation: sanity-shake-medium 2s infinite;
+  filter: sepia(0.6) hue-rotate(220deg);
+}
+@keyframes sanity-shake-medium {
+  0%, 100% { transform: translate(0, 0); }
+  10%, 90% { transform: translate(-1px, 0); }
+  20%, 80% { transform: translate(1px, 0); }
+  30%, 50%, 70% { transform: translate(0, 0); }
+}
+
+/* Critical (0-5) - Intense Glitch & Dark Purple */
+.sanity-critical .hero-avatar {
+  animation: sanity-glitch 0.2s infinite;
+  filter: sepia(1) hue-rotate(260deg) saturate(2) contrast(1.5);
+  box-shadow: 0 0 20px #8000ff;
+}
+.sanity-critical .san-badge .stat-value {
+  color: #d8b4fe;
+  animation: text-flicker 0.1s infinite;
+}
+
+@keyframes sanity-glitch {
+  0% { transform: translate(0, 0) scale(1.0); opacity: 1; }
+  20% { transform: translate(-2px, 2px) scale(1.02); opacity: 0.9; }
+  40% { transform: translate(2px, -2px) scale(0.98); opacity: 1; }
+  60% { transform: translate(-2px, -2px) scale(1.01); opacity: 0.8; }
+  80% { transform: translate(2px, 2px) scale(0.99); opacity: 1; }
+  100% { transform: translate(0, 0) scale(1.0); opacity: 1; }
+}
+
+@keyframes text-flicker {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
 /* Status Bar Positioning */
 .status-bar-wrapper {
-  position: absolute;
+  position: fixed;
   z-index: 20;
 }
 
 .opponent-status {
   top: 2rem;
-  left: 2rem;
+  right: 2rem;
 }
 
 .player-status {
   bottom: 2rem;
   left: 2rem;
+}
+
+/* Interactive Areas */
+.field-graveyard-area, .field-banished-area {
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+}
+.field-graveyard-area:hover, .field-banished-area:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+}
+
+/* --- Modal Styles --- */
+.hidden {
+  display: none !important;
+}
+
+.game-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-modal {
+  padding: 0;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: transparent;
+  width: 80vw;
+  max-width: 1000px;
+  max-height: 80vh;
+  box-shadow: 0 0 50px rgba(0,0,0,0.8);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Remove ::backdrop as we use overlay */
+
+.modal-content {
+  background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%);
+  color: #fff;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 80vh; /* Ensure content handles overflow */
+}
+
+/* Opponent Modal Variant */
+.modal-content.modal-opponent {
+  background: radial-gradient(circle at center, #2a0505 0%, #0a0000 100%);
+  border: 1px solid #8b0000;
+  box-shadow: inset 0 0 50px rgba(139, 0, 0, 0.2);
+}
+
+.modal-content.modal-opponent .modal-header {
+  border-bottom-color: #8b0000;
+}
+
+.modal-content.modal-opponent .modal-header h2 {
+  color: #fca5a5; /* Light red text */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #333;
+  padding-bottom: 1rem;
+}
+
+.modal-header h2 {
+  font-family: serif;
+  font-size: 1.5rem;
+  color: #e5e7eb;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Matches card width */
+  gap: 1.5rem;
+  overflow-y: auto;
+  padding: 1rem;
+  min-height: 200px;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 1rem;
+}
+.modal-close-btn:hover {
+  color: #fff;
+}
+
+.modal-empty-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #6b7280;
+  font-family: serif;
+  font-style: italic;
+  margin-top: 2rem;
 }

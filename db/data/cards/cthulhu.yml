@@ -5,8 +5,11 @@ deep_one_scout:
   cost: "1"
   hp: 2
   attack: "2"
+  threshold: 3
   keywords: []
-  description: ルルイエの門番。水中から這い上がり、敵を見つける。
+  description: "ファンファーレ：カードを1枚引く。"
+  description_insane: "ファンファーレ：カードを1枚引く。疾走を持つ。"
+  flavor_text: "ルルイエの門番。水中から這い上がり、敵を見つける。"
 
 cthulhu_cultist:
   key_code: cthulhu_cultist
@@ -15,8 +18,11 @@ cthulhu_cultist:
   cost: "2"
   hp: 3
   attack: "2"
+  threshold: 3
   keywords: []
-  description: 「いあ！いあ！」と叫びながら突撃する狂気の信者。
+  description: "ラストワード：ランダムな相手ユニットに1ダメージ。"
+  description_insane: "ラストワード：ランダムな相手ユニットに3ダメージ。"
+  flavor_text: "「いあ！いあ！」と叫びながら突撃する狂気の信者。"
 
 shoggoth_spawn:
   key_code: shoggoth_spawn
@@ -26,7 +32,8 @@ shoggoth_spawn:
   hp: 4
   attack: "2"
   keywords: []
-  description: 不定形の恐怖。まだ小さいが、その力は侮れない。
+  description: ""
+  flavor_text: "不定形的恐怖。まだ小さいが、その力は侮れない。"
 
 star_spawn:
   key_code: star_spawn
@@ -36,7 +43,8 @@ star_spawn:
   hp: 3
   attack: "3"
   keywords: [haste]
-  description: 星間から召喚された存在。素早く敵を襲う。
+  description: ""
+  flavor_text: "星間から召喚された存在。素早く敵を襲う。"
 
 deep_one_warrior:
   key_code: deep_one_warrior
@@ -46,7 +54,8 @@ deep_one_warrior:
   hp: 4
   attack: "4"
   keywords: []
-  description: 海底の戦士。鋭い爪で敵を引き裂く。
+  description: ""
+  flavor_text: "海底の戦士。鋭い爪で敵を引き裂く。"
 
 dagon_priest:
   key_code: dagon_priest
@@ -56,7 +65,8 @@ dagon_priest:
   hp: 3
   attack: "3"
   keywords: [guardian]
-  description: 深海の神に仕える者。味方を守護する力を持つ。
+  description: ""
+  flavor_text: "深海の神に仕える者。味方を守護する力を持つ。"
 
 mother_hydra_offspring:
   key_code: mother_hydra_offspring
@@ -66,7 +76,8 @@ mother_hydra_offspring:
   hp: 5
   attack: "3"
   keywords: []
-  description: 深海の母神ハイドラの子。生命力が高い。
+  description: ""
+  flavor_text: "深海の母神ハイドラの子。生命力が高い。"
 
 shoggoth:
   key_code: shoggoth
@@ -76,7 +87,8 @@ shoggoth:
   hp: 6
   attack: "5"
   keywords: []
-  description: 「テケリ・リ！」無定形の巨大な怪物。
+  description: ""
+  flavor_text: "「テケリ・リ！」無定形の巨大な怪物。"
 
 deep_one_lord:
   key_code: deep_one_lord
@@ -86,7 +98,8 @@ deep_one_lord:
   hp: 6
   attack: "5"
   keywords: [guardian]
-  description: インスマスを支配する深きものの首領。
+  description: ""
+  flavor_text: "インスマスを支配する深きものの首領。"
 
 cthulhu_spawn:
   key_code: cthulhu_spawn
@@ -96,7 +109,8 @@ cthulhu_spawn:
   hp: 7
   attack: "6"
   keywords: []
-  description: 偉大なるクトゥルフの血を引く存在。
+  description: ""
+  flavor_text: "偉大なるクトゥルフの血を引く存在。"
 
 dagon:
   key_code: dagon
@@ -106,7 +120,8 @@ dagon:
   hp: 8
   attack: "6"
   keywords: [guardian]
-  description: 深海の父神。その威容は見る者を圧倒する。
+  description: ""
+  flavor_text: "深海の父神。その威容は見る者を圧倒する。"
 
 hydra:
   key_code: hydra
@@ -116,7 +131,8 @@ hydra:
   hp: 7
   attack: "7"
   keywords: []
-  description: 深海の母神。ダゴンと共に深きものを率いる。
+  description: ""
+  flavor_text: "深海の母神。ダゴンと共に深きものを率いる。"
 
 call_of_the_deep:
   key_code: call_of_the_deep
@@ -124,7 +140,8 @@ call_of_the_deep:
   card_type: spell
   cost: "2"
   keywords: []
-  description: 対象のユニットに3ダメージを与える。
+  description: "対象のユニットに3ダメージを与える。"
+  flavor_text: "深淵より響く声が、精神を蝕む。"
 
 rlyeh_rising:
   key_code: rlyeh_rising
@@ -132,7 +149,8 @@ rlyeh_rising:
   card_type: spell
   cost: "3"
   keywords: []
-  description: 自分の全ユニットの攻撃力を+2する（このターンのみ）。
+  description: "自分の全ユニットの攻撃力を+2する（このターンのみ）。"
+  flavor_text: "星辰が正しい位置についた時、古の都市が海上に姿を現す。"
 
 ocean_embrace:
   key_code: ocean_embrace
@@ -140,7 +158,8 @@ ocean_embrace:
   card_type: spell
   cost: "2"
   keywords: []
-  description: 対象のユニットのHPを3回復する。
+  description: "対象のユニットのHPを3回復する。"
+  flavor_text: "母なる海の優しさは、傷ついた肉体を癒やす。"
 
 tidal_wave:
   key_code: tidal_wave
@@ -148,7 +167,8 @@ tidal_wave:
   card_type: spell
   cost: "4"
   keywords: []
-  description: 敵の全ユニットに2ダメージを与える。
+  description: "敵の全ユニットに2ダメージを与える。"
+  flavor_text: "圧倒的な質量の海水が、全てを押し流す。"
 
 cthulhu_dream:
   key_code: cthulhu_dream
@@ -156,4 +176,5 @@ cthulhu_dream:
   card_type: spell
   cost: "1d4"
   keywords: []
-  description: 対象のユニットをスタン状態にする。
+  description: "対象のユニットをスタン状態にする。"
+  flavor_text: "旧支配者の見る悪夢は、人々の正気を奪う。"

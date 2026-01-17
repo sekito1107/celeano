@@ -1,23 +1,18 @@
-<div class="status-bar-container <%= insane? ? 'insane' : '' %>">
-  <!-- HP Bar -->
-  <div class="status-row hp-row">
-    <div class="status-icon hp-icon">
-      <span class="icon-symbol" aria-hidden="true">♥</span>
+<div class="hero-status-container <%= sanity_level_class %>">
+  <div class="hero-portrait-wrapper">
+    <!-- Avatar Image (Masked Circle) -->
+    <%= image_tag "lobby/default_avatar.jpg", class: "hero-avatar", alt: "Player" %>
+    
+    <!-- Frame Overlay -->
+    <%= image_tag "ui/hero_frame.png", class: "hero-frame", alt: "" %>
+    
+    <!-- Stats Gem Overlay -->
+    <div class="stat-badge hp-badge">
+      <div class="stat-value"><%= hp %></div>
     </div>
-    <div class="status-gauge-wrapper">
-      <div class="status-gauge-fill hp-fill" style="width: <%= hp_percent %>%;"></div>
-      <div class="status-text"><%= hp %> / <%= max_hp %></div>
-    </div>
-  </div>
-
-  <!-- SAN Bar -->
-  <div class="status-row san-row">
-    <div class="status-icon san-icon">
-      <span class="icon-symbol" aria-hidden="true">🧠</span>
-    </div>
-    <div class="status-gauge-wrapper">
-      <div class="status-gauge-fill san-fill" style="width: <%= san_percent %>%;"></div>
-      <div class="status-text"><%= san %> / <%= max_san %></div>
+    
+    <div class="stat-badge san-badge">
+      <div class="stat-value"><%= san %></div>
     </div>
   </div>
 </div>

@@ -1,9 +1,12 @@
 <%= stylesheet_link_tag "game_board", "data-turbo-track": "reload" %>
 <%= stylesheet_link_tag "status_bar", "data-turbo-track": "reload" %>
+<%= stylesheet_link_tag "card", "data-turbo-track": "reload" %>
 
-<div class="game-board">
+<div class="game-board" data-controller="board" data-action="click->board#clearDetail">
   <div class="game-overlay"></div>
-  <div class="game-logo">CELEANO</div>
+  
+  <%# Master-Detail Preview Container %>
+  <div id="card-preview-container"></div>
 
   <!-- Opponent Area -->
   <div class="status-bar-wrapper opponent-status">
@@ -14,7 +17,7 @@
 
   <div class="play-mat play-mat-opponent">
     <% if @opponent_game_player %>
-      <%= render Game::FieldComponent.new(game_player: @opponent_game_player) %>
+      <%= render Game::FieldComponent.new(game_player: @opponent_game_player, viewer: current_user) %>
       <%= render Game::HandComponent.new(game_player: @opponent_game_player, viewer: current_user) %>
     <% else %>
       <div class="flex items-center justify-center h-full">
@@ -24,8 +27,8 @@
   </div>
 
   <!-- 中央エリア (Battle Logなど将来的に配置) -->
-  <div class="center-area flex-grow flex items-center justify-center opacity-30 pointer-events-none">
-    <div class="text-6xl font-serif text-red-900 tracking-widest">CELEANO</div>
+  <div class="center-area flex-grow flex items-center justify-center pointer-events-none">
+
   </div>
 
   <!-- Player Area -->
@@ -34,7 +37,7 @@
   </div>
 
   <div class="play-mat">
-    <%= render Game::FieldComponent.new(game_player: @game_player) %>
+    <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user) %>
     <%= render Game::HandComponent.new(game_player: @game_player, viewer: current_user) %>
   </div>
 </div>

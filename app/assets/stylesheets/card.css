@@ -1,0 +1,576 @@
+/* Card Component Styles - Abyssal Library Theme (Integrated Asset) */
+
+.card-wrapper {
+  position: relative;
+  width: var(--card-width);
+  height: var(--card-height);
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  user-select: none;
+}
+
+.card-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8));
+}
+
+/* --- Integrated Frames --- */
+.frame-unit {
+  background-image: url('cards/base_unit_integrated.png');
+}
+
+.frame-spell {
+  background-image: url('cards/base_spell_integrated.png');
+}
+
+.state-resolving {
+  opacity: 0.8;
+  filter: drop-shadow(0 0 10px #fbbf24);
+}
+
+.state-stunned::after {
+  content: "";
+  position: absolute;
+  top: 6%; left: 6%; width: 88%; height: 88%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.1) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  pointer-events: none;
+  z-index: 10;
+  border-radius: 8px;
+}
+
+/* --- Card Art --- */
+.card-art {
+  position: absolute;
+  top: 13%;
+  left: 12%;
+  width: 76%;
+  height: 48%; /* Adjusted to match the "window" of the integrated frame */
+  background-color: #000;
+  overflow: hidden;
+  z-index: -1; /* Behind the frame so edges are clean */
+  border-radius: 2px;
+}
+
+.art-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.art-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, #222, #000);
+  color: #777;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+}
+
+/* --- Stats Orbs (Text Containers Only) --- */
+/* The graphic is now part of the frame image. These are just for positioning numbers. */
+
+/* Value modifiers */
+.text-buffed { color: #86efac; text-shadow: 0 0 8px #22c55e; }
+.text-damaged { color: #fecaca; text-shadow: 0 0 5px #b91c1c; }
+
+/* --- Text Box --- */
+.card-textbox {
+  position: absolute;
+  bottom: 15%; /* Adjusted for integrated frame's text area */
+  left: 11%;
+  width: 78%;
+  height: 25%;
+  padding: 2px 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-name {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #e5e7eb;
+  text-align: center;
+  margin-bottom: 2px;
+  text-shadow: 0 2px 2px rgba(0,0,0,0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-bottom: 2px;
+}
+
+.card-description {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  color: #d1d5db;
+  line-height: 1.3;
+  overflow-y: auto;
+  flex-grow: 1;
+  scrollbar-width: none;
+  text-align: left;
+}
+.card-description::-webkit-scrollbar { display: none; }
+
+/* --- Badges --- */
+.badges-container {
+  position: absolute;
+  top: 62%;
+  right: 9%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 4;
+}
+
+.keyword-badge {
+  background: rgba(0,0,0,0.8);
+  border: 1px solid #cbb577; 
+  border-radius: 50%;
+  width: 24px; height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: #fbbf24;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* --- Hover Effects --- */
+.card-interactive:hover .card-wrapper.card-simple {
+  transform: translateY(-20px) scale(1.1);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+  z-index: 100;
+  border-color: #fbbf24;
+}
+
+/* --- SIMPLE HAND VIEW STYLES (Mockup) --- */
+.card-simple {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #333;
+  background: #000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-graveyard {
+  filter: grayscale(100%) brightness(0.8);
+}
+
+.simple-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.simple-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cost: Top-Left Purple Circle */
+.simple-cost-circle {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  min-width: 30px; /* Changed from fixed width */
+  width: auto;
+  padding: 0 4px; /* Added padding for wider text */
+  height: 30px;
+  background-color: #7e22ce; /* Purple-700 */
+  border: 2px solid #a855f7; /* Purple-500 */
+  border-radius: 15px; /* Pill shape */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font-display), sans-serif; /* Changed font to support lowercase */
+  font-weight: bold;
+  font-size: 1.0rem;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Badges: Top-Right */
+.simple-badges {
+  position: absolute;
+  top: 4px; 
+  right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+}
+
+.badge-icon {
+  font-size: 1.0rem;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.8));
+}
+
+/* Name Strip: Middle-Low */
+.simple-name-strip {
+  position: absolute;
+  top: 75%; /* Lowered further */
+  left: 0;
+  width: 100%;
+  padding: 3px 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  backdrop-filter: blur(2px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.name-text {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: #f3f4f6;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+/* Stats: Bottom Row */
+.simple-stats-row {
+  position: absolute;
+  bottom: 0; /* Flush with bottom */
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 12px;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.75); /* Semi-transparent black strip */
+  backdrop-filter: blur(2px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.stat-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-display), sans-serif; /* Changed font to support lowercase */
+  font-weight: bold;
+  font-size: 1.0rem; /* Smaller */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+}
+
+.attack-group {
+  color: #ef4444; /* Red */
+}
+
+.hp-group {
+  color: #4ade80; /* Green */
+}
+
+.threshold-group {
+  color: #60a5fa; /* Blue-400 */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.9rem;
+  margin: 0 4px; /* Add some spacing from other stats */
+  filter: drop-shadow(0 0 4px rgba(96, 165, 250, 0.6)); /* Glow effect */
+}
+
+/* Specific size for the eye icon */
+.threshold-icon {
+  font-size: 0.8rem;
+}
+
+.simple-poison-overlay {
+  font-size: 0.85rem; /* Smaller */
+  opacity: 0.9;
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle, transparent 40%, rgba(16, 185, 129, 0.3) 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* --- DETAIL PREVIEW STYLES --- */
+#card-preview-container {
+  position: fixed; /* or absolute depending on layout */
+  top: 50%;
+  left: 20px; /* Left side of screen */
+  transform: translateY(-45%); /* Start slightly off */
+  width: 320px; /* Larger than hand card */
+  height: 600px;
+  z-index: 3000; /* Higher than modal (2000) */
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+#card-preview-container.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%);
+}
+
+#card-preview-container.pinned {
+  pointer-events: auto;
+}
+
+.card-detail {
+  /* Detail view just uses the full frame logic but scaled up if needed */
+  width: 100%;
+  height: 100%;
+}
+
+/* --- DETAIL PANEL STYLES (Sidebar) --- */
+.detail-panel {
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 15, 0.95);
+  border: 1px solid #333;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  color: #e5e7eb;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: linear-gradient(to right, #1f2937, #111827);
+  border-bottom: 2px solid #8b0000;
+  gap: 12px;
+}
+
+.detail-cost {
+  width: 32px;
+  height: 32px;
+  background: #7e22ce;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cinzel Decorative', cursive;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  color: #fff;
+}
+
+.detail-name {
+  flex-grow: 1;
+  font-family: var(--font-display);
+  font-size: 1.0rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.detail-type-icon {
+  font-size: 0.7rem;
+  background: #374151;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.detail-art-container {
+  width: 100%;
+  height: 200px; /* Base height for art */
+  flex-shrink: 0;
+  position: relative;
+  background: #000;
+  border-bottom: 1px solid #333;
+}
+
+.detail-art-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail-stats-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 8px;
+  background: rgba(0,0,0,0.4);
+  border-bottom: 1px solid #333;
+}
+
+.detail-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.detail-stat .label {
+  font-size: 0.6rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 2px;
+}
+
+.detail-stat .value {
+  font-family: var(--font-display), sans-serif; /* Changed font to support lowercase */
+  font-size: 1.4rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.stat-atk .value { color: #ef4444; }
+.stat-hp .value { color: #4ade80; }
+.stat-threshold .value { color: #60a5fa; }
+.stat-threshold .icon { font-size: 0.8rem; margin-top: 2px; }
+
+.detail-body {
+  flex-grow: 1;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  overflow-y: auto;
+  position: relative;
+}
+
+.detail-description-box {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #d1d5db;
+  text-align: left;
+}
+
+.detail-flavor-text {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-style: italic;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  font-family: serif;
+}
+
+.detail-footer {
+  padding: 8px 12px;
+  background: #111827;
+  border-top: 1px solid #333;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.detail-badge {
+  font-size: 0.75rem;
+  background: rgba(251, 191, 36, 0.1); /* Amber tint */
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* --- FIELD VIEW STYLES (Scaled Down Mockup) --- */
+/* Used when card is on the board, fits into --card-width: 140px */
+.card-field .simple-cost-circle {
+  width: 26px;
+  height: 26px;
+  font-size: 0.9rem;
+  top: -3px; left: -3px;
+}
+
+.card-field .simple-badges {
+  top: 3px; right: 3px;
+  gap: 2px;
+}
+.card-field .badge-icon {
+  font-size: 0.85rem;
+}
+
+.card-field .simple-name-strip {
+  padding: 2px 0;
+  top: 72%; /* Adjusted */
+}
+.card-field .name-text {
+  font-size: 0.6rem;
+}
+
+.card-field .simple-stats-row {
+  padding: 2px 4px; /* Reduced padding */
+}
+.card-field .stat-group {
+  font-size: 0.75rem; /* Reduced font size for 1d4 */
+  gap: 2px;
+}
+.card-field .stat-icon {
+  font-size: 0.75rem;
+}
+
+/* Ensure art covers well */
+.card-field .simple-art {
+  height: 100%;
+}
+
+/* --- Insane Description --- */
+.detail-insane-box {
+  margin-top: 12px;
+  background: rgba(80, 0, 0, 0.3);
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.insane-header {
+  background: rgba(60, 0, 0, 0.6);
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.insane-icon {
+  font-size: 0.9rem;
+  color: #f87171;
+}
+
+.insane-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #f87171;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.insane-text {
+  padding: 8px;
+  color: #fca5a5;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}

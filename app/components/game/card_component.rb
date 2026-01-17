@@ -1,41 +1,24 @@
 # frozen_string_literal: true
 
 class Game::CardComponent < ApplicationComponent
-  def initialize(card_entity:)
+  def initialize(card_entity:, variant: :hand)
     @card_entity = card_entity
+    @variant = variant
   end
 
-  def name
-    card_source.name
-  end
-
-  def cost
-    card_source.cost
-  end
-
-  def attack
-    if game_card?
-      @card_entity.total_attack
+  def call
+    component_class = case @variant
+    when :hand, :field
+      Game::Card::SimpleComponent
+    when :detail
+      Game::Card::DetailComponent
     else
-      card_source.attack
+      # Default to simple if unknown
+      Game::Card::SimpleComponent
     end
-  end
 
-  def hp
-    if game_card?
-      @card_entity.current_hp
-    else
-      card_source.hp
-    end
-  end
-
-  private
-
-  def game_card?
-    @card_entity.is_a?(GameCard)
-  end
-
-  def card_source
-    game_card? ? @card_entity.card : @card_entity
+    kwargs = { card_entity: @card_entity }
+    kwargs[:variant] = @variant if component_class == Game::Card::SimpleComponent
+    render component_class.new(**kwargs)
   end
 end
