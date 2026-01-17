@@ -16,7 +16,8 @@ class MatchmakingController < ApplicationController
 
     if @game_id
       game = Game.find_by(id: @game_id)
-      @opponent = game&.game_players&.where&.not(user_id: current_user.id)&.first&.user
+      player = game&.game_players&.find_by(user: current_user)
+      @opponent = player&.opponent&.user
     end
   end
 

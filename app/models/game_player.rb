@@ -7,6 +7,10 @@ class GamePlayer < ApplicationRecord
 
   enum :role, { host: 0, guest: 1 }
 
+  def opponent
+    game.game_players.find { |gp| gp.id != id }
+  end
+
   validates :hp, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :san, presence: true, numericality: { greater_than_or_equal_to: 0 }
 

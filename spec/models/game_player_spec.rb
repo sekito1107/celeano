@@ -9,6 +9,19 @@ RSpec.describe GamePlayer, type: :model do
 
   let(:card_master) { create(:card, name: "テストカード", key_code: "test_c") }
 
+  describe '#opponent' do
+    let(:opponent) { create(:game_player, game: game) }
+
+    before do
+      opponent # ensure opponent exists
+    end
+
+    it '対戦相手のGamePlayerオブジェクトを返すこと' do
+      expect(player.opponent).to eq opponent
+      expect(opponent.opponent).to eq player
+    end
+  end
+
   describe '#pay_cost!' do
     it 'SAN値が減少し、pay_costログが記録されること' do
       expect {
