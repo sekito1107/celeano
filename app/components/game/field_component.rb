@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 
 class Game::FieldComponent < ApplicationComponent
-  def initialize(game_player:)
+  def initialize(game_player:, viewer: nil)
     @game_player = game_player
+    @viewer = viewer
+  end
+
+  def opponent?
+    return false unless @viewer
+    @game_player.user_id != @viewer.id
   end
 
   def deck_count

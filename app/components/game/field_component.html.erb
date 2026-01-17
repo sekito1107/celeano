@@ -47,9 +47,9 @@
 
       <div class="game-modal-overlay hidden" data-card-list-modal-target="modal" data-action="click->card-list-modal#close">
         <div class="game-modal">
-          <div class="modal-content">
+          <div class="modal-content <%= 'modal-opponent' if opponent? %>">
             <div class="modal-header">
-              <h2>Graveyard (<%= graveyard_cards.count %>)</h2>
+              <h2><%= opponent? ? "Opponent Graveyard" : "Graveyard" %> (<%= graveyard_cards.count %>)</h2>
               <button class="modal-close-btn" data-action="click->card-list-modal#closeButton">×</button>
             </div>
             <div class="modal-grid">
@@ -80,9 +80,9 @@
 
       <div class="game-modal-overlay hidden" data-card-list-modal-target="modal" data-action="click->card-list-modal#close">
         <div class="game-modal">
-          <div class="modal-content">
+          <div class="modal-content <%= 'modal-opponent' if opponent? %>">
             <div class="modal-header">
-              <h2>Banished Zone (<%= banished_cards.count %>)</h2>
+              <h2><%= opponent? ? "Opponent Banished" : "Banished Zone" %> (<%= banished_cards.count %>)</h2>
               <button class="modal-close-btn" data-action="click->card-list-modal#closeButton">×</button>
             </div>
             <div class="modal-grid">

@@ -17,7 +17,7 @@
 
   <div class="play-mat play-mat-opponent">
     <% if @opponent_game_player %>
-      <%= render Game::FieldComponent.new(game_player: @opponent_game_player) %>
+      <%= render Game::FieldComponent.new(game_player: @opponent_game_player, viewer: current_user) %>
       <%= render Game::HandComponent.new(game_player: @opponent_game_player, viewer: current_user) %>
     <% else %>
       <div class="flex items-center justify-center h-full">
@@ -37,7 +37,7 @@
   </div>
 
   <div class="play-mat">
-    <%= render Game::FieldComponent.new(game_player: @game_player) %>
+    <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user) %>
     <%= render Game::HandComponent.new(game_player: @game_player, viewer: current_user) %>
   </div>
 </div>
