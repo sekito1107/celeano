@@ -20,11 +20,26 @@
   background-position: center center;
   background-attachment: fixed;
   background-size: cover;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   overflow-y: auto; /* Allow vertical scrolling if content overflows */
-  height: 100vh; /* Constrain to viewport height so scrollbar appears */
+  /* Height is determined by absolute positioning */
   display: flex;
   flex-direction: column;
+  /* padding-bottom removed as requested */
+  gap: 1rem; /* Ensure visual separation between mats */
+}
+
+/* Remove utility divs from flex flow to prevent unwanted gaps at the top */
+.game-overlay,
+#card-preview-container {
+  position: absolute;
+  width: 100%;
+  height: 0;
+  pointer-events: none;
 }
 
 /* 雰囲気出しのためのビネット効果 (疑似要素で実装可能だが今回は親コンテナに適用想定) */
@@ -274,6 +289,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  position: relative; /* Ensure deck count is positioned relative to this */
   border-radius: 8px; /* Match card radius */
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 
