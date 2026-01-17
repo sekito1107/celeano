@@ -17,6 +17,8 @@ class Game::CardComponent < ApplicationComponent
       Game::Card::SimpleComponent
     end
 
-    render component_class.new(card_entity: @card_entity, variant: @variant)
+    kwargs = { card_entity: @card_entity }
+    kwargs[:variant] = @variant if component_class == Game::Card::SimpleComponent
+    render component_class.new(**kwargs)
   end
 end
