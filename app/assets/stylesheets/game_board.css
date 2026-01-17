@@ -1,0 +1,220 @@
+/* ゲームボードのレイアウト - Abyssal Library Theme */
+
+:root {
+  --card-width: 120px;
+  --card-height: 160px;
+  --slot-gap: 1.5rem;
+  --game-primary-dark: #050505;
+  --game-accent-red: #8b0000;
+  --game-border-color: rgba(255, 255, 255, 0.15);
+  --game-slot-bg: rgba(0, 0, 0, 0.4);
+  --game-glow: 0 0 10px rgba(139, 0, 0, 0.3);
+}
+
+/* 全体の背景設定 */
+/* View側でクラスを適用する必要がありますが、ここでは変数を定義 */
+.game-board {
+  background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 雰囲気出しのためのビネット効果 (疑似要素で実装可能だが今回は親コンテナに適用想定) */
+.game-board::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.8) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* プレイエリア（マット） */
+.play-mat {
+  background-color: rgba(20, 20, 25, 0.6);
+  border-top: 1px solid var(--game-border-color);
+  border-bottom: 1px solid var(--game-border-color);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  padding: 2rem 0;
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(2px);
+}
+
+.play-mat-opponent {
+  border-bottom: none;
+  border-top: 1px solid var(--game-border-color);
+  transform: rotate(180deg);
+}
+
+/* 手札コンポーネント */
+.hand-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* カードを下揃え */
+  gap: 0; /* 重ねるために gap を 0 に */
+  padding: 1rem 2rem;
+  min-height: calc(var(--card-height) + 2rem);
+  width: 100%;
+  perspective: 1000px;
+}
+
+.hand-card-wrapper {
+  width: var(--card-width);
+  height: var(--card-height);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin-left: -15px; /* カードを少し重ねる */
+  position: relative;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.5); /* 重なりの影 */
+}
+
+/* 最初のカードは左マージン不要 */
+.hand-card-wrapper:first-child {
+  margin-left: 0;
+}
+
+.hand-card-wrapper:hover {
+  transform: translateY(-30px) scale(1.1) rotate(0deg) !important; /* ホバー時は強調 */
+  z-index: 100;
+  margin-left: 10px; /* ホバー時に隣との間隔を広げる */
+  margin-right: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
+
+/* 相手の手札 (逆向き) */
+.hand-card-wrapper.opponent-card {
+  margin-left: -5px;
+  box-shadow: none;
+}
+.hand-card-wrapper.opponent-card:hover {
+  transform: none; /* 相手の手札はホバーしても動かない */
+  margin-left: -5px;
+  margin-right: 0;
+}
+
+/* フィールドコンポーネント */
+.field-container {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem;
+  align-items: center;
+}
+
+.field-deck-area,
+.field-graveyard-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.field-slots-area {
+  display: flex;
+  justify-content: center;
+  gap: var(--slot-gap);
+  padding: 1rem;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  border-radius: 50%; /* 楕円形の光 */
+}
+
+/* スロットの共通スタイル */
+.field-slot {
+  width: var(--card-width);
+  height: var(--card-height);
+  border: 1px solid var(--game-border-color);
+  background-color: var(--game-slot-bg);
+  border-radius: 4px; /* 少し角ばらせる */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.field-slot::after {
+  /* 魔法陣のような装飾枠 (簡易版) */
+  content: "";
+  position: absolute;
+  top: 5px; left: 5px; right: 5px; bottom: 5px;
+  border: 1px border-style var(--game-border-color);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.field-slot:hover {
+  border-color: rgba(255,255,255,0.3);
+  box-shadow: inset 0 0 15px rgba(139, 0, 0, 0.2); /* 少し赤く光る */
+}
+
+/* プレースホルダー */
+.deck-placeholder,
+.empty-graveyard,
+.empty-slot {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.2);
+  font-family: serif;
+  font-size: 0.8rem;
+  text-shadow: 0 1px 2px black;
+}
+
+/* デッキの山札感 */
+.deck-placeholder {
+  background: repeating-linear-gradient(
+    -45deg,
+    #2a2a2a,
+    #2a2a2a 2px,
+    #333 2px,
+    #333 4px
+  );
+  border: 2px solid #444;
+  box-shadow: 2px 2px 0 #111, 4px 4px 0 #111; /* 簡易的な厚み */
+}
+
+/* カード裏面 (よりリッチに) */
+.card-back {
+  width: 100%;
+  height: 100%;
+  background-color: #0a0a0a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: 
+    radial-gradient(circle at center, #1a0505 0%, transparent 70%),
+    repeating-linear-gradient(45deg, #111, #111 10px, #151515 10px, #151515 20px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.card-back::before {
+  /* 中央のシンボル的なもの */
+  content: "👁️"; 
+  font-size: 1.5rem;
+  opacity: 0.2;
+  filter: grayscale(100%);
+}
+
+/* デッキ枚数バッジ */
+.deck-count {
+  position: absolute;
+  bottom: -10px;
+  background-color: #000;
+  border: 1px solid #444;
+  color: #888;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-family: monospace;
+}

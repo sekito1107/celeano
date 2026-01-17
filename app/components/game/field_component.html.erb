@@ -1,0 +1,41 @@
+<div class="field-container">
+  <div class="field-deck-area">
+    <div class="deck-placeholder">
+      <div class="deck-count"><%= deck_count %></div>
+    </div>
+  </div>
+
+  <div class="field-slots-area">
+    <div class="field-slot left-slot">
+      <% if left_slot_card %>
+        <%= render Game::CardComponent.new(card_entity: left_slot_card) %>
+      <% else %>
+        <div class="empty-slot"></div>
+      <% end %>
+    </div>
+
+    <div class="field-slot center-slot">
+      <% if center_slot_card %>
+        <%= render Game::CardComponent.new(card_entity: center_slot_card) %>
+      <% else %>
+        <div class="empty-slot"></div>
+      <% end %>
+    </div>
+
+    <div class="field-slot right-slot">
+      <% if right_slot_card %>
+        <%= render Game::CardComponent.new(card_entity: right_slot_card) %>
+      <% else %>
+        <div class="empty-slot"></div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="field-graveyard-area">
+    <% if graveyard_top_card %>
+      <%= render Game::CardComponent.new(card_entity: graveyard_top_card) %>
+    <% else %>
+      <div class="empty-graveyard"></div>
+    <% end %>
+  </div>
+</div>

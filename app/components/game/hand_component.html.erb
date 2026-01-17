@@ -1,0 +1,15 @@
+<div class="hand-container" data-controller="hand">
+  <% if viewer_is_owner? %>
+    <% cards.each do |game_card| %>
+      <div class="hand-card-wrapper">
+        <%= render Game::CardComponent.new(card_entity: game_card) %>
+      </div>
+    <% end %>
+  <% else %>
+    <% cards.each do |game_card| %>
+      <div class="hand-card-wrapper opponent-card">
+        <div class="card-back"></div>
+      </div>
+    <% end %>
+  <% end %>
+</div>
