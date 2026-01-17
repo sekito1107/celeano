@@ -9,8 +9,8 @@ RSpec.describe Game::StatusBarComponent, type: :component do
 
   before do
     # 定数が定義されていることを確認 (テスト内で定数に依存するため)
-    stub_const("GamePlayer::MAX_HP", 20)
-    stub_const("GamePlayer::MAX_SAN", 20)
+    stub_const("GamePlayer::DEFAULT_HP", 20)
+    stub_const("GamePlayer::DEFAULT_SAN", 20)
   end
 
   context "通常状態の場合" do
@@ -18,7 +18,8 @@ RSpec.describe Game::StatusBarComponent, type: :component do
       render_inline(described_class.new(game_player: game_player))
 
       expect(page).to have_css(".status-bar-container")
-      expect(page).to have_css(".status-text", text: "20 / 20")
+      expect(page).to have_css(".hp-row .status-text", text: "20 / 20")
+      expect(page).to have_css(".san-row .status-text", text: "20 / 20")
     end
 
     it "HPバーの幅が100%であること" do
