@@ -13,7 +13,15 @@ class Game::CardComponent < ApplicationComponent
     card_source.cost
   end
 
-  def attack
+  def image_name
+    card_source.image_name
+  end
+
+  def text
+    card_source.description
+  end
+
+  def total_attack
     if game_card?
       @card_entity.total_attack
     else
@@ -27,6 +35,61 @@ class Game::CardComponent < ApplicationComponent
     else
       card_source.hp
     end
+  end
+
+  def max_hp
+    card_source.hp
+  end
+
+  # Visual State Helpers
+  def attack_buffed?
+    return false unless game_card?
+    # base attack (from card) < current total
+    card_source.attack.to_i < total_attack.to_i
+  end
+
+  def damaged?
+    return false unless game_card?
+    hp < max_hp
+  end
+
+  def poisoned?
+    return false unless game_card?
+    @card_entity.modifiers.any? { |m| m.poison? }
+  end
+
+  def stunned?
+    return false unless game_card?
+    @card_entity.stunned?
+  end
+
+  def haste?
+    card_source.haste?
+  end
+
+  def guardian?
+    card_source.guardian?
+  end
+
+  def unit?
+    card_source.card_type == "unit"
+  end
+
+  def spell?
+    card_source.card_type == "spell"
+  end
+
+  def resolving?
+    game_card? && @card_entity.location_resolving?
+  end
+
+  def frame_class
+    base = "card-frame"
+    base += " frame-unit" if unit?
+    base += " frame-spell" if spell?
+    base += " state-resolving" if resolving?
+    base += " state-stunned" if stunned?
+    base
   end
 
   private

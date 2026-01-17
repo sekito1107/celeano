@@ -1,24 +1,54 @@
-<div class="card-component border border-gray-600 rounded bg-gray-900 text-white w-48 h-64 flex flex-col p-2 relative">
-  <div class="card-header flex justify-between items-center mb-2">
-    <span class="card-cost bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+<div class="card-wrapper card-interactive" data-controller="card">
+  <div class="<%= frame_class %>">
+    
+    <%# --- Cost Orb --- %>
+    <div class="stat-orb cost-orb">
       <%= cost %>
-    </span>
-    <span class="card-name text-sm font-serif truncate">
-      <%= name %>
-    </span>
-  </div>
-
-  <div class="card-art bg-gray-800 flex-grow mb-2 flex items-center justify-center text-gray-500 text-xs">
-    <!-- 画像プレースホルダー -->
-    <span>画像なし</span>
-  </div>
-
-  <div class="card-stats flex justify-between items-end mt-auto">
-    <div class="stat-attack bg-red-900 border border-red-700 px-2 py-1 rounded text-sm font-bold">
-      <%= attack %>
     </div>
-    <div class="stat-hp bg-green-900 border border-green-700 px-2 py-1 rounded text-sm font-bold">
-      <%= hp %>
+  
+    <%# --- Card Art --- %>
+    <div class="card-art">
+      <% if image_name.present? %>
+        <%#= image_tag "cards/#{image_name}", class: "art-image" %>
+        <div class="art-placeholder"><%= image_name %></div>
+      <% else %>
+        <div class="art-placeholder">画像なし</div>
+      <% end %>
+
+      <%# Poison Effect Overlay %>
+      <% if poisoned? %>
+        <div class="status-effect-overlay effect-poison"></div>
+      <% end %>
     </div>
+
+    <%# --- Text Box --- %>
+    <div class="card-textbox">
+      <div class="card-name"><%= name %></div>
+      <div class="card-description">
+        <%= simple_format(text) %>
+      </div>
+    </div>
+
+    <%# --- Badges (Keywords) --- %>
+    <div class="badges-container">
+      <% if guardian? %>
+        <div class="keyword-badge">🛡️</div>
+      <% end %>
+      <% if haste? %>
+        <div class="keyword-badge">⚡</div>
+      <% end %>
+    </div>
+
+    <%# --- Stats Orbs (Unit Only) --- %>
+    <% if unit? %>
+      <div class="stat-orb attack-orb <%= attack_buffed? ? 'text-buffed' : '' %>">
+        <%= total_attack %>
+      </div>
+      
+      <div class="stat-orb hp-orb <%= damaged? ? 'text-damaged' : '' %>">
+        <%= hp %>
+      </div>
+    <% end %>
+
   </div>
 </div>
