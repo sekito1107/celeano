@@ -596,3 +596,174 @@
   font-style: italic;
   margin-top: 2rem;
 }
+
+/* --- GAME OVER OVERLAY --- */
+
+.game-over-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  animation: fadeIn 1s ease-out 1.5s forwards; /* 1.5s delay before showing result */
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.overlay-content {
+  text-align: center;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.game-over-title {
+  font-family: var(--font-display, serif);
+  font-size: 5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  text-shadow: 0 10px 20px rgba(0,0,0,0.8);
+  margin: 0;
+  opacity: 0;
+  transform: scale(1.5);
+  animation: titleSlam 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s forwards;
+}
+
+@keyframes titleSlam {
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Victory */
+.game-over-overlay.win {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.2), rgba(0,0,0,0.8));
+}
+.game-over-overlay.win .game-over-title {
+  color: #fbbf24;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 0 4px 8px #000;
+}
+
+/* Defeat */
+.game-over-overlay.loss {
+  background: radial-gradient(circle, rgba(153, 27, 27, 0.2), rgba(0,0,0,0.9));
+}
+.game-over-overlay.loss .game-over-title {
+  color: #991b1b;
+  text-shadow: 0 0 20px rgba(153, 27, 27, 0.6), 0 4px 8px #000;
+}
+
+/* Draw */
+.game-over-overlay.draw {
+  background: radial-gradient(circle, rgba(156, 163, 175, 0.2), rgba(0,0,0,0.9));
+}
+.game-over-overlay.draw .game-over-title {
+  color: #9ca3af;
+}
+
+/* Buttons */
+.btn-return, .btn-insane {
+  padding: 1rem 3rem;
+  font-family: var(--font-display, serif);
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-return {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+.btn-return:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* --- SANITY DEATH (MADNESS) --- */
+
+.game-over-overlay.sanity-death {
+  background: rgba(40, 0, 0, 0.4);
+}
+
+.shatter-layer {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  /* background-image: url('ui/shatter_overlay.png'); Placeholder for shatter texture */
+  background-size: cover;
+  opacity: 0.6;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 1;
+  animation: shatterIn 0.2s cubic-bezier(0.1, 0.9, 0.2, 1.0) forwards;
+}
+
+/* Fallback shatter if no image: web of CSS gradients? */
+.shatter-layer::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: 
+    linear-gradient(45deg, transparent 48%, rgba(0,0,0,0.8) 50%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(0,0,0,0.8) 50%, transparent 52%),
+    radial-gradient(circle at center, transparent 60%, rgba(50,0,0,0.8) 100%);
+  mix-blend-mode: overlay;
+}
+
+@keyframes shatterIn {
+  0% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.0); opacity: 0.8; }
+}
+
+.title-insane, .insane-title {
+  color: #f87171;
+  font-family: 'Cinzel Decorative', cursive; /* Or similar crazy font */
+  text-shadow: 4px 4px 0px #000, -2px -2px 0 #500;
+  animation: sanityGlitch 3s infinite;
+}
+
+.game-over-message {
+  color: #fca5a5;
+  font-family: serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  opacity: 0;
+  animation: fadeIn 2s ease 1s forwards;
+}
+
+.btn-insane {
+  background: #000;
+  border: 1px solid #7f1d1d;
+  color: #f87171;
+  box-shadow: 0 0 20px rgba(127, 29, 29, 0.5);
+}
+.btn-insane:hover {
+  background: #220505;
+  color: #ff0000;
+  box-shadow: 0 0 40px rgba(255, 0, 0, 0.8);
+  transform: scale(1.05);
+}
+
+@keyframes sanityGlitch {
+  0% { transform: translate(0,0) skew(0deg); filter: blur(0px); }
+  20% { transform: translate(-2px, 2px) skew(2deg); filter: blur(0.5px); }
+  40% { transform: translate(2px, -2px) skew(-2deg); }
+  60% { transform: translate(-1px, -1px); filter: hue-rotate(10deg); }
+  80% { transform: translate(1px, 1px); }
+  100% { transform: translate(0,0); }
+}
