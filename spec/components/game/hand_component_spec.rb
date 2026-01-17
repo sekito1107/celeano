@@ -14,8 +14,8 @@ RSpec.describe Game::HandComponent, type: :component do
     create_list(:game_card, 3, :hand, game: game, game_player: game_player, user: user)
   end
 
-  context "when viewer is the owner" do
-    it "renders the cards face up" do
+  context "閲覧者が所有者の場合" do
+    it "カードが表向きで表示されること" do
       render_inline(described_class.new(game_player: game_player, viewer: user))
 
       expect(page).to have_css(".hand-container")
@@ -24,8 +24,8 @@ RSpec.describe Game::HandComponent, type: :component do
     end
   end
 
-  context "when viewer is the opponent" do
-    it "renders the cards face down" do
+  context "閲覧者が対戦相手の場合" do
+    it "カードが裏向きで表示されること" do
       render_inline(described_class.new(game_player: game_player, viewer: opponent_user))
 
       expect(page).to have_css(".hand-container")

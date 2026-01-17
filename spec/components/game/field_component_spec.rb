@@ -12,17 +12,17 @@ RSpec.describe Game::FieldComponent, type: :component do
     create_list(:game_card, 5, :deck, game: game, game_player: game_player, user: user)
   end
 
-  it "renders the deck count" do
+  it "デッキ枚数が正しく表示されること" do
     render_inline(described_class.new(game_player: game_player))
 
     expect(page).to have_css(".field-deck-area .deck-count", text: "5")
   end
 
-  context "with cards on board" do
+  context "ボードにカードがある場合" do
     let!(:left_card) { create(:game_card, :board, position: :left, game: game, game_player: game_player, user: user) }
     let!(:center_card) { create(:game_card, :board, position: :center, game: game, game_player: game_player, user: user) }
 
-    it "renders cards in correct slots" do
+    it "正しいスロットにカードが表示されること" do
       render_inline(described_class.new(game_player: game_player))
 
       expect(page).to have_css(".field-slot.left-slot .card-component") # CardComponentが.card-componentのような識別可能な要素を描画すると仮定
@@ -40,10 +40,10 @@ RSpec.describe Game::FieldComponent, type: :component do
     end
   end
 
-  context "with graveyard" do
+  context "墓地にカードがある場合" do
     let!(:graveyard_card) { create(:game_card, :graveyard, game_player: game_player, game: game, user: user) }
 
-    it "renders the top card of graveyard" do
+    it "墓地の一番上のカードが表示されること" do
       render_inline(described_class.new(game_player: game_player))
 
       expect(page).to have_css(".field-graveyard-area")
@@ -51,8 +51,8 @@ RSpec.describe Game::FieldComponent, type: :component do
     end
   end
 
-  context "empty graveyard" do
-    it "renders empty graveyard placeholder" do
+  context "墓地が空の場合" do
+    it "墓地のプレースホルダーが表示されること" do
       render_inline(described_class.new(game_player: game_player))
 
       expect(page).to have_css(".field-graveyard-area .empty-graveyard")
