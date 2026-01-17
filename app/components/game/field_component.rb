@@ -20,6 +20,26 @@ class Game::FieldComponent < ApplicationComponent
                 .max_by { |gc| [ gc.updated_at, gc.id ] }
   end
 
+  def banished_top_card
+    @game_player.game_cards
+                .select { |gc| gc.location_banished? }
+                .max_by { |gc| [ gc.updated_at, gc.id ] }
+  end
+
+  def graveyard_cards
+    @game_player.game_cards
+                .select { |gc| gc.location_graveyard? }
+                .sort_by { |gc| [ gc.updated_at, gc.id ] }
+                .reverse
+  end
+
+  def banished_cards
+    @game_player.game_cards
+                .select { |gc| gc.location_banished? }
+                .sort_by { |gc| [ gc.updated_at, gc.id ] }
+                .reverse
+  end
+
   def slot_card(position)
     # N+1対策: メモリ上の game_cards から検索
     @game_player.game_cards.find { |gc| gc.location_board? && gc.position == position.to_s }

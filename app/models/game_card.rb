@@ -8,7 +8,7 @@ class GameCard < ApplicationRecord
   has_many :modifiers, class_name: "GameCardModifier", dependent: :destroy
   has_many :moves, dependent: :destroy
 
-  enum :location, { deck: 0, hand: 1, board: 2, graveyard: 3, resolving: 4 }, prefix: true
+  enum :location, { deck: 0, hand: 1, board: 2, graveyard: 3, resolving: 4, banished: 5 }, prefix: true
   enum :position, { left: 0, center: 1, right: 2 }, prefix: true
 
   validates :user_id, :game_player_id, presence: true
