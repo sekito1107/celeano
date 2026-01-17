@@ -144,7 +144,7 @@
   content: "";
   position: absolute;
   top: 5px; left: 5px; right: 5px; bottom: 5px;
-  border: 1px border-style var(--game-border-color);
+  border: 1px solid var(--game-border-color);
   opacity: 0.3;
   pointer-events: none;
 }
