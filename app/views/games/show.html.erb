@@ -40,4 +40,12 @@
     <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user) %>
     <%= render Game::HandComponent.new(game_player: @game_player, viewer: current_user) %>
   </div>
+
+  <!-- Game Over Overlay -->
+  <% if @game.finished? %>
+    <%= render Game::GameOverOverlayComponent.new(game: @game, current_user: current_user) %>
+  <% else %>
+    <%# Pre-render a hidden overlay component via WebSocket or logic updates later %>
+    <%# Currently only server-side rendered on refresh if finished %>
+  <% end %>
 </div>
