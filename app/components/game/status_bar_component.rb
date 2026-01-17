@@ -25,13 +25,17 @@ class Game::StatusBarComponent < ApplicationComponent
     @game_player.insane?
   end
 
+  SANITY_CRITICAL_THRESHOLD = 5
+  SANITY_LOW_THRESHOLD = 10
+  SANITY_WARNING_THRESHOLD = 15
+
   def sanity_level_class
     case san
-    when 0..5
+    when 0..SANITY_CRITICAL_THRESHOLD
       "sanity-critical"
-    when 6..10
+    when (SANITY_CRITICAL_THRESHOLD + 1)..SANITY_LOW_THRESHOLD
       "sanity-low"
-    when 11..15
+    when (SANITY_LOW_THRESHOLD + 1)..SANITY_WARNING_THRESHOLD
       "sanity-warning"
     else
       "sanity-normal"
