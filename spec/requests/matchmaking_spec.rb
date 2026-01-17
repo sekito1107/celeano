@@ -29,7 +29,7 @@ RSpec.describe "マッチメイキング機能", type: :request do
         }.to change(Game, :count).by(1)
 
         game = Game.last
-        expect(response).to redirect_to(game_path(game))
+        expect(response).to redirect_to(matchmaking_path(matched: true, game_id: game.id))
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe "マッチメイキング機能", type: :request do
           post matchmaking_path
         }.not_to change(Game, :count)
 
-        expect(response).to redirect_to(game_path(game))
+        expect(response).to redirect_to(matchmaking_path(matched: true, game_id: game.id))
       end
     end
   end
