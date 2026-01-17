@@ -9,12 +9,13 @@
   --game-border-color: rgba(255, 255, 255, 0.15);
   --game-slot-bg: rgba(0, 0, 0, 0.4);
   --game-glow: 0 0 10px rgba(139, 0, 0, 0.3);
+  --game-bg-overlay: rgba(0, 0, 0, 0.6);
 }
 
 /* 全体の背景設定 */
 /* View側でクラスを適用する必要がありますが、ここでは変数を定義 */
 .game-board {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("game_background.png");
+  background-image: linear-gradient(var(--game-bg-overlay), var(--game-bg-overlay)), url("game_background.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
