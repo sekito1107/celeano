@@ -29,7 +29,7 @@ RSpec.describe "マッチメイキング機能", type: :request do
         }.to change(Game, :count).by(1)
 
         game = Game.last
-        expect(response).to redirect_to(game_path(game))
+        expect(response).to redirect_to(matchmaking_path(matched: true, game_id: game.id))
       end
     end
 
@@ -42,7 +42,7 @@ RSpec.describe "マッチメイキング機能", type: :request do
           post matchmaking_path
         }.not_to change(Game, :count)
 
-        expect(response).to redirect_to(game_path(game))
+        expect(response).to redirect_to(matchmaking_path(matched: true, game_id: game.id))
       end
     end
   end
@@ -58,6 +58,20 @@ RSpec.describe "マッチメイキング機能", type: :request do
       get matchmaking_path
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("探索中")
+    end
+
+    context "マッチング成立後（リダイレクト後）の場合" do
+      let(:game) { create(:game, status: :playing) }
+      let(:opponent) { create(:user, name: "Cultist Opponent") }
+      let!(:me_player) { create(:game_player, game: game, user: user) }
+      let!(:op_player) { create(:game_player, game: game, user: opponent) }
+
+      it "対戦相手の名前を表示すること" do
+        get matchmaking_path, params: { matched: "true", game_id: game.id }
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Cultist Opponent")
+        expect(response.body).to include("Ready")
+      end
     end
   end
 

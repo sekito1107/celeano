@@ -4,7 +4,9 @@
 
 <div class="matchmaking-container"
      data-controller="matchmaking"
-     data-matchmaking-user-id-value="<%= current_user.id %>">
+     data-matchmaking-user-id-value="<%= current_user.id %>"
+     data-matchmaking-matched-value="<%= @matched.to_s %>"
+     data-matchmaking-game-id-value="<%= @game_id %>">
   <div class="matchmaking-background"></div>
   <div class="matchmaking-overlay"></div>
 
@@ -37,12 +39,13 @@
       </div>
     </div>
 
-    <!-- Right: Enemy Card (Placeholder) -->
+    <!-- Right: Enemy Card -->
     <%= render Matchmaking::PlayerCardComponent.new(
-      name: "UNKNOWN",
+      name: @opponent ? @opponent.name : "UNKNOWN",
       title: "CULTIST",
-      status: :connecting,
-      type: :enemy
+      status: @opponent ? :ready : :connecting,
+      type: :enemy,
+      image_path: @opponent ? "lobby/default_avatar.jpg" : nil
     ) %>
 
   </div>
