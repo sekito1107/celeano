@@ -263,7 +263,7 @@
 
 /* デッキの山札感 */
 .deck-placeholder {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("cards/card_back.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("cards/card_back_ancient.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -282,7 +282,7 @@
   height: 100%;
   border-radius: 8px; /* Match card wrapper radius */
   box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("cards/card_back.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("cards/card_back_ancient.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
