@@ -160,7 +160,6 @@
   transform: translateY(-24px) scale(1.15) rotate(1deg);
   box-shadow: 0 15px 30px rgba(0,0,0,0.95);
   z-index: 100;
-  border-color: #fbbf24;
 }
 
 /* --- Selected State --- */
