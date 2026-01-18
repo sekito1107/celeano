@@ -82,6 +82,20 @@ RSpec.describe Game::CardComponent, type: :component do
              expect(page.find(".card-wrapper")["data-action"]).to include("click->game--card#click")
           end
         end
+
+        context "when resolving (Reserved Spell)" do
+          it "does NOT have click action or draggable capability" do
+            render_inline(described_class.new(card_entity: game_card, variant: :resolving))
+            element = page.find(".card-wrapper")
+            action = element["data-action"]
+
+            expect(action).not_to include("click->game--card#click")
+            expect(action).not_to include("dragstart->game--card#dragstart")
+            expect(element["draggable"]).to eq("false")
+            # Should still have hover effects
+            expect(action).to include("mouseenter->game--card#mouseenter")
+          end
+        end
       end
   end
   end

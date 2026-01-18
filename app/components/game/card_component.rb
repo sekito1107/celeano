@@ -29,15 +29,18 @@ class Game::CardComponent < ApplicationComponent
     # Check if card is a pile top card (graveyard/banished) on the field
     # Use respond_to? for easier testing/duck typing
     is_pile_on_field = @variant == :field &&
-                       (@card_entity.respond_to?(:location_graveyard?) && @card_entity.location_graveyard? ||
-                        @card_entity.respond_to?(:location_banished?) && @card_entity.location_banished?)
+                       ((@card_entity.respond_to?(:location_graveyard?) && @card_entity.location_graveyard?) ||
+                        (@card_entity.respond_to?(:location_banished?) && @card_entity.location_banished?))
 
     base_actions = [
       "mouseenter->game--card#mouseenter",
       "mouseleave->game--card#mouseleave"
     ]
 
-    unless is_pile_on_field
+    # Determine if the card should be interactive (clickable, draggable)
+    is_interactive = !is_pile_on_field && @variant != :resolving
+
+    if is_interactive
       base_actions << "click->game--card#click"
       base_actions << "dragstart->game--card#dragstart"
       base_actions << "dragend->game--card#dragend"
@@ -56,7 +59,7 @@ class Game::CardComponent < ApplicationComponent
     }
 
     # Set draggable HTML attribute explicitly
-    kwargs[:draggable] = is_pile_on_field ? "false" : "true"
+    kwargs[:draggable] = is_interactive ? "true" : "false"
 
     # Field/Board cards are valid targets for spells
     if @variant == :field && !is_pile_on_field
