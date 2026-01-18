@@ -717,6 +717,19 @@
   min-height: 200px;
 }
 
+/* Fix: Do not apply selected state visuals (transform, etc) to cards in modal grid */
+/* This prevents layout breakage while keeping the "pinning" logic active */
+.modal-grid .card-wrapper.selected {
+  transform: none !important;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.6) !important; /* Reset to default shadow */
+  border-color: #333 !important; /* Reset to default border or keep it subtle */
+  z-index: auto !important;
+}
+
+/* Optional: Add a very subtle indicator if needed, e.g. opacity */
+/* But user asked to distinctively NOT emphasize it. */
+
+
 .modal-close-btn {
   background: none;
   border: none;
