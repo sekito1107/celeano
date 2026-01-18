@@ -10,6 +10,7 @@ class ResolvePhase
   # 7. TriggerRoundEndEffects: ラウンド終了時効果（墓地効果を含む）
   organize RevealCards,
            ResolveSpells,
+           ProcessDeaths, # スペルによる死亡処理
            TriggerRoundStartEffects,
            ExecuteCombat,
            ProcessDeaths,

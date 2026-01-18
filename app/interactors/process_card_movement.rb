@@ -12,7 +12,13 @@ class ProcessCardMovement
       game_card.reserve_to!(position)
     else
       # スペルも予約状態に（解決フェーズで効果発動後に墓地へ）
-      game_card.update!(location: :resolving, position: nil, position_in_stack: nil)
+      target = context.target
+      game_card.update!(
+        location: :resolving,
+        position: nil,
+        position_in_stack: nil,
+        target_game_card: target
+      )
     end
   end
 end
