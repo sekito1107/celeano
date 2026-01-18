@@ -174,4 +174,18 @@ export default class extends Controller {
     }
     return null
   }
+
+  // 準備完了トグル
+  async ready(event) {
+    try {
+        const response = await api.post(`/games/${this.gameIdValue}/ready_states`, {})
+        
+        if (response.status === "success") {
+            window.location.reload()
+        }
+    } catch (error) {
+        console.error("Ready toggle failed:", error)
+        alert(error.message || "処理に失敗しました")
+    }
+  }
 }
