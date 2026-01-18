@@ -19,6 +19,8 @@ class ValidatePlay
 
     if card.unit?
       validate_unit_play(turn, user)
+    elsif card.spell?
+      validate_spell_play(card)
     end
   end
 
@@ -28,6 +30,21 @@ class ValidatePlay
     validate_position_presence!
     validate_summon_limit!(turn, user)
     validate_slot_availability!
+  end
+
+  def validate_spell_play(card)
+    if card.targeted?
+      if context.target_id.blank?
+        context.fail!(message: "このスペルを使用するには対象を選択してください")
+      end
+
+      # ターゲットの実在確認
+      target = GameCard.find_by(id: context.target_id)
+      unless target
+         context.fail!(message: "指定された対象が見つかりません")
+      end
+      context.target = target
+    end
   end
 
   def validate_position_presence!

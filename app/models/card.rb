@@ -28,4 +28,8 @@ class Card < ApplicationRecord
   def guardian?
     has_keyword?(KEYWORDS[:guardian])
   end
+
+  def targeted?
+    description.include?("対象")
+  end
 end
