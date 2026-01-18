@@ -10,11 +10,18 @@ export const api = {
     
     // 成功時も失敗時もFetchRequestがJSONをパースしてくれる
     const response = await request.perform()
+    let data = {}
+    
+    try {
+      data = await response.json
+    } catch (e) {
+      // JSONパースエラー時は空オブジェクトとして扱う
+    }
+
     if (response.ok) {
-      return await response.json
+      return data
     } else {
-        const error = await response.json.catch(() => ({}))
-        throw new Error(error.message || "Request failed")
+      throw new Error(data.message || "Request failed")
     }
   }
 }
