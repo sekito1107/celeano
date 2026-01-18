@@ -8,7 +8,7 @@ class Game::CardComponent < ApplicationComponent
 
   def call
     component_class = case @variant
-    when :hand, :field
+    when :hand, :field, :list
       Game::Card::SimpleComponent
     when :detail
       Game::Card::DetailComponent

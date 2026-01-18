@@ -5,7 +5,7 @@
     <div class="detail-header">
       <div class="detail-cost"><%= cost %></div>
       <div class="detail-name"><%= name %></div>
-      <div class="detail-type-icon"><%= unit? ? 'Monster' : 'Spell' %></div>
+      <div class="detail-type-icon"><%= unit? ? 'Unit' : 'Spell' %></div>
     </div>
 
     <%# Art Area %>
@@ -26,9 +26,8 @@
 
         <% if has_threshold? %>
           <div class="detail-stat stat-threshold">
-            <span class="label">INSIGHT</span>
+            <span class="label">閾値</span>
             <span class="value"><%= threshold %></span>
-            <span class="icon">👁️</span>
           </div>
         <% end %>
 
@@ -48,8 +47,10 @@
       <% if description_insane.present? %>
         <div class="detail-insane-box">
           <div class="insane-header">
-            <span class="insane-icon">👁️</span>
-            <span class="insane-label">INSANITY (Threshold <%= threshold %>)</span>
+            <span class="insane-label">狂気効果</span>
+          </div>
+          <div class="insane-condition">
+            SAN値が<%= threshold %>以下の時
           </div>
           <div class="insane-text">
             <%= simple_format(description_insane) %>
@@ -66,9 +67,8 @@
 
     <%# Footer / Badges %>
     <div class="detail-footer">
-      <% if guardian? %><span class="detail-badge">🛡️ Guardian</span><% end %>
-      <% if haste? %><span class="detail-badge">⚡ Haste</span><% end %>
-      <% if stunned? %><span class="detail-badge">💫 Stunned</span><% end %>
+      <% if guardian? %><span class="detail-badge">🛡️ 守護</span><% end %>
+      <% if haste? %><span class="detail-badge">⚡ 速攻</span><% end %>
     </div>
 
   </div>

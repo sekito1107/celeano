@@ -107,6 +107,10 @@ class Game::Card::BaseComponent < ApplicationComponent
         game_card? && @card_entity.location_graveyard?
       end
 
+      def banished?
+        game_card? && @card_entity.location_banished?
+      end
+
       def threshold
         card_source.threshold_san
       end

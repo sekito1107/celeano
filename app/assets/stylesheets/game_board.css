@@ -30,7 +30,19 @@
   display: flex;
   flex-direction: column;
   /* padding-bottom removed as requested */
-  gap: 1rem; /* Ensure visual separation between mats */
+  /* gap: 0; -- Controlled by .center-area height and .play-mat flex-grow */
+  gap: 0; 
+}
+
+/* Center area acts as a fixed spacer between growing play mats */
+.center-area {
+  margin: 0.1rem 0;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  min-height: 100px;
 }
 
 /* Remove utility divs from flex flow to prevent unwanted gaps at the top */
@@ -57,15 +69,21 @@
 
 /* プレイエリア（マット） */
 .play-mat {
-  background-color: rgba(20, 20, 25, 0.6);
-  border-top: 1px solid var(--game-border-color);
-  border-bottom: 1px solid var(--game-border-color);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  background-color: rgba(20, 20, 25, 0.2); /* Even more transparent */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.9),
+    inset 0 0 50px rgba(0,0,0,0.5); /* Deep inner shadow */
   padding: 2rem 0 4rem 0; /* Increase bottom padding for hand cards */
   position: relative;
   z-index: 2;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(12px); /* Increased blur for premium glass feel */
   flex-shrink: 0; /* Prevent shrinking */
+  flex-grow: 1; /* Expand to fill available vertical space */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Anchor content to the "bottom" (screen edge) */
   margin-bottom: 0;
 }
 
@@ -75,6 +93,7 @@
   transform: rotate(180deg);
   padding: 2rem 0; /* padding reset */
   margin-top: 0;
+  width: 100%;
 }
 
 .play-mat-opponent .field-slots-area {
@@ -256,6 +275,13 @@
 .field-slot:hover {
   border-color: rgba(255,255,255,0.3);
   box-shadow: inset 0 0 15px rgba(139, 0, 0, 0.2);
+}
+
+/* Player Field Hover: Pop up */
+.play-mat:not(.play-mat-opponent) .field-slot:hover .card-wrapper {
+  transform: translateY(-20px) scale(1.1);
+  z-index: 100;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
 }
 
 /* プレースホルダー */

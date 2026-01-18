@@ -4,9 +4,10 @@
   position: relative;
   width: var(--card-width);
   height: var(--card-height);
-  border-radius: 12px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 10px; /* Precise radius for integrated frames */
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
   user-select: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.6);
 }
 
 .card-frame {
@@ -15,7 +16,7 @@
   height: 100%;
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8));
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.9)); /* Deeper shadow */
 }
 
 /* --- Integrated Frames --- */
@@ -151,8 +152,8 @@
 
 /* --- Hover Effects --- */
 .card-interactive:hover .card-wrapper.card-simple {
-  transform: translateY(-20px) scale(1.1);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+  transform: translateY(-24px) scale(1.15) rotate(1deg);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.95);
   z-index: 100;
   border-color: #fbbf24;
 }
@@ -171,6 +172,10 @@
   filter: grayscale(100%) brightness(0.8);
 }
 
+.card-banished {
+  filter: grayscale(100%) brightness(0.4) opacity(0.8);
+}
+
 .simple-frame {
   position: relative;
   width: 100%;
@@ -186,24 +191,25 @@
 /* Cost: Top-Left Purple Circle */
 .simple-cost-circle {
   position: absolute;
-  top: -4px;
-  left: -4px;
-  min-width: 30px; /* Changed from fixed width */
+  top: 4px;
+  left: 4px;
+  min-width: 32px; /* Slightly larger base */
   width: auto;
-  padding: 0 4px; /* Added padding for wider text */
-  height: 30px;
+  padding: 0 6px; /* More padding */
+  height: 32px; /* Match min-width */
   background-color: #7e22ce; /* Purple-700 */
   border: 2px solid #a855f7; /* Purple-500 */
-  border-radius: 15px; /* Pill shape */
+  border-radius: 16px; /* Pill shape */
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-family: var(--font-display), sans-serif; /* Changed font to support lowercase */
   font-weight: bold;
-  font-size: 1.0rem;
+  font-size: 0.9rem; /* Reduced to fit 1d6+3 */
   z-index: 10;
   box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  white-space: nowrap; /* Prevent wrap */
 }
 
 /* Badges: Top-Right */
@@ -256,7 +262,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 2px 12px;
+  padding: 2px 8px; /* Reduced padding */
   z-index: 5;
   background: rgba(0, 0, 0, 0.75); /* Semi-transparent black strip */
   backdrop-filter: blur(2px);
@@ -266,11 +272,12 @@
 .stat-group {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px; /* Reduced gap */
   font-family: var(--font-display), sans-serif; /* Changed font to support lowercase */
   font-weight: bold;
-  font-size: 1.0rem; /* Smaller */
+  font-size: 0.9rem; /* Smaller base size */
   text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+  white-space: nowrap; /* Prevent wrapping */
 }
 
 .attack-group {
@@ -312,7 +319,7 @@
   position: fixed; /* or absolute depending on layout */
   top: 50%;
   left: 20px; /* Left side of screen */
-  transform: translateY(-45%); /* Start slightly off */
+  transform: translateY(-60%); /* Moved up to avoid player icon overlap */
   width: 320px; /* Larger than hand card */
   height: 600px;
   z-index: 3000; /* Higher than modal (2000) */
@@ -325,7 +332,7 @@
 #card-preview-container.active {
   opacity: 1;
   visibility: visible;
-  transform: translateY(-50%);
+  transform: translateY(-60%);
 }
 
 #card-preview-container.pinned {
@@ -364,18 +371,21 @@
 }
 
 .detail-cost {
-  width: 32px;
+  min-width: 32px;
+  width: auto;
   height: 32px;
+  padding: 0 8px; /* Ensure padding for wider text */
   background: #7e22ce;
-  border-radius: 50%;
+  border-radius: 16px; /* Pill shape */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Cinzel Decorative', cursive;
+  font-family: var(--font-display), sans-serif; /* Match simple card style */
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.0rem; /* Reduced slightly */
   box-shadow: 0 2px 4px rgba(0,0,0,0.5);
   color: #fff;
+  white-space: nowrap;
 }
 
 .detail-name {
@@ -439,9 +449,11 @@
 
 .detail-stat .value {
   font-family: var(--font-display), sans-serif; /* Changed font to support lowercase */
-  font-size: 1.4rem;
+  font-size: 1.1rem; /* Reduced to fit 1d6+2 */
   font-weight: bold;
   line-height: 1;
+  white-space: nowrap;
+  text-transform: none; /* Ensure 1d4 stays lowercase */
 }
 
 .stat-atk .value { color: #ef4444; }
@@ -469,9 +481,10 @@
   padding-top: 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   font-style: italic;
-  font-size: 0.8rem;
+  font-size: 0.7rem; /* Reduced size */
   color: #9ca3af;
   font-family: serif;
+  opacity: 0.8;
 }
 
 .detail-footer {
@@ -498,10 +511,13 @@
 /* --- FIELD VIEW STYLES (Scaled Down Mockup) --- */
 /* Used when card is on the board, fits into --card-width: 140px */
 .card-field .simple-cost-circle {
-  width: 26px;
+  min-width: 26px;
+  width: auto; /* Allow grow for 1d6+3 */
+  padding: 0 4px;
   height: 26px;
   font-size: 0.9rem;
-  top: -3px; left: -3px;
+  top: 2px; left: 2px;
+  border-radius: 13px; /* Pill shape */
 }
 
 .card-field .simple-badges {
@@ -554,23 +570,25 @@
   border-bottom: 1px solid rgba(220, 38, 38, 0.2);
 }
 
-.insane-icon {
-  font-size: 0.9rem;
-  color: #f87171;
-}
+
 
 .insane-label {
-  font-family: var(--font-display);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: bold;
-  color: #f87171;
-  text-transform: uppercase;
+  color: #fca5a5;
   letter-spacing: 0.05em;
+}
+
+.insane-condition {
+  padding: 4px 8px 0;
+  font-size: 0.75rem;
+  color: #fca5a5;
+  font-style: italic;
 }
 
 .insane-text {
   padding: 8px;
+  font-size: 0.8rem;
+  line-height: 1.5;
   color: #fca5a5;
-  font-size: 0.85rem;
-  line-height: 1.4;
 }

@@ -8,14 +8,14 @@ RSpec.describe AuthLogoComponent, type: :component do
       render_inline(described_class.new)
 
       expect(page).to have_css(".auth-logo")
-      expect(page).to have_css(".logo-title", text: "Call of Celeano")
+      expect(page).to have_css(".logo-title", text: "Call of Celaeno")
       expect(page).to have_css(".logo-subtitle", text: "— Archive of the Great Old Ones —")
     end
 
     it "data-text属性を含む" do
       render_inline(described_class.new)
 
-      expect(page).to have_css(".logo-title[data-text='Call of Celeano']")
+      expect(page).to have_css(".logo-title[data-text='Call of Celaeno']")
     end
   end
 
