@@ -3,6 +3,7 @@ import { api } from "utils/api"
 
 // Connects to data-controller="game--board"
 export default class extends Controller {
+  static targets = ["preview"]
   static values = {
     gameId: String
   }
@@ -15,7 +16,7 @@ export default class extends Controller {
   // 詳細表示の更新（イベント受信）
   showDetail(event) {
     const { cardId, html } = event.detail
-    const previewContainer = document.getElementById("card-preview-container")
+    const previewContainer = this.hasPreviewTarget ? this.previewTarget : null
     
     if (previewContainer && html) {
         // もしピン留めされてたら更新しない（自分以外）
@@ -30,7 +31,7 @@ export default class extends Controller {
 
   // 詳細非表示に更新
   hideDetail() {
-    const previewContainer = document.getElementById("card-preview-container")
+    const previewContainer = this.hasPreviewTarget ? this.previewTarget : null
     if (!previewContainer) return
 
     // もしピン留めされてたら非表示にしない
@@ -58,9 +59,10 @@ export default class extends Controller {
         this.selectedCardType = null
         element.setAttribute("data-game--card-selected-value", "false")
         
+        
         // ピン留め解除
-        const previewContainer = document.getElementById("card-preview-container")
-        if (previewContainer) {
+        if (this.hasPreviewTarget) {
+            const previewContainer = this.previewTarget
             delete previewContainer.dataset.pinnedBy
             previewContainer.classList.remove("pinned")
             this.hideDetail() // 自動的に隠す
@@ -71,8 +73,8 @@ export default class extends Controller {
         element.setAttribute("data-game--card-selected-value", "true")
         
         // ピン留め
-        const previewContainer = document.getElementById("card-preview-container")
-        if (previewContainer) {
+        if (this.hasPreviewTarget) {
+            const previewContainer = this.previewTarget
             previewContainer.dataset.pinnedBy = cardId
             previewContainer.classList.add("pinned")
 
@@ -93,8 +95,8 @@ export default class extends Controller {
     this.selectedCardId = null
     this.selectedCardType = null
 
-    const previewContainer = document.getElementById("card-preview-container")
-    if (previewContainer) {
+    if (this.hasPreviewTarget) {
+        const previewContainer = this.previewTarget
         delete previewContainer.dataset.pinnedBy
         previewContainer.classList.remove("pinned")
         this.hideDetail()
