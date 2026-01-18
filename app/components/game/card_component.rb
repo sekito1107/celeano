@@ -25,7 +25,7 @@ class Game::CardComponent < ApplicationComponent
     kwargs[:data] = {
       controller: "game--card",
       game__card_id_value: @card_entity.id,
-      game__card_type_value: @card_entity.card.card_type, # unit or spell
+      game__card_type_value: @card_entity.card&.card_type, # unit or spell
       game__card_detail_html_value: detail_html,
       game__card_selected_value: false,
       game__board_target: "card",
