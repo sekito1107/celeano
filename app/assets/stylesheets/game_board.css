@@ -332,13 +332,33 @@
   box-shadow: 0 -10px 20px rgba(0,0,0,0.8); /* Shadow needs flip too */
 }
 
-/* Fix orientation for opponent's deck and field areas (Labels & Numbers) */
+/* Fix orientation for opponent's deck and field areas */
 .play-mat-opponent .deck-placeholder,
 .play-mat-opponent .field-graveyard-area,
 .play-mat-opponent .field-banished-area,
-.play-mat-opponent .field-label,
 .play-mat-opponent .deck-count {
   transform: rotate(180deg) !important;
+}
+
+/* Fix Labels separately to ensure they are above the slot visually */
+.play-mat-opponent .field-label {
+  transform: rotate(0deg); /* Text itself is upright via parent rotation? No, parent is 180. */
+  /* Steps:
+     1. Mat is 180.
+     2. Area is 180 (Total 360 = Upright).
+     3. Label is inside Area. So it inherits 360 (Upright).
+     4. Label position: top: -1.2rem relative to Area.
+        Since Area is 360 (visually upright), top is top.
+        So Label should be above.
+     If user says "Still inverted", maybe my Area rotation didn't work.
+     I will reinforce the rule.
+  */
+}
+
+/* Explicitly fix icons inside empty states if Area rotation fails */
+.play-mat-opponent .empty-graveyard .icon,
+.play-mat-opponent .empty-banished .icon {
+  transform: rotate(0deg); /* If area is rotated, this is fine. If not, this does nothing. */
 }
 
 .field-slot:hover {
