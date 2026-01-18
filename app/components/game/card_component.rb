@@ -38,10 +38,16 @@ class Game::CardComponent < ApplicationComponent
     ]
 
     # Determine if the card should be interactive (clickable, draggable)
-    is_interactive = !is_pile_on_field && @variant != :resolving
+    # Determine if the card should be interactive (clickable, draggable)
+    # Resolving cards (Reserved Spells) should be clickable (for details) but not draggable
+    is_clickable = !is_pile_on_field
+    is_draggable = !is_pile_on_field && @variant != :resolving
 
-    if is_interactive
+    if is_clickable
       base_actions << "click->game--card#click"
+    end
+
+    if is_draggable
       base_actions << "dragstart->game--card#dragstart"
       base_actions << "dragend->game--card#dragend"
     end
@@ -59,7 +65,7 @@ class Game::CardComponent < ApplicationComponent
     }
 
     # Set draggable HTML attribute explicitly
-    kwargs[:draggable] = is_interactive ? "true" : "false"
+    kwargs[:draggable] = is_draggable ? "true" : "false"
 
     # Field/Board cards are valid targets for spells
     if @variant == :field && !is_pile_on_field

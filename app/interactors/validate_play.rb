@@ -12,6 +12,10 @@ class ValidatePlay
       context.fail!(message: "現在はカードをプレイできるフェーズではありません")
     end
 
+    unless context.game_card.location_hand?
+      context.fail!(message: "手札のカードしかプレイできません")
+    end
+
     nonce = Move.joins(:turn).where(turns: { game_id: context.game.id }).count
     actual_cost = Dice.roll(card.cost, context.game.seed, nonce)
 
