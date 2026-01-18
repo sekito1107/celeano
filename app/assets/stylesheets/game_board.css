@@ -151,9 +151,9 @@
 }
 
 /* Player Hand (Not Opponent): Fixed to bottom of screen */
-.play-mat:not(.play-mat-opponent) .hand-container {
-  position: fixed; /* Fixed to viewport */
-  bottom: -30px; /* Buried slightly */
+.player-hand-container-wrapper .hand-container {
+  position: absolute; /* Absolute relative to .game-board */
+  bottom: 0; /* Align to bottom */
   left: 0;
   right: 0;
   height: auto;
@@ -162,10 +162,11 @@
   justify-content: center;
   align-items: flex-end;
   pointer-events: none; /* Container ignores clicks */
+  transform: translateY(40%); /* Bury half (40-50%) */
 }
 
 /* Allow interaction with cards in fixed container */
-.play-mat:not(.play-mat-opponent) .hand-container .hand-card-wrapper {
+.player-hand-container-wrapper .hand-container .hand-card-wrapper {
   pointer-events: auto;
 }
 

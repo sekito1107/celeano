@@ -51,7 +51,10 @@
         <% end %>
       </div>
     </div>
+  </div>
 
+  <!-- Player Hand (Moved outside play-mat to fix positioning context) -->
+  <div class="player-hand-container-wrapper">
     <%= render Game::HandComponent.new(game_player: @game_player, viewer: current_user) %>
   </div>
 
