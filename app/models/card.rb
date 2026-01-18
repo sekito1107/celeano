@@ -30,6 +30,7 @@ class Card < ApplicationRecord
   end
 
   def targeted?
-    description&.include?("対象")
+    # Ensure boolean return
+    !!description&.include?("対象")
   end
 end
