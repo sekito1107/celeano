@@ -116,122 +116,67 @@
 
 /* プレイエリア（マット） */
 .play-mat {
-  background-color: rgba(20, 20, 25, 0.2); /* Even more transparent */
+  background-color: rgba(20, 20, 25, 0.2);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 
     0 10px 30px rgba(0, 0, 0, 0.9),
-    inset 0 0 50px rgba(0,0,0,0.5); /* Deep inner shadow */
-  padding: 2rem 0 4rem 0; /* Increase bottom padding for hand cards */
+    inset 0 0 50px rgba(0,0,0,0.5);
+  padding: 1rem 0 2rem 0; /* Reduced padding (Bottom 4rem -> 2rem) */
   position: relative;
   z-index: 2;
-  backdrop-filter: blur(12px); /* Increased blur for premium glass feel */
-  flex-shrink: 0; /* Prevent shrinking */
-  flex-grow: 1; /* Expand to fill available vertical space */
+  backdrop-filter: blur(12px);
+  flex-shrink: 1; /* Allow shrinking */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* Anchor content to the "bottom" (screen edge) */
+  justify-content: center; /* Center content */
   margin-bottom: 0;
+  min-height: 0; /* Important for flex shrinking */
 }
 
-.play-mat-opponent {
-  border-bottom: none;
-  border-top: 1px solid var(--game-border-color);
-  transform: rotate(180deg);
-  padding: 2rem 0; /* padding reset */
-  margin-top: 0;
-  width: 100%;
-}
-
-.play-mat-opponent .field-slots-area {
-  flex-direction: row-reverse;
-}
-
-/* Opponent Field Cards: Rotate Upright */
-.play-mat-opponent .field-slot .card-wrapper {
-  transform: rotate(180deg);
-}
-/* Opponent Field Hover: Maintain Rotation */
-.play-mat-opponent .field-slot:hover .card-wrapper {
-  transform: rotate(180deg) translateY(-20px) scale(1.1) !important;
-  z-index: 100;
-}
-
-/* Fix orientation for opponent's deck and field areas (Labels & Numbers) */
-.play-mat-opponent .deck-placeholder,
-.play-mat-opponent .field-graveyard-area,
-.play-mat-opponent .field-banished-area {
-  transform: rotate(180deg) !important;
-}
-
-
-
-/* 手札コンポーネント */
+/* Hand Container - Compact */
 .hand-container {
   /* Update local variables for container calculations */
-  --card-height: 224px;
+  --card-height: 180px; /* Reduced from 224px */
   
   display: flex;
   justify-content: center;
-  align-items: flex-end; /* カードを下揃え */
-  gap: 0; /* 重ねるために gap を 0 に */
+  align-items: flex-end;
+  gap: 0;
   padding: 0.5rem 1rem;
-  min-height: calc(var(--card-height) + 2rem);
+  min-height: calc(var(--card-height) + 1rem); /* Tighter fit */
   width: 100%;
   perspective: 1000px;
 }
 
 .hand-card-wrapper {
   /* Explicitly larger size for hand cards */
-  --card-width: 160px;
-  --card-height: 224px;
+  --card-width: 130px; /* Reduced from 160px */
+  --card-height: 180px; /* Reduced from 224px */
   width: var(--card-width);
   height: var(--card-height);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  margin-left: -5px; /* Cards overlap slightly less */
+  margin-left: -5px;
   position: relative;
-  box-shadow: -2px 0 5px rgba(0,0,0,0.5); /* 重なりの影 */
+  box-shadow: -2px 0 5px rgba(0,0,0,0.5);
 }
 
-/* 最初のカードは左マージン不要 */
-.hand-card-wrapper:first-child {
-  margin-left: 0;
-}
-
-.hand-card-wrapper:hover {
-  transform: translateY(-30px) scale(1.1) rotate(0deg) !important; /* ホバー時は強調 */
-  z-index: 100;
-  margin-left: 10px; /* ホバー時に隣との間隔を広げる */
-  margin-right: 10px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
-}
-
-/* 相手の手札 (逆向き) */
-.hand-card-wrapper.opponent-card {
-  margin-left: -5px;
-  box-shadow: none;
-}
-.hand-card-wrapper.opponent-card:hover {
-  transform: none; /* 相手の手札はホバーしても動かない */
-  margin-left: -5px;
-  margin-right: 0;
-}
-
-/* フィールドコンポーネント */
+/* Field Container - Compact */
 .field-container {
   /* Slightly larger to fit detailed card design better */
-  --card-width: 140px;
-  --card-height: 196px;
-  --slot-gap: 1rem; /* Reduced gap */
+  --card-width: 114px; /* Reduced from 140px */
+  --card-height: 160px; /* Reduced from 196px */
+  --slot-gap: 0.5rem; /* Reduced from 1rem */
 
   display: grid;
-  grid-template-columns: 300px 1fr 300px; /* Symmetric columns (300px fits Grave+Void) */
+  grid-template-columns: 240px 1fr 240px; /* Reduced side columns */
   justify-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   width: 100%;
-  max-width: 1200px; /* Increased to prevent overflow misalignment */
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   align-items: center;
 }
 
