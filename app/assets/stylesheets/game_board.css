@@ -296,7 +296,7 @@
   --center: calc((var(--total) - 1) / 2);
   --offset: calc(var(--i) - var(--center));
   --rotate-deg: calc(var(--offset) * 8deg); /* Fan spread angle */
-  --y-offset: calc(abs(var(--offset)) * 12px); /* Arch height */
+  --y-offset: calc(max(var(--offset), -1 * var(--offset)) * 12px); /* Arch height */
 
   transform-origin: center bottom 200px; /* Rotate from a distant point */
   transform: rotate(var(--rotate-deg)) translateY(var(--y-offset));
