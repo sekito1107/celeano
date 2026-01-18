@@ -109,11 +109,9 @@
 }
 
 /* Fixed Controls for Ready Button */
-
-/* Fixed Controls for Ready Button */
 .status-controls-fixed {
   position: fixed;
-  left: 220px; /* Shifted right for better spacing */
+  left: calc(2rem + 180px); /* Positioned relative to status bar */
   bottom: 2.5rem; /* Slightly lifted */
   z-index: 50;
   display: flex;
@@ -185,4 +183,10 @@
 @keyframes pulse-border {
   0%, 100% { border-color: #7f1d1d; }
   50% { border-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-warning {
+    animation: none;
+  }
 }
