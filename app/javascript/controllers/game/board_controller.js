@@ -3,7 +3,6 @@ import { api } from "utils/api"
 
 // Connects to data-controller="game--board"
 export default class extends Controller {
-  static targets = ["detail", "preview"]
   static values = {
     gameId: String
   }
@@ -30,7 +29,7 @@ export default class extends Controller {
   }
 
   // 詳細非表示に更新
-  hideDetail(event) {
+  hideDetail() {
     const previewContainer = document.getElementById("card-preview-container")
     if (!previewContainer) return
 
