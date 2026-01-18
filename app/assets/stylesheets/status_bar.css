@@ -107,3 +107,36 @@
   50% { box-shadow: 0 0 20px rgba(139, 0, 0, 0.6); }
   100% { box-shadow: 0 0 10px rgba(139, 0, 0, 0.2); }
 }
+
+/* Fixed Controls for Ready Button */
+.status-controls-fixed {
+  position: fixed;
+  left: 170px; /* Right of portrait (170px width) */
+  bottom: 2rem;
+  z-index: 50; /* Above status bar, below modals */
+}
+
+.btn-ready {
+  min-width: 120px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); /* Shadow-xl equiv */
+  transform: scale(1);
+  transition: all 0.3s;
+  display: flex !important; /* Force visibility */
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-ready:hover {
+  transform: scale(1.05);
+}
+
+.btn-warning {
+  background: linear-gradient(to bottom, #713f12, #451a03); /* Amber/Brown */
+  border: 1px solid #d97706; /* Amber-600 */
+  color: #fff;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+  border-radius: 4px;
+  cursor: default; /* Waiting state */
+  padding: 14px;
+}

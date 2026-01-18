@@ -17,8 +17,10 @@
   </div>
 
   <% if controls? %>
-    <div class="status-controls fixed left-48 bottom-8 z-50">
-      <button class="btn <%= ready? ? 'btn-warning' : 'btn-primary' %> min-w-[120px] shadow-xl"
+    <%# Ready Button: Fixed position to ensure visibility on top of all layers %>
+    <%# Ready Button: Fixed position to ensure visibility %>
+    <div class="status-controls-fixed">
+      <button class="btn <%= ready? ? 'btn-warning' : 'btn-primary btn-ready' %>"
               data-action="click->game--board#ready">
         <%= ready? ? "WAITING..." : "READY" %>
       </button>
