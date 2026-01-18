@@ -7,14 +7,14 @@ class Game::Card::SimpleComponent < Game::Card::BaseComponent
       end
 
       def variant_field?
-        @variant == :field
+        @variant == :field || @variant == :list
       end
 
       def interactive?
         # Only allow pinning/interaction if card is in hand or board
         return false unless game_card?
 
-        @card_entity.location_hand? || @card_entity.location_board?
+        @card_entity.location_hand? || @card_entity.location_board? || @variant == :list
       end
 
       def detail_html

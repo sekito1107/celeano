@@ -1,3 +1,3 @@
-# Call of Celeano
+# Call of Celaeno
 
 クトゥルフ神話をモチーフにした二人対戦型カードゲームです。

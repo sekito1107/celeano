@@ -54,7 +54,7 @@
             </div>
             <div class="modal-grid">
               <% graveyard_cards.each do |card| %>
-                <%= render Game::CardComponent.new(card_entity: card, variant: :field) %>
+                <%= render Game::CardComponent.new(card_entity: card, variant: :list) %>
               <% end %>
               <% if graveyard_cards.empty? %>
                 <div class="modal-empty-msg">No cards in Graveyard.</div>
@@ -87,7 +87,7 @@
             </div>
             <div class="modal-grid">
               <% banished_cards.each do |card| %>
-                <%= render Game::CardComponent.new(card_entity: card, variant: :field) %>
+                <%= render Game::CardComponent.new(card_entity: card, variant: :list) %>
               <% end %>
               <% if banished_cards.empty? %>
                 <div class="modal-empty-msg">No banished cards.</div>
