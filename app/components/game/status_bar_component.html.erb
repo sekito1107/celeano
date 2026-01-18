@@ -18,10 +18,12 @@
 
   <% if controls? %>
     <%# Ready Button: Fixed position to ensure visibility on top of all layers %>
-    <%# Ready Button: Fixed position to ensure visibility %>
     <div class="status-controls-fixed">
       <button class="btn <%= ready? ? 'btn-warning' : 'btn-primary btn-ready' %>"
-              data-action="click->game--board#ready">
+              data-action="click->game--board#ready"
+              aria-label="<%= ready? ? 'Waiting for opponent' : 'Confirm ready state' %>"
+              aria-pressed="<%= ready? %>"
+              <%= 'disabled' if ready? %>>
         <%= ready? ? "WAITING..." : "READY" %>
       </button>
     </div>

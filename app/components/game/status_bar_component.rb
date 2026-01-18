@@ -11,7 +11,7 @@ class Game::StatusBarComponent < ApplicationComponent
   end
 
   def ready?
-    @game_player.ready
+    !!@game_player.ready
   end
 
   def hp
