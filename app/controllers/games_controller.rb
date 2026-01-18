@@ -12,5 +12,7 @@ class GamesController < ApplicationController
 
     # GameAuthenticatable のチェックを通すためのインスタンス変数は再利用
     # (includes を使ってロードし直した @game を使うため)
+
+    @resolving_cards = @game.game_cards.select(&:location_resolving?)
   end
 end
