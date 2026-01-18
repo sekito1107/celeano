@@ -114,6 +114,14 @@ export default class extends Controller {
     
     let targetId = this.getTargetId(event.currentTarget)
 
+    // スロット自体にIDがない場合、内部のカードコンポーネントを探す
+    if (!targetId) {
+        const cardElement = event.currentTarget.querySelector('[data-game--card-id-value]')
+        if (cardElement) {
+             targetId = cardElement.getAttribute('data-game--card-id-value')
+        }
+    }
+
     if (this.selectedCardType === "unit" && !targetPosition) return
     
     await this.performCardPlay(this.selectedCardId, targetPosition, targetId)

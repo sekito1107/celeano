@@ -36,13 +36,16 @@
 
 /* Center area acts as a fixed spacer between growing play mats */
 .center-area {
-  margin: 0.1rem 0;
-  flex-grow: 1;
+  margin: 0.5rem 0;
+  flex-grow: 0; /* Fixed height region */
+  height: 180px; /* Enough for cards */
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  min-height: 100px;
+  background: rgba(0, 0, 0, 0.2); /* Slight visual separation */
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* Remove utility divs from flex flow to prevent unwanted gaps at the top */
@@ -344,6 +347,7 @@
   background-position: center;
   background-repeat: no-repeat;
   border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+  background-color: #1f2937; /* Fallback dark gray */
 }
 
 
