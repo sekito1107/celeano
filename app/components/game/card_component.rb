@@ -19,7 +19,9 @@ class Game::CardComponent < ApplicationComponent
 
     kwargs = { card_entity: @card_entity }
     # Stimulus attributes
-    detail_html = render(Game::Card::DetailComponent.new(card_entity: @card_entity))
+    # Only generate detail HTML if we are NOT in detail view to avoid recursion/double rendering
+    detail_html = (@variant == :detail) ? "" : render(Game::Card::DetailComponent.new(card_entity: @card_entity))
+
     kwargs[:data] = {
       controller: "game--card",
       game__card_id_value: @card_entity.id,
