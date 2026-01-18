@@ -83,9 +83,9 @@ RSpec.describe Game::CardComponent, type: :component do
           end
         end
 
-        context "when resolving (Reserved Spell)" do
-          it "does NOT have click action or draggable capability" do
-            render_inline(described_class.new(card_entity: game_card, variant: :resolving))
+          context "when resolving (Reserved Spell)" do
+            it "does NOT have click action or draggable capability" do
+              render_inline(described_class.new(card_entity: game_card, variant: :resolving))
             element = page.find(".card-wrapper")
             action = element["data-action"]
 
