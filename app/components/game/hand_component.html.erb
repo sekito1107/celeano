@@ -6,8 +6,9 @@
       </div>
     <% end %>
   <% else %>
-    <% cards.count.times do %>
-      <div class="hand-card-wrapper opponent-card">
+    <% count = cards.count %>
+    <% count.times do |i| %>
+      <div class="hand-card-wrapper opponent-card" style="--i: <%= i %>; --total: <%= count %>;">
         <div class="card-back"></div>
       </div>
     <% end %>

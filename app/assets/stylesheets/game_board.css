@@ -264,6 +264,47 @@
   pointer-events: none;
 }
 
+/* Opponent Hand: Absolute positioning to push to top edge */
+.play-mat-opponent .hand-container {
+  display: flex !important; /* Force flex */
+  position: absolute;
+  bottom: -6rem; /* Push visually to top (rotated coordinates) */
+  left: 0;
+  right: 0;
+  height: 120px;
+  align-items: flex-end; /* Align to "bottom" of container which is top of screen */
+  z-index: 10;
+  justify-content: center;
+  overflow: visible;
+  pointer-events: none; /* Let clicks pass through if needed, but we might want hover info later */
+}
+
+/* Fan Effect Logic */
+.play-mat-opponent .hand-card-wrapper.opponent-card {
+  /*
+     Calculate rotation based on index (--i) and total (--total).
+     Center is (total - 1) / 2.
+     Offset = i - center.
+     Rotate = offset * 5deg.
+     TranslateY = abs(offset) * 5px (arch effect).
+  */
+  --center: calc((var(--total) - 1) / 2);
+  --offset: calc(var(--i) - var(--center));
+  --rotate-deg: calc(var(--offset) * 8deg); /* Fan spread angle */
+  --y-offset: calc(abs(var(--offset)) * 12px); /* Arch height */
+
+  transform-origin: center bottom 200px; /* Rotate from a distant point */
+  transform: rotate(var(--rotate-deg)) translateY(var(--y-offset));
+  margin-left: -40px !important; /* Overlap heavily */
+  
+  /* Reset previous shadow/hover */
+  box-shadow: -2px 0 10px rgba(0,0,0,0.8);
+}
+/* Allow interaction */
+.play-mat-opponent .hand-container {
+  pointer-events: auto;
+}
+
 .play-mat-opponent {
   border-bottom: none;
   border-top: 1px solid var(--game-border-color);
