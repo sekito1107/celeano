@@ -2,14 +2,17 @@
 <%= stylesheet_link_tag "status_bar", "data-turbo-track": "reload" %>
 <%= stylesheet_link_tag "card", "data-turbo-track": "reload" %>
 
-<div class="game-board" data-controller="board" data-action="click->board#clearDetail">
+<div class="game-board" 
+     data-controller="game--board" 
+     data-game--board-game-id-value="<%= @game.id %>"
+     data-action="click->game--board#deselectAll dragover->game--board#dragover drop->game--board#drop game--card:showDetail->game--board#showDetail game--card:hideDetail->game--board#hideDetail game--card:selectCard->game--board#selectCard">
   <div class="game-overlay"></div>
   
   <%# Animation Layer (Pointer events none, top z-index) %>
   <div id="animation-layer" class="pointer-events-none absolute inset-0 z-50"></div>
   
   <%# Master-Detail Preview Container %>
-  <div id="card-preview-container"></div>
+  <div id="card-preview-container" data-game--board-target="preview"></div>
 
   <!-- Opponent Area -->
   <div class="status-bar-wrapper opponent-status">
@@ -30,7 +33,8 @@
   </div>
 
   <!-- 中央エリア (Battle Logなど将来的に配置) -->
-  <div class="center-area flex-grow flex items-center justify-center pointer-events-none">
+  <div class="center-area flex-grow flex items-center justify-center"
+       data-action="click->game--board#playCard">
 
   </div>
 

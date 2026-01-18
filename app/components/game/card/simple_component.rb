@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Game::Card::SimpleComponent < Game::Card::BaseComponent
-      def initialize(card_entity:, variant: :hand)
+      def initialize(card_entity:, variant: :hand, **html_attributes)
         super(card_entity: card_entity)
         @variant = variant
+        @html_attributes = html_attributes
       end
 
       def variant_field?
@@ -30,6 +31,8 @@ class Game::Card::SimpleComponent < Game::Card::BaseComponent
         classes << "card-field" if variant_field?
         classes << "card-graveyard" if graveyard?
         classes << "card-banished" if banished?
+        classes << "state-stunned" if stunned?
+        classes << "state-poisoned" if poisoned?
         classes.join(" ")
       end
 end

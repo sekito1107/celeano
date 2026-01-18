@@ -44,7 +44,7 @@ class Game::FieldComponent < ApplicationComponent
 
   def slot_card(position)
     # N+1対策: メモリ上の game_cards から検索
-    @game_player.game_cards.find { |gc| gc.location_board? && gc.position == position.to_s }
+    @game_player.game_cards.find { |gc| (gc.location_board? || gc.location_resolving?) && gc.position == position.to_s }
   end
 
   def left_slot_card

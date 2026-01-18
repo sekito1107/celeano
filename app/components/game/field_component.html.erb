@@ -6,29 +6,47 @@
   </div>
 
   <div class="field-slots-area">
-    <div class="field-slot left-slot">
+    <%= tag.div class: "field-slot left-slot",
+                **(opponent? ? {} : {
+                  data: {
+                    position: "left",
+                    action: "click->game--board#playCard dragover->game--board#dragover drop->game--board#drop"
+                  }
+                }) do %>
       <% if left_slot_card %>
         <%= render Game::CardComponent.new(card_entity: left_slot_card, variant: :field) %>
       <% else %>
         <div class="empty-slot"></div>
       <% end %>
-    </div>
+    <% end %>
 
-    <div class="field-slot center-slot">
+    <%= tag.div class: "field-slot center-slot",
+                **(opponent? ? {} : {
+                  data: {
+                    position: "center",
+                    action: "click->game--board#playCard dragover->game--board#dragover drop->game--board#drop"
+                  }
+                }) do %>
       <% if center_slot_card %>
         <%= render Game::CardComponent.new(card_entity: center_slot_card, variant: :field) %>
       <% else %>
         <div class="empty-slot"></div>
       <% end %>
-    </div>
+    <% end %>
 
-    <div class="field-slot right-slot">
+    <%= tag.div class: "field-slot right-slot",
+                **(opponent? ? {} : {
+                  data: {
+                    position: "right",
+                    action: "click->game--board#playCard dragover->game--board#dragover drop->game--board#drop"
+                  }
+                }) do %>
       <% if right_slot_card %>
         <%= render Game::CardComponent.new(card_entity: right_slot_card, variant: :field) %>
       <% else %>
         <div class="empty-slot"></div>
       <% end %>
-    </div>
+    <% end %>
   </div>
 
   <div class="field-right-stack">
