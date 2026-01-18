@@ -122,15 +122,15 @@
   box-shadow: 
     0 10px 30px rgba(0, 0, 0, 0.9),
     inset 0 0 50px rgba(0,0,0,0.5);
-  padding: 0.5rem 0; /* Minimal padding to bring mats closer */
+  padding: 1rem 0; /* Moderate padding */
   position: relative;
   z-index: 2;
   backdrop-filter: blur(12px);
   flex-shrink: 1; /* Allow shrinking */
-  flex-grow: 0; /* STOP growing, pack to center */
+  flex-grow: 1; /* Grow to fill screen */
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center content */
+  justify-content: space-evenly; /* Distribute content (Field vs Ritual) */
   margin-bottom: 0;
   min-height: 0; /* Important for flex shrinking */
 }
