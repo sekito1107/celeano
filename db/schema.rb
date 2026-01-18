@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_17_133209) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_18_110453) do
   create_table "battle_logs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.json "details", default: {}, null: false
@@ -71,6 +71,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_17_133209) do
     t.integer "position"
     t.integer "position_in_stack"
     t.integer "summoned_turn"
+    t.integer "target_game_card_id"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["card_id"], name: "index_game_cards_on_card_id"
@@ -79,6 +80,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_17_133209) do
     t.index ["game_id"], name: "index_game_cards_on_game_id"
     t.index ["game_player_id", "location"], name: "index_game_cards_on_game_player_id_and_location"
     t.index ["game_player_id"], name: "index_game_cards_on_game_player_id"
+    t.index ["target_game_card_id"], name: "index_game_cards_on_target_game_card_id"
     t.index ["user_id"], name: "index_game_cards_on_user_id"
   end
 
@@ -188,6 +190,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_17_133209) do
   add_foreign_key "card_keywords", "keywords"
   add_foreign_key "game_card_modifiers", "game_cards"
   add_foreign_key "game_cards", "cards"
+  add_foreign_key "game_cards", "game_cards", column: "target_game_card_id"
   add_foreign_key "game_cards", "game_players"
   add_foreign_key "game_cards", "games"
   add_foreign_key "game_cards", "users"

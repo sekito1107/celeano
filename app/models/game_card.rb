@@ -5,6 +5,7 @@ class GameCard < ApplicationRecord
   belongs_to :user
   belongs_to :card
   belongs_to :game_player
+  belongs_to :target_game_card, class_name: "GameCard", optional: true
   has_many :modifiers, class_name: "GameCardModifier", dependent: :destroy
   has_many :moves, dependent: :destroy
 
