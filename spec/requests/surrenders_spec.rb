@@ -49,7 +49,7 @@ RSpec.describe "Surrenders", type: :request do
             post game_surrender_path(finished_game)
 
             expect(response).to redirect_to(game_path(finished_game))
-            expect(flash[:notice]).to eq("降伏しました。")
+            expect(flash[:notice]).to eq("ゲームは既に終了しています。")
             # ステータスはfinishedのまま変わらない
             expect(finished_game.reload.status).to eq("finished")
           end

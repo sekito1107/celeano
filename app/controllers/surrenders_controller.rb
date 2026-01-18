@@ -3,9 +3,11 @@ class SurrendersController < ApplicationController
   include GameActionHelper
 
   def create
-    @game_player.surrender!
-
-    result = GameActionResult.success(message: "降伏しました。")
+    if @game_player.surrender!
+      result = GameActionResult.success(message: "降伏しました。")
+    else
+      result = GameActionResult.success(message: "ゲームは既に終了しています。")
+    end
     handle_game_action(result)
   end
 end
