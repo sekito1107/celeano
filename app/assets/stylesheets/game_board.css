@@ -342,6 +342,12 @@
   transform: rotate(180deg) scale(1.05);
 }
 
+/* Maintain rotation for selected opponent cards */
+.play-mat-opponent .field-slot .card-wrapper.selected {
+  transform: rotate(180deg) translateY(-32px) scale(1.15) !important;
+  /* Box shadow and border color are handled by card.css */
+} 
+
 /* Fix Labels separately to ensure they are above the slot visually */
 .play-mat-opponent .field-label {
   transform: rotate(0deg); /* Text itself is upright via parent rotation? No, parent is 180. */
