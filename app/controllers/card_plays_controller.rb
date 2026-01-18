@@ -6,7 +6,7 @@ class CardPlaysController < ApplicationController
     game_card = @game_player.game_cards.find_by(id: params[:game_card_id])
     unless game_card
       return handle_game_action(
-        GameActionResult.failure("指定されたカードが見つかりません"),
+        GameActionResult.failure(message: "指定されたカードが見つかりません"),
         status: :not_found
       )
     end
