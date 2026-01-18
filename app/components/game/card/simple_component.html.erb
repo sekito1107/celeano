@@ -1,8 +1,4 @@
-<div class="<%= wrapper_classes %>" 
-     data-controller="card-hover"
-     data-action="mouseenter->card-hover#showDetail mouseleave->card-hover#hideDetail <%= 'click->card-hover#pinDetail' if interactive? %>"
-     data-card-hover-id-value="<%= card_hover_id %>"
-     data-card-hover-detail-html-value="<%= ERB::Util.html_escape(detail_html) %>">
+<%= tag.div class: wrapper_classes, **@html_attributes do %>
   
   <div class="simple-frame mockup-style">
     <%# Full Art %>
@@ -17,7 +13,8 @@
     <div class="simple-badges">
       <% if guardian? %><span class="badge-icon">🛡️</span><% end %>
       <% if haste? %><span class="badge-icon">⚡</span><% end %>
-      <% if stunned? %><span class="badge-icon">💫</span><% end %>
+      <% if stunned? %><span class="badge-icon" title="Stunned">💫</span><% end %>
+      <% if poisoned? %><span class="badge-icon" title="Poisoned">☠️</span><% end %>
     </div>
 
     <%# Middle-Low: Name Strip %>
@@ -53,4 +50,4 @@
     <% end %>
 
   </div>
-</div>
+<% end %>
