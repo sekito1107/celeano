@@ -32,6 +32,11 @@
     <% end %>
   </div>
 
+  <!-- Player Area -->
+  <div class="status-bar-wrapper player-status">
+    <%= render Game::StatusBarComponent.new(game_player: @game_player, controls: true) %>
+  </div>
+
   <div class="play-mat">
     <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user) %>
     
