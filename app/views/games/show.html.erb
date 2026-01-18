@@ -32,22 +32,21 @@
     <% end %>
   </div>
 
-  <!-- 予約スペルエリア (自分のみ表示) -->
-  <div class="reserved-spells-container">
-    <% @resolving_cards.each do |card| %>
-      <div class="reserved-card-wrapper transition-all duration-500 relative group">
-          <%= render Game::CardComponent.new(card_entity: card, variant: :resolving) %>
-      </div>
-    <% end %>
-  </div>
-
-  <!-- Player Area -->
-  <div class="status-bar-wrapper player-status">
-    <%= render Game::StatusBarComponent.new(game_player: @game_player, controls: true) %>
-  </div>
-
   <div class="play-mat">
     <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user) %>
+    
+    <!-- Reserved Spells Zone -->
+    <div class="reserved-spells-zone">
+      <div class="zone-label">RITUAL</div>
+      <div class="reserved-cards-stack">
+        <% @resolving_cards.each_with_index do |card, index| %>
+          <div class="reserved-card-wrapper" style="--stack-index: <%= index %>;">
+              <%= render Game::CardComponent.new(card_entity: card, variant: :resolving) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
     <%= render Game::HandComponent.new(game_player: @game_player, viewer: current_user) %>
   </div>
 
