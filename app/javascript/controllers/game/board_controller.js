@@ -105,8 +105,7 @@ export default class extends Controller {
 
   // カードプレイ（クリック版）
   async playCard(event) {
-    event.stopPropagation() // バブリング防止 (Card -> Slotの重複発火を防ぐ)
-
+    // 選択されていない場合はバブリングさせて deselectAll へ
     if (!this.selectedCardId) return
 
     const targetPosition = event.currentTarget.dataset.position
@@ -124,9 +123,13 @@ export default class extends Controller {
         }
     }
     
-    console.log(`Playing card ${this.selectedCardId} (Type: ${this.selectedCardType}) -> Target: ${targetId}, Position: ${targetPosition}`)
-
+    // バリデーション: ユニットは位置指定必須（なければ無効プレイとしてバブリングさせる）
     if (this.selectedCardType === "unit" && !targetPosition) return
+    
+    // 有効なプレイと判断したらイベントを止める
+    event.stopPropagation()
+
+    console.log(`Playing card ${this.selectedCardId} (Type: ${this.selectedCardType}) -> Target: ${targetId}, Position: ${targetPosition}`)
     
     await this.performCardPlay(this.selectedCardId, targetPosition, targetId)
     this.deselectAll()

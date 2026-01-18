@@ -21,7 +21,8 @@
     <% end %>
   </div>
 
-  <div class="play-mat play-mat-opponent">
+  <div class="play-mat play-mat-opponent" 
+       data-action="dragover->game--board#dragover drop->game--board#drop click->game--board#playCard">
     <% if @opponent_game_player %>
       <%= render Game::FieldComponent.new(game_player: @opponent_game_player, viewer: current_user) %>
       <%= render Game::HandComponent.new(game_player: @opponent_game_player, viewer: current_user) %>
