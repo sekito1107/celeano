@@ -3,7 +3,10 @@ class PayResolvePhaseCosts
 
   def call
     game = context.game
+    return if game.finished?
+
     turn = game.turns.find_by(turn_number: game.current_turn_number)
+    return unless turn
 
     # このターンにプレイされたカード（Move）を取得
     moves = turn.moves.includes(:game_card, :user)

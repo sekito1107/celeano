@@ -3,6 +3,8 @@ class CancelCardPlay
 
   def call
     game = context.game
+    return if game.finished?
+
     user = context.user
     game_card_id = context.game_card_id
 
