@@ -23,4 +23,21 @@ class Dice
 
     [ total + modifier, 0 ].max # マイナスにはならない
   end
+
+  def self.range(notation)
+    return [ notation.to_i, notation.to_i ] if notation.match?(/\A\d+\z/)
+
+    # "2d6+1" -> 2, 6, 1
+    match = notation.match(/(\d+)d(\d+)([\+\-]\d+)?/)
+    return [ 0, 0 ] unless match # Invalid format fallback
+
+    count = match[1].to_i
+    sides = match[2].to_i
+    modifier = match[3].to_i
+
+    min = [ count * 1 + modifier, 0 ].max
+    max = [ count * sides + modifier, 0 ].max
+
+    [ min, max ]
+  end
 end

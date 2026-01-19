@@ -37,7 +37,6 @@ class Game::StatusBarComponent < ApplicationComponent
   SANITY_CRITICAL_THRESHOLD = 5
   SANITY_LOW_THRESHOLD = 10
   SANITY_WARNING_THRESHOLD = 15
-
   def sanity_level_class
     case san
     when 0..SANITY_CRITICAL_THRESHOLD

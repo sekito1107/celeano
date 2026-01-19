@@ -53,4 +53,30 @@ RSpec.describe Dice, type: :model do
       end
     end
   end
+
+  describe '.range' do
+    it 'parses simple number' do
+      expect(Dice.range('5')).to eq([ 5, 5 ])
+    end
+
+    it 'parses NdM format' do
+      expect(Dice.range('1d6')).to eq([ 1, 6 ])
+    end
+
+    it 'parses NdM+K format' do
+      expect(Dice.range('2d6+3')).to eq([ 5, 15 ])
+    end
+
+    it 'parses NdM-K format' do
+      expect(Dice.range('2d6-2')).to eq([ 0, 10 ])
+    end
+
+    it 'handles negative results by clamping to 0' do
+      expect(Dice.range('1d4-10')).to eq([ 0, 0 ])
+    end
+
+    it 'handles invalid format gracefully' do
+      expect(Dice.range('invalid')).to eq([ 0, 0 ])
+    end
+  end
 end

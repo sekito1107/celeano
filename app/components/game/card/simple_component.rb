@@ -26,11 +26,6 @@ class Game::Card::SimpleComponent < Game::Card::BaseComponent
         @card_entity&.id || "preview"
       end
 
-      def pending_cost
-        return nil unless game_card?
-        @card_entity.pending_cost
-      end
-
       def scheduled?
         # FieldComponent passes variant: :field for scheduled cards too,
         # but their location is still :hand or :resolving (reserved).

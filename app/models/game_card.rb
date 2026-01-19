@@ -1,8 +1,6 @@
 class GameCard < ApplicationRecord
   include Loggable
 
-  attr_accessor :pending_cost
-
   belongs_to :game
   belongs_to :user
   belongs_to :card

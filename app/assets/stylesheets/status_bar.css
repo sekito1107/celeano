@@ -55,6 +55,7 @@
 .hp-icon .icon-symbol { color: #e53e3e; }
 .san-icon .icon-symbol { color: #805ad5; }
 
+
 .status-gauge-wrapper {
   flex-grow: 1;
   height: 20px;

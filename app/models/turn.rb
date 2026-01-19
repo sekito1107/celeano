@@ -25,4 +25,24 @@ class Turn < ApplicationRecord
   def summon_limit_reached?(user)
     units_summoned_count(user) >= unit_summon_limit
   end
+
+  def pending_cost_range_for(user)
+    # user_idで検索するためにIDを取得
+    user_id = user.is_a?(User) ? user.id : user
+
+    pending_moves = moves.includes(game_card: :card).where(user_id: user_id)
+    return [ 0, 0 ] if pending_moves.empty?
+
+    min_total = 0
+    max_total = 0
+
+    pending_moves.each do |move|
+      cost_str = move.game_card.card.cost
+      min, max = Dice.range(cost_str)
+      min_total += min
+      max_total += max
+    end
+
+    [ min_total, max_total ]
+  end
 end

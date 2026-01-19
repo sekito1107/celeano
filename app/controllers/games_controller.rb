@@ -14,15 +14,8 @@ class GamesController < ApplicationController
     # (includes を使ってロードし直した @game を使うため)
 
     # 現在のターンのMoveを取得してコストを紐付ける
-    current_turn = @game.turns.find_by(turn_number: @game.current_turn_number)
-    moves = current_turn&.moves&.where(user: current_user) || []
-
     @resolving_cards = @game.game_cards.select do |card|
-      if card.location_resolving? && card.user_id == current_user.id && !card.unit?
-        move = moves.find { |m| m.game_card_id == card.id }
-        card.pending_cost = move&.cost if move
-        true
-      end
+      card.location_resolving? && card.user_id == current_user.id && !card.unit?
     end
   end
 end

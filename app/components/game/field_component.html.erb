@@ -55,6 +55,12 @@
         <span class="label">SUMMON:</span>
         <span class="value"><%= units_summoned %> / <%= unit_limit %></span>
       </div>
+      <% if pending_cost_text %>
+        <div class="field-pending-cost">
+          <span class="label">SAN COST:</span>
+          <%= pending_cost_text %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 

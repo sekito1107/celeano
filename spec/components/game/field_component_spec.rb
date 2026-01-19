@@ -122,4 +122,36 @@ RSpec.describe Game::FieldComponent, type: :component do
       end
     end
   end
+
+  context "コスト消費の表示" do
+    let!(:turn) { create(:turn, game: game, turn_number: 1) }
+
+    before do
+      allow(game).to receive(:current_turn_number).and_return(1)
+      cards = create_list(:card, 2, cost: "1")
+      # Move 1: Cost 1
+      gc1 = create(:game_card, game: game, game_player: game_player, user: user, card: cards[0])
+      create(:move, turn: turn, user: user, game_card: gc1, cost: 1)
+      # Move 2: Cost 1
+      gc2 = create(:game_card, game: game, game_player: game_player, user: user, card: cards[1])
+      create(:move, turn: turn, user: user, game_card: gc2, cost: 1)
+    end
+
+    context "自身が閲覧する場合" do
+      it "合計消費コストが表示されること" do
+        render_inline(described_class.new(game_player: game_player, viewer: user))
+        expect(page).to have_css(".field-pending-cost", text: "-2")
+        expect(page).to have_css(".field-pending-cost .label", text: "SAN COST:")
+      end
+    end
+
+    context "相手が閲覧する場合" do
+      let(:opponent) { create(:user) }
+
+      it "コスト消費は表示されないこと" do
+        render_inline(described_class.new(game_player: game_player, viewer: opponent))
+        expect(page).not_to have_css(".field-pending-cost")
+      end
+    end
+  end
 end

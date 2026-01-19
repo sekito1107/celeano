@@ -88,4 +88,53 @@ RSpec.describe Turn, type: :model do
       end
     end
   end
+
+  describe '#pending_cost_range_for' do
+    let(:game) { create(:game) }
+    let(:user) { create(:user) }
+    let(:turn) { create(:turn, game: game) }
+    let(:game_player) { create(:game_player, game: game, user: user) }
+
+    context 'Moveがない場合' do
+      it '[0, 0]を返すこと' do
+        expect(turn.pending_cost_range_for(user)).to eq([ 0, 0 ])
+      end
+    end
+
+    context '確定コストのMoveがある場合' do
+      it 'そのコストを返すこと' do
+        card = create(:card, cost: "3")
+        gc = create(:game_card, game: game, card: card, user: user)
+        create(:move, turn: turn, user: user, game_card: gc)
+
+        expect(turn.pending_cost_range_for(user)).to eq([ 3, 3 ])
+      end
+    end
+
+    context '範囲コスト(ダイス)のMoveがある場合' do
+      it '最小値と最大値を返すこと' do
+        card = create(:card, cost: "1d4")
+        gc = create(:game_card, game: game, card: card, user: user)
+        create(:move, turn: turn, user: user, game_card: gc)
+
+        expect(turn.pending_cost_range_for(user)).to eq([ 1, 4 ])
+      end
+    end
+
+    context '複数のMoveがある場合' do
+      it '合算値を返すこと' do
+        card1 = create(:card, cost: "2")
+        card2 = create(:card, cost: "1d6")
+
+        gc1 = create(:game_card, game: game, card: card1, user: user, game_player: game_player)
+        gc2 = create(:game_card, game: game, card: card2, user: user, game_player: game_player)
+
+        create(:move, turn: turn, user: user, game_card: gc1)
+        create(:move, turn: turn, user: user, game_card: gc2)
+
+        # 2 + [1, 6] = [3, 8]
+        expect(turn.pending_cost_range_for(user)).to eq([ 3, 8 ])
+      end
+    end
+  end
 end
