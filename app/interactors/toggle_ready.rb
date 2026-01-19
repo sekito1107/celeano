@@ -8,6 +8,7 @@ class ToggleReady
     game = game_player.game
     turn = context.turn
 
+    broadcast_logs = false
     ActiveRecord::Base.transaction do
       # 競合を防ぐためにgameレコードをロック
       game.lock!
@@ -24,12 +25,15 @@ class ToggleReady
         context.fail!(message: result.message) if result.failure?
 
         context.phase_completed = true
-
-        # バトルログと盤面更新を配信
-        Game::BroadcastBattleLogs.call(game: game, logs: turn.battle_logs)
+        broadcast_logs = true
       else
         context.phase_completed = false
       end
+    end
+
+    if broadcast_logs
+      # バトルログと盤面更新を配信
+      Game::BroadcastBattleLogs.call(game: game, logs: turn.battle_logs)
     end
   end
 
