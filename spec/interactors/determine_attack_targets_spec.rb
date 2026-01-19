@@ -67,16 +67,17 @@ RSpec.describe DetermineAttackTargets, type: :interactor do
       end
     end
 
-    context '召喚酔い中のユニット' do
+    context '召喚直後のユニット' do
       let!(:attacker) do
         create(:game_card, game: game, user: user, game_player: player,
                card: unit_card, location: :board, position: :center, summoned_turn: 1)
       end
 
-      it '攻撃しない' do
+      it '召喚ターンであっても攻撃を行う' do
         result = described_class.call(game: game)
 
-        expect(result.attack_plan).to be_empty
+        expect(result.attack_plan).to be_present
+        expect(result.attack_plan.first[:attacker]).to eq attacker
       end
     end
 
