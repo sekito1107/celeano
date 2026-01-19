@@ -253,10 +253,10 @@ export default class extends Controller {
     cutInContainer.className = "spell-cut-in-container"
     
     // カード画像パスの構築 (簡易的に)
-    // 実際にはRailsのHelper等でパスを知る必要があるが、ここでは固定かkey_code利用
     const imagePath = keyCode ? `/assets/cards/${keyCode}.jpg` : "/assets/cards/card_back_ancient.png"
 
     cutInContainer.innerHTML = `
+      <div class="spell-cut-in-bg"></div>
       <div class="spell-cut-in-content">
         <div class="spell-cut-in-image" style="background-image: url('${imagePath}');"></div>
         <div class="spell-cut-in-text">${cardName}</div>
@@ -265,7 +265,8 @@ export default class extends Controller {
     document.body.appendChild(cutInContainer)
     
     // Trigger Animation
-    requestAnimationFrame(() => cutInContainer.classList.add("animate"))
+    // 少し遅らせてアニメーション開始（DOM追加後のreflowを待つ意図）
+    requestAnimationFrame(() => requestAnimationFrame(() => cutInContainer.classList.add("animate")))
 
     // 2. Target Highlighting (タイミングを少し遅らせる)
     this.delay(500).then(() => {

@@ -125,72 +125,111 @@
 
 
 /* --- Spell Cut-In Animation --- */
+/* --- Spell Cut-In Animation --- */
 .spell-cut-in-container {
   position: fixed;
-  top: 30%;
-  left: -10%;
-  width: 120%;
-  height: 200px;
-  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(139, 0, 0, 0.9) 20%, rgba(139, 0, 0, 0.9) 80%, rgba(0,0,0,0) 100%);
+  top: 25%;
+  left: 0;
+  width: 100%;
+  height: 250px;
   z-index: 9999;
-  transform: skewX(-20deg) translateX(-150%);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 2px solid rgba(255, 255, 255, 0.5);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-  pointer-events: none; /* Click through */
+  pointer-events: none;
+  opacity: 0; /* Initially hidden */
+}
+
+/* Background Strip */
+.spell-cut-in-bg {
+  position: absolute;
+  top: 0;
+  left: -20%;
+  width: 140%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(100, 0, 0, 0.9) 40%, rgba(50, 0, 0, 0.9) 100%);
+  transform: skewX(-30deg) translateX(-150%);
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  border-top: 4px solid #fff;
+  border-bottom: 2px solid #ff3333;
 }
 
 .spell-cut-in-container.animate {
-  animation: cut-in-slide 2.0s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 1;
+}
+
+.spell-cut-in-container.animate .spell-cut-in-bg {
+  animation: cut-in-slide-bg 2.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
 .spell-cut-in-content {
-  transform: skewX(20deg); /* Counter-skew text/image */
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 2rem;
-  opacity: 0;
-  color: #fff;
+  gap: 4rem;
+  z-index: 10;
+  perspective: 1000px;
 }
 
-.spell-cut-in-container.animate .spell-cut-in-content {
-  animation: cut-in-content-fade 2.0s ease-in-out forwards;
-}
-
+/* Card Art Style */
 .spell-cut-in-image {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 3px solid #fff;
+  width: 300px; /* Larger */
+  height: 420px; /* Card aspect */
   background-size: cover;
-  background-position: center;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  background-position: center top;
+  border: 4px solid #fff;
+  border-radius: 12px;
+  box-shadow: 10px 10px 30px rgba(0,0,0,0.8);
+  transform: translateX(-200px) rotateY(40deg) rotateZ(-10deg) scale(0.8);
+  opacity: 0;
 }
 
+.spell-cut-in-container.animate .spell-cut-in-image {
+  animation: cut-in-image-fly 2.0s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 0.1s;
+}
+
+/* Text Style */
 .spell-cut-in-text {
-  font-family: var(--font-display), serif;
-  font-size: 3rem;
+  font-family: var(--font-display), "Impact", sans-serif;
+  font-size: 5rem;
   font-weight: 900;
   text-transform: uppercase;
-  text-shadow: 2px 2px 0 #000, 0 0 10px rgba(255, 0, 0, 0.8);
-  letter-spacing: 0.1em;
+  color: #fff;
+  font-style: italic;
+  text-shadow: 
+    4px 4px 0 #8b0000, 
+    8px 8px 0 rgba(0,0,0,0.5);
+  transform: translateX(200px) skewX(-20deg);
+  opacity: 0;
+  white-space: nowrap;
 }
 
-@keyframes cut-in-slide {
-  0% { transform: skewX(-20deg) translateX(-150%); }
-  15% { transform: skewX(-20deg) translateX(0%); } /* Slide in fast */
-  85% { transform: skewX(-20deg) translateX(0%); } /* Stay */
-  100% { transform: skewX(-20deg) translateX(150%); } /* Slide out */
+.spell-cut-in-container.animate .spell-cut-in-text {
+  animation: cut-in-text-slide 2.0s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 0.2s;
 }
 
-@keyframes cut-in-content-fade {
-  0% { opacity: 0; transform: skewX(20deg) translateX(-50px); }
-  20% { opacity: 1; transform: skewX(20deg) translateX(0); }
-  80% { opacity: 1; transform: skewX(20deg) translateX(0); }
-  100% { opacity: 0; transform: skewX(20deg) translateX(50px); }
+/* Animations */
+@keyframes cut-in-slide-bg {
+  0% { transform: skewX(-30deg) translateX(-150%); }
+  15% { transform: skewX(-30deg) translateX(0%); }
+  85% { transform: skewX(-30deg) translateX(0%); }
+  100% { transform: skewX(-30deg) translateX(150%); }
+}
+
+@keyframes cut-in-image-fly {
+  0% { opacity: 0; transform: translateX(-300px) rotateY(40deg) rotateZ(-20deg) scale(0.5); }
+  20% { opacity: 1; transform: translateX(0) rotateY(0deg) rotateZ(-5deg) scale(1); }
+  85% { opacity: 1; transform: translateX(20px) rotateY(0deg) rotateZ(0deg) scale(1.05); } 
+  100% { opacity: 0; transform: translateX(100px) scale(1.2); }
+}
+
+@keyframes cut-in-text-slide {
+  0% { opacity: 0; transform: translateX(300px) skewX(-20deg); }
+  20% { opacity: 1; transform: translateX(0) skewX(-20deg); }
+  85% { opacity: 1; transform: translateX(-20px) skewX(-20deg); text-shadow: 4px 4px 0 #ff0000; }
+  100% { opacity: 0; transform: translateX(-100px) skewX(-20deg); }
 }
 
 /* --- Target Highlight Glow --- */
