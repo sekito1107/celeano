@@ -66,13 +66,17 @@ export default class extends Controller {
 
   async animateReveal(log) {
     const cardId = log.details.card_id
-    return this.applyAnimation(`#game-card-${cardId}`, "animate-reveal", 1200)
+    const cardEl = document.querySelector(`#game-card-${cardId}`)
+    this._ensureActive(cardEl)
+    return this.applyAnimation(cardEl, "animate-reveal", 1200)
   }
 
   async animateAttack(log) {
     const attackerId = log.details.attacker_id
     const attackerEl = document.querySelector(`#game-card-${attackerId}`)
     if (!attackerEl) return
+
+    this._ensureActive(attackerEl)
 
     const isOpponent = attackerEl.closest('.play-mat-opponent') !== null
     const directionClass = isOpponent ? "animate-attack-down" : "animate-attack-up"
@@ -109,6 +113,7 @@ export default class extends Controller {
 
     const cardEl = document.querySelector(`#game-card-${cardId}`)
     if (cardEl) {
+        this._ensureActive(cardEl)
         this.showDamageNumber(cardEl, amount)
     }
 
@@ -134,7 +139,9 @@ export default class extends Controller {
 
   async animateSpell(log) {
     const cardId = log.details.card_id
-    return this.applyAnimation(`#game-card-${cardId}`, "animate-spell", 1400)
+    const cardEl = document.querySelector(`#game-card-${cardId}`)
+    this._ensureActive(cardEl)
+    return this.applyAnimation(cardEl, "animate-spell", 1400)
   }
 
   async animatePayCost(log) {
@@ -157,6 +164,12 @@ export default class extends Controller {
   }
 
   // --- Utilities ---
+
+  _ensureActive(cardEl) {
+    if (!cardEl) return
+    // 召喚待機状態（半透明、ラベル付き）を解除してアニメーションを正しく見せる
+    cardEl.classList.remove("scheduled-summon")
+  }
 
   showDamageNumber(el, amount) {
     if (!el || !amount) return
