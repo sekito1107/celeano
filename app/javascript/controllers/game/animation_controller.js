@@ -300,9 +300,24 @@ export default class extends Controller {
   }
 
   _findUserIdByPlayerId(playerId) {
-    // StatusBarComponent に追加した player-id-value を使って検索
-    const el = document.querySelector(`[data-game--countdown-player-id-value="${playerId}"]`)
-    return el ? el.dataset.gameCountdownUserIdValue : null
+    const selector = `[data-game--countdown-player-id-value="${playerId}"]`
+    const el = document.querySelector(selector)
+    
+    if (!el) {
+        // デバッグ: 見つからない場合、DOMにあるIDを全てリストアップする
+        const all = document.querySelectorAll('[data-game--countdown-player-id-value]')
+        const availableIds = Array.from(all).map(e => e.getAttribute('data-game--countdown-player-id-value'))
+        console.warn(`[DEBUG] _findUserIdByPlayerId failed for ${playerId}. Available IDs in DOM:`, availableIds)
+        return null
+    }
+    
+    // Datasetプロパティアクセスの互換性確認
+    // "data-game--countdown-user-id-value" -> dataset.gameCountdownUserIdValue
+    const userId = el.dataset.gameCountdownUserIdValue
+    if (!userId) {
+        console.warn(`[DEBUG] Element found for ${playerId} but userId is missing.`, el)
+    }
+    return userId
   }
 
   applyAnimation(selectorOrEl, className, duration) {
