@@ -28,7 +28,11 @@ class GameCard < ApplicationRecord
   end
 
   def stunned?
-    modifiers.exists?(effect_type: :stun)
+    if modifiers.loaded?
+      modifiers.any?(&:stun?)
+    else
+      modifiers.exists?(effect_type: :stun)
+    end
   end
 
   def can_attack?
@@ -41,13 +45,22 @@ class GameCard < ApplicationRecord
   end
 
   def apply_poison_damage!
-    total_damage = modifiers.where(effect_type: :poison).sum("COALESCE(value, 1)")
+    if modifiers.loaded?
+      total_damage = modifiers.select(&:poison?).sum { |m| m.value || 1 }
+    else
+      total_damage = modifiers.where(effect_type: :poison).sum("COALESCE(value, 1)")
+    end
+
     take_damage!(total_damage) if total_damage > 0
     total_damage
   end
 
   def attack_buff_value
-    modifiers.where(effect_type: :attack_buff).sum("COALESCE(value, 0)")
+    if modifiers.loaded?
+      modifiers.select(&:attack_buff?).sum { |m| m.value || 0 }
+    else
+      modifiers.where(effect_type: :attack_buff).sum("COALESCE(value, 0)")
+    end
   end
 
   def total_attack
