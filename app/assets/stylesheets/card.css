@@ -1,7 +1,7 @@
 /* Card Component Styles - Abyssal Library Theme (Integrated Asset) */
 
 .card-wrapper {
-  --card-base-transform: none;
+  --card-base-transform: rotate(0deg);
   position: relative;
   width: var(--card-width);
   height: var(--card-height);
