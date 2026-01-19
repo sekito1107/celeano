@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Game::CardComponent < ApplicationComponent
-  def initialize(card_entity:, variant: :hand)
+  def initialize(card_entity:, variant: :hand, hidden: false)
     @card_entity = card_entity
     @variant = variant
+    @hidden = hidden
   end
 
   def call
@@ -79,6 +80,7 @@ class Game::CardComponent < ApplicationComponent
     end
 
     kwargs[:variant] = @variant if component_class == Game::Card::SimpleComponent
+    kwargs[:hidden] = @hidden
     render component_class.new(**kwargs)
   end
 end

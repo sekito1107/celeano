@@ -664,3 +664,41 @@
   justify-content: center;
   align-items: center;
 }
+
+/* Card Back Side (Hidden State) */
+.card-back-side {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #2d1b4e 0%, #0d0a1b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.back-pattern {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 10px 10px;
+  opacity: 0.5;
+}
+
+.back-logo {
+  font-family: var(--font-display), serif;
+  font-size: 4rem;
+  color: rgba(203, 181, 119, 0.15); /* Faint gold logo */
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+.state-hidden {
+  border: 1px dashed rgba(203, 181, 119, 0.3) !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+

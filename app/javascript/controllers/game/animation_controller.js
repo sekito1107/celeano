@@ -194,8 +194,15 @@ export default class extends Controller {
 
   _ensureActive(cardEl) {
     if (!cardEl) return
-    // 召喚待機状態（半透明、ラベル付き）を解除してアニメーションを正しく見せる
+    // scheduled-summon状態を解除してカードをアクティブにする
     cardEl.classList.remove("scheduled-summon")
+    cardEl.classList.remove("state-hidden")
+
+    // 伏せられている可能性（相手の召喚など）があるため、表側に切り替える
+    const backSide = cardEl.querySelector(".card-back-side")
+    const frontSide = cardEl.querySelector(".card-front-side")
+    if (backSide) backSide.classList.add("hidden")
+    if (frontSide) frontSide.classList.remove("hidden")
   }
 
   showDamageNumber(el, amount) {

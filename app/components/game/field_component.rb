@@ -50,7 +50,12 @@ class Game::FieldComponent < ApplicationComponent
   def render_slot_card(card)
     return nil unless card
 
-    card_html = render Game::CardComponent.new(card_entity: card, variant: :field)
+    is_scheduled = card.location_resolving? || card.location_hand?
+    card_html = render Game::CardComponent.new(
+      card_entity: card,
+      variant: :field,
+      hidden: opponent? && is_scheduled
+    )
 
     if !opponent? && card.location_resolving?
       tag.div(**cancellation_attributes(card)) { card_html }
@@ -69,9 +74,6 @@ class Game::FieldComponent < ApplicationComponent
   end
 
   def find_scheduled_card(position)
-    # 相手の場合は召喚予定を見せない
-    return nil if opponent?
-
     # 召喚予定カードを検索 (Move経由)
     move = current_turn&.moves&.find do |m|
       m.user_id == @game_player.user_id &&
