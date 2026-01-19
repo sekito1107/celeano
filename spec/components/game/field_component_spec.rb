@@ -140,7 +140,7 @@ RSpec.describe Game::FieldComponent, type: :component do
     context "自身が閲覧する場合" do
       it "合計消費コストが表示されること" do
         render_inline(described_class.new(game_player: game_player, viewer: user))
-        expect(page).to have_css(".field-pending-cost", text: "-2")
+        expect(page).to have_css(".field-pending-cost", text: "2")
         expect(page).to have_css(".field-pending-cost .label", text: "SAN COST:")
       end
     end

@@ -104,9 +104,9 @@ class Game::FieldComponent < ApplicationComponent
     return nil if max_total == 0
 
     if min_total == max_total
-      "-#{min_total}"
+      "#{min_total}"
     else
-      "-#{min_total}~#{max_total}"
+      "#{min_total}~#{max_total}"
     end
   end
 
