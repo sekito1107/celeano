@@ -1,10 +1,12 @@
 /* Card Component Styles - Abyssal Library Theme (Integrated Asset) */
 
 .card-wrapper {
+  --card-base-transform: none;
   position: relative;
   width: var(--card-width);
   height: var(--card-height);
   border-radius: 10px; /* Precise radius for integrated frames */
+  transform: var(--card-base-transform);
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
   user-select: none;
   box-shadow: 0 4px 6px rgba(0,0,0,0.6);

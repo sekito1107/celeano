@@ -350,14 +350,14 @@
 
 /* Opponent Field Cards: Rotate Upright relative to screen */
 .play-mat-opponent .field-slot .card-wrapper {
-  transform: rotate(180deg);
+  --card-base-transform: rotate(180deg);
 }
 
 /* Opponent Field Hover: Maintain Rotation */
 .play-mat-opponent .field-slot:hover .card-wrapper {
-  transform: rotate(180deg) translateY(-20px) scale(1.1);
+  transform: var(--card-base-transform) translateY(-20px) scale(1.1);
   z-index: 100;
-  box-shadow: 0 -10px 20px rgba(0,0,0,0.8); /* Shadow needs flip too */
+  box-shadow: 0 -10px 20px rgba(0,0,0,0.8);
 }
 
 /* Fix orientation for opponent's deck and field areas */
@@ -375,8 +375,7 @@
 
 /* Maintain rotation for selected opponent cards */
 .play-mat-opponent .field-slot .card-wrapper.selected {
-  transform: rotate(180deg) translateY(-32px) scale(1.15) !important;
-  /* Box shadow and border color are handled by card.css */
+  transform: var(--card-base-transform) translateY(-32px) scale(1.15) !important;
 } 
 
 /* Fix Labels separately to ensure they are above the slot visually */
