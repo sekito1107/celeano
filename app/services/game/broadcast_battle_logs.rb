@@ -8,7 +8,7 @@ class Game::BroadcastBattleLogs
     # バトルログのデータ配信（アニメーション用）
     GameChannel.broadcast_to(game, {
       type: "battle_logs",
-      logs: logs.map { |log|
+      logs: (logs || []).map { |log|
         {
           event_type: log.event_type,
           details: log.details,
