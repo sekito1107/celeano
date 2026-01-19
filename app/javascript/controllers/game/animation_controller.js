@@ -279,6 +279,7 @@ export default class extends Controller {
 
   _highlightTargets(log) {
       const details = log.details
+      console.log("[DEBUG] _highlightTargets called", details)
       let targets = []
 
       // 複数対象 (target_ids) があれば優先、なければ単体 (target_id)
@@ -288,7 +289,11 @@ export default class extends Controller {
       if (targetType === "unit") {
           targetIds.forEach(id => {
               const el = document.querySelector(`#game-card-${id}`)
-              if (el) targets.push(el)
+              if (el) {
+                  targets.push(el)
+              } else {
+                  console.warn(`[DEBUG] Target unit not found: #game-card-${id}`)
+              }
           })
       } else if (targetType === "player") {
            // プレイヤー対象の場合 (target_ids には player_id が入っている想定)
@@ -296,13 +301,26 @@ export default class extends Controller {
                const userId = this._findUserIdByPlayerId(playerId)
                if (userId) {
                    const el = document.querySelector(`[data-game--countdown-user-id-value="${userId}"] .hero-portrait-wrapper`)
-                   if (el) targets.push(el)
+                   if (el) {
+                        targets.push(el)
+                   } else {
+                        console.warn(`[DEBUG] Target player element not found for userId: ${userId}`)
+                   }
+               } else {
+                   console.warn(`[DEBUG] UserId not found for playerId: ${playerId}`)
                }
            })
       }
+      
+      console.log("[DEBUG] Targets found for glow:", targets)
+      if (targets.length === 0) return
 
       // Apply Glow
-      targets.forEach(el => el.classList.add("animate-target-glow"))
+      targets.forEach(el => {
+          el.classList.add("animate-target-glow")
+          // Force layout reflow to ensure animation triggers if re-added
+          void el.offsetWidth 
+      })
 
       // Remove Glow after a while
       setTimeout(() => {
