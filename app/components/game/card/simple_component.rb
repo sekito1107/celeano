@@ -5,9 +5,7 @@ class Game::Card::SimpleComponent < Game::Card::BaseComponent
         super(card_entity: card_entity)
         @variant = variant
         @hidden = hidden
-        @html_attributes = html_attributes.merge(
-          "data-game--card-target-type-hint-value": target_type_hint
-        )
+        @html_attributes = html_attributes
       end
 
       def hidden?

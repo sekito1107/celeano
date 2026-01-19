@@ -119,27 +119,6 @@ class Game::Card::BaseComponent < ApplicationComponent
         threshold.present? && threshold > 0
       end
 
-      def target_type_hint
-        return "slot" if unit?
-        return "none" unless spell?
-
-        desc = card_source.description || ""
-        if desc.include?("対象")
-          if desc.include?("味方")
-            "ally_unit"
-          # Default to enemy_unit if explicitly "enemy" or unsure (offensive spells)
-          else
-            "enemy_unit"
-          end
-        elsif desc.include?("敵の全ユニット")
-          "enemy_board"
-        elsif desc.include?("自分の全ユニット")
-          "ally_board"
-        else
-          "none"
-        end
-      end
-
       private
 
       def game_card?

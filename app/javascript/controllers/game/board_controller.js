@@ -179,7 +179,10 @@ export default class extends Controller {
         }
 
         // ターゲット候補のハイライト
-        const targetTypeHint = element.dataset.gameCardTargetTypeHintValue
+        // dataset property conversion can be tricky with double hyphens. Using getAttribute for safety.
+        const targetTypeHint = element.getAttribute("data-game--card-target-type-hint-value")
+        console.log("[DEBUG] selectCard:", { cardId, targetTypeHint, dataset: element.dataset })
+
         if (targetTypeHint) {
             this._highlightValidTargets(targetTypeHint)
         }
