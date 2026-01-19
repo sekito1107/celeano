@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Game::FieldComponent < ApplicationComponent
-  def initialize(game_player:, viewer: nil)
+  def initialize(game_player:, viewer: nil, current_turn: nil)
     @game_player = game_player
     @viewer = viewer
+    @current_turn = current_turn
   end
 
   def opponent?

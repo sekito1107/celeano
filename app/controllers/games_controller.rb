@@ -13,6 +13,9 @@ class GamesController < ApplicationController
     # GameAuthenticatable のチェックを通すためのインスタンス変数は再利用
     # (includes を使ってロードし直した @game を使うため)
 
+    # 現在のターンを取得
+    @current_turn = @game.turns.includes(moves: { game_card: :card }).find_by(turn_number: @game.current_turn_number)
+
     # 現在のターンのMoveを取得してコストを紐付ける
     @resolving_cards = @game.game_cards.select do |card|
       card.location_resolving? && card.user_id == current_user.id && !card.unit?

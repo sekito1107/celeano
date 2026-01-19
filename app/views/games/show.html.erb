@@ -25,7 +25,7 @@
        data-action="dragover->game--board#dragover drop->game--board#drop click->game--board#playCard">
     <% if @opponent_game_player %>
       <div id="opponent-field">
-        <%= render Game::FieldComponent.new(game_player: @opponent_game_player, viewer: current_user) %>
+        <%= render Game::FieldComponent.new(game_player: @opponent_game_player, viewer: current_user, current_turn: @current_turn) %>
       </div>
       <div id="opponent-hand">
         <%= render Game::HandComponent.new(game_player: @opponent_game_player, viewer: current_user) %>
@@ -44,7 +44,7 @@
 
   <div class="play-mat">
     <div id="player-field">
-      <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user) %>
+      <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user, current_turn: @current_turn) %>
     </div>
     
     <div id="reserved-spells">
