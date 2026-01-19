@@ -69,11 +69,8 @@ export default class extends Controller {
 
   updateDisplay(value) {
     if (this.hasValueTarget) {
-      if (this.hasMaxValue) {
-        this.valueTarget.textContent = `${value} / ${this.maxValue}`
-      } else {
-        this.valueTarget.textContent = value
-      }
+      // 常に現在値のみ表示（最大値はバーの計算にのみ使用）
+      this.valueTarget.textContent = value
     }
 
     if (this.hasBarTarget && this.hasMaxValue) {
