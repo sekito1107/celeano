@@ -9,7 +9,7 @@ class PayResolvePhaseCosts
     return unless turn
 
     # このターンにプレイされたカード（Move）を取得
-    moves = turn.moves.includes(:game_card, :user)
+    moves = turn.moves.includes(game_card: :card).includes(:user)
 
     if context.target_card_types
       moves = moves.select { |m| context.target_card_types.include?(m.game_card.card.card_type.to_sym) }
