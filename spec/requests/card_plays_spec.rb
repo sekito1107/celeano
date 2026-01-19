@@ -102,12 +102,21 @@ RSpec.describe "CardPlays", type: :request do
     describe "DELETE /games/:game_id/card_plays/:game_card_id" do
     let!(:move) { create(:move, turn: turn, user: player_user, game_card: game_card, cost: 1) }
 
+    context "未ログインの場合" do
+      it "認証エラーを返すこと" do
+        delete destroy_game_card_plays_path(game, game_card.id), as: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
     context "ログイン時" do
       before { sign_in player_user }
 
       context "正常系" do
         it "JSONリクエストに対して成功レスポンスを返すこと" do
-          delete destroy_game_card_plays_path(game, game_card.id), as: :json
+          expect {
+            delete destroy_game_card_plays_path(game, game_card.id), as: :json
+          }.to change(Move, :count).by(-1)
 
           expect(response).to have_http_status(:ok)
           expect(JSON.parse(response.body)["status"]).to eq("success")
