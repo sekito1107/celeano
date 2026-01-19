@@ -14,7 +14,7 @@ class GamesController < ApplicationController
     # (includes を使ってロードし直した @game を使うため)
 
     @resolving_cards = @game.game_cards.select do |card|
-      card.location_resolving? && card.user_id == current_user.id
+      card.location_resolving? && card.user_id == current_user.id && !card.card.unit?
     end
   end
 end
