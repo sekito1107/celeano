@@ -193,8 +193,8 @@ export default class extends Controller {
   async animatePlayerDamage(log) {
     const targetPlayerId = log.details.target_player_id
     const damage = log.details.damage
-    const currentHp = log.details.target_hp // サーバーから返却される想定
-    const currentSan = log.details.target_san // サーバーから返却される想定
+    const currentHp = log.details.target_hp 
+    const currentSan = log.details.target_san 
 
     const targetUserId = this._findUserIdByPlayerId(targetPlayerId)
     if (!targetUserId) return

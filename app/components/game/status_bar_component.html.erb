@@ -12,7 +12,8 @@
          data-game--countdown-current-value="<%= hp %>"
          data-game--countdown-player-id-value="<%= @game_player.id %>"
          data-game--countdown-user-id-value="<%= @game_player.user_id %>"
-         data-game--countdown-max-value="<%= max_hp %>">
+         data-game--countdown-max-value="<%= max_hp %>"
+         data-action="game--status:update-hp@window->game--countdown#updateFromEvent">
       <div class="stat-value" data-game--countdown-target="value"><%= hp %></div>
     </div>
     
