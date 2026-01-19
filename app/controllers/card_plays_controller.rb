@@ -30,10 +30,6 @@ class CardPlaysController < ApplicationController
       game_card_id: params[:game_card_id]
     )
 
-    if result.success?
-      render json: { status: "success", message: "アクションをキャンセルしました" }
-    else
-      render json: { status: "error", message: result.message }, status: :unprocessable_entity
-    end
+    handle_game_action(result, success_message: "アクションをキャンセルしました")
   end
 end
