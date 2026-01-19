@@ -15,14 +15,12 @@ export default class extends Controller {
 
     this.queue.push(...logs)
     
-    if (this.isAnimating) return
-    
     this.isAnimating = true
     await this.processQueue()
     this.isAnimating = false
 
-    // 全てのアニメーション完了後、必要ならリロード
-    // ただし、現在はTurboリロードが動いているため、整合性に注意
+    // 全てのアニメーション完了を通知
+    this.dispatch("finished", { bubbles: true })
   }
 
   async processQueue() {

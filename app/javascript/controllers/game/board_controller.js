@@ -27,17 +27,32 @@ export default class extends Controller {
     this.consumer?.disconnect()
   }
 
-  handleMessage(data) {
-    if (data.type === "board_update") {
-      if (window.Turbo) {
-        window.Turbo.visit(window.location.href, { action: "replace" })
-      } else {
-        window.location.reload()
+  async handleMessage(data) {
+    if (data.type === "game_update") {
+      if (data.battle_logs && data.battle_logs.length > 0) {
+        // アニメーション完了後にリロードしたいため、完了を待つリスナーを一度だけセット
+        if (data.board_update) {
+          const onFinished = () => {
+            this.element.removeEventListener("game--animation:finished", onFinished)
+            this.refreshBoard()
+          }
+          this.element.addEventListener("game--animation:finished", onFinished)
+        }
+        
+        // アニメーション開始
+        this.dispatch("logs-received", { detail: { logs: data.battle_logs } })
+      } else if (data.board_update) {
+        // ログがない場合は即時リロード
+        this.refreshBoard()
       }
-    } else if (data.type === "battle_logs") {
-      // NOTE: アニメーション実装までのプレースホルダー
-      // console.table(data.logs)
-      this.dispatch("logs-received", { detail: { logs: data.logs } })
+    }
+  }
+
+  refreshBoard() {
+    if (window.Turbo) {
+      window.Turbo.visit(window.location.href, { action: "replace" })
+    } else {
+      window.location.reload()
     }
   }
 
