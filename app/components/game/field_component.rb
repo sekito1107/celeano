@@ -44,7 +44,18 @@ class Game::FieldComponent < ApplicationComponent
 
   def slot_card(position)
     # N+1対策: メモリ上の game_cards から検索
-    @game_player.game_cards.find { |gc| gc.location_board? && gc.position == position.to_s }
+    card = @game_player.game_cards.find { |gc| gc.location_board? && gc.position == position.to_s }
+    return card if card
+
+    # 相手の場合は召喚予定を見せない
+    return nil if opponent?
+
+    # 召喚予定カードを検索 (Move経由)
+    # Move#position is integer, need to map symbol to integer
+    pos_int = GameCard.positions[position.to_s]
+    move = current_turn&.moves&.find { |m| m.user_id == @game_player.user_id && m.action_type_play? && m.position == pos_int }
+
+    move&.game_card
   end
 
   def left_slot_card
@@ -60,11 +71,11 @@ class Game::FieldComponent < ApplicationComponent
   end
 
   def current_turn
-    @game_player.game.turns.find_by(turn_number: @game_player.game.current_turn_number)
+    @current_turn ||= @game_player.game.turns.find_by(turn_number: @game_player.game.current_turn_number)
   end
 
   def unit_limit
-    current_turn&.unit_summon_limit || 0
+    current_turn&.unit_summon_limit || Turn::DEFAULT_SUMMON_LIMIT
   end
 
   def units_summoned

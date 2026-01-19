@@ -26,6 +26,16 @@ class Game::Card::SimpleComponent < Game::Card::BaseComponent
         @card_entity&.id || "preview"
       end
 
+      def scheduled?
+        # FieldComponent passes variant: :field for scheduled cards too,
+        # but their location is still :hand (or potentially :resolving).
+        # We check if it is displayed as :field or :resolving but not actually on board location.
+        return false unless game_card?
+
+        # If it's effectively on the field view but location is hand
+        variant_field? && @card_entity.location_hand?
+      end
+
       def wrapper_classes
         classes = [ "card-wrapper", "card-simple" ]
         classes << "card-field" if variant_field?
@@ -33,6 +43,7 @@ class Game::Card::SimpleComponent < Game::Card::BaseComponent
         classes << "card-banished" if banished?
         classes << "state-stunned" if stunned?
         classes << "state-poisoned" if poisoned?
+        classes << "scheduled-summon" if scheduled?
         classes.join(" ")
       end
 end

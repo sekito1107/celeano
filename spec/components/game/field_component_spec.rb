@@ -85,4 +85,35 @@ RSpec.describe Game::FieldComponent, type: :component do
       end
     end
   end
+
+  context "召喚予定のユニットがある場合" do
+    let!(:turn) { create(:turn, game: game, turn_number: 1) }
+    let(:hand_card) { create(:game_card, :hand, game: game, user: user, game_player: game_player) }
+
+    before do
+       # Create a Move (schedule unit play)
+       create(:move, turn: turn, user: user, game_card: hand_card, action_type: :play, position: 1) # Center slot
+    end
+
+    context "自分が閲覧する場合" do
+      it "スロットにカードが表示され、scheduled-summonクラスが付与されていること" do
+        render_inline(described_class.new(game_player: game_player, viewer: user))
+
+        expect(page).to have_css(".field-slot.center-slot .card-wrapper")
+        expect(page).to have_css(".field-slot.center-slot .card-wrapper.scheduled-summon")
+      end
+    end
+
+    context "相手が閲覧する場合" do
+      let(:opponent) { create(:user) }
+      let(:opponent_player) { create(:game_player, game: game, user: opponent) }
+
+      it "スロットは空として表示されること" do
+        render_inline(described_class.new(game_player: game_player, viewer: opponent))
+
+        expect(page).to have_css(".field-slot.center-slot .empty-slot")
+        expect(page).not_to have_css(".field-slot.center-slot .card-wrapper")
+      end
+    end
+  end
 end

@@ -50,10 +50,12 @@
       <% end %>
     </div>
     
-    <div class="unit-summon-info">
-      <span class="label">SUMMON:</span>
-      <span class="value"><%= units_summoned %> / <%= unit_limit %></span>
-    </div>
+    <% unless opponent? %>
+      <div class="unit-summon-info">
+        <span class="label">SUMMON:</span>
+        <span class="value"><%= units_summoned %> / <%= unit_limit %></span>
+      </div>
+    <% end %>
   </div>
 
   <div class="field-right-stack">
