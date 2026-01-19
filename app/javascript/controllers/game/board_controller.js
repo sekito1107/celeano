@@ -41,7 +41,8 @@ export default class extends Controller {
         }
         
         // アニメーション開始
-        this.dispatch("logs-received", { detail: { logs: data.battle_logs } })
+        const logs = Array.isArray(data.battle_logs) ? data.battle_logs : []
+        this.dispatch("logs-received", { detail: { logs } })
       } else if (data.board_update) {
         this.refreshBoard()
       }
