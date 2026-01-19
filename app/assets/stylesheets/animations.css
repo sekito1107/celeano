@@ -110,3 +110,28 @@
     opacity: 0; 
   }
 }
+
+/* Accessibility: Support users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-reveal,
+  .animate-attack-up,
+  .animate-attack-down,
+  .animate-damage,
+  .animate-death,
+  .animate-spell,
+  .damage-number {
+    animation-duration: 0.1s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.1s !important;
+  }
+  
+  .animate-damage {
+    animation: none !important;
+    background-color: rgba(255, 0, 0, 0.4) !important;
+  }
+
+  .damage-number {
+    transform: translate(-50%, -100%) !important;
+    opacity: 1 !important;
+  }
+}
