@@ -46,6 +46,20 @@ class Game::FieldComponent < ApplicationComponent
     cards.sort_by { |gc| [ gc.updated_at, gc.id ] }.reverse
   end
 
+  def render_slot_card(card)
+    return nil unless card
+
+    if opponent?
+      render Game::CardComponent.new(card_entity: card, variant: :field)
+    elsif card.location_resolving?
+      tag.div(**cancellation_attributes(card)) do
+        render Game::CardComponent.new(card_entity: card, variant: :field)
+      end
+    else
+      render Game::CardComponent.new(card_entity: card, variant: :field)
+    end
+  end
+
   def slot_card(position)
     find_board_card(position) || find_scheduled_card(position)
   end
