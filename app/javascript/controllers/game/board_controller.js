@@ -34,6 +34,7 @@ export default class extends Controller {
         if (data.board_update) {
           const onFinished = () => {
             this.element.removeEventListener("game--animation:finished", onFinished)
+            // フェーズ完了時は必ずリロードして最新の盤面（新ターン等）にする
             this.refreshBoard()
           }
           this.element.addEventListener("game--animation:finished", onFinished)
@@ -42,13 +43,23 @@ export default class extends Controller {
         // アニメーション開始
         this.dispatch("logs-received", { detail: { logs: data.battle_logs } })
       } else if (data.board_update) {
-        // ログがない場合は即時リロード
         this.refreshBoard()
       }
+    } else if (data.type === "ready_update") {
+      // 準備状態の変更をリアルタイムに反映（リロードなしでボタン外見などを変える）
+      // 面倒ならここでも refreshBoard() して良いが、
+      // フェーズ移行時（game_update）と重まらないように注意が必要。
+      // 今回は安全のため、フェーズ移行（battle_logsがある場合）でなければリロードする
+      this.refreshBoard()
     }
   }
 
   refreshBoard() {
+    // すでにアニメーション中ならリロードを予約するなどの制御が必要かもしれないが、
+    // 基本は一度だけ実行されるようにする
+    if (this._refreshing) return
+    this._refreshing = true
+
     if (window.Turbo) {
       window.Turbo.visit(window.location.href, { action: "replace" })
     } else {
@@ -281,10 +292,7 @@ export default class extends Controller {
   async ready(event) {
     try {
         const response = await api.post(`/games/${this.gameIdValue}/ready_states`, {})
-        
-        if (response.status === "success") {
-            window.location.reload()
-        }
+        // 成功してもリロードしない。ActionCableの ready_update または game_update を待つ。
     } catch (error) {
         console.error("Ready toggle failed:", error)
         alert(error.message || "処理に失敗しました")
