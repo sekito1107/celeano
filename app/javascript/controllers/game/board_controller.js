@@ -182,6 +182,7 @@ export default class extends Controller {
   // キャンセル（ダブルクリック）
   async cancelCard(event) {
       event.preventDefault()
+      event.stopPropagation()
       const cardId = event.currentTarget.dataset.cardId
       if (cardId) {
           await this.performCardCancel(cardId)
