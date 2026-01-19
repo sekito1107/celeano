@@ -386,12 +386,12 @@ export default class extends Controller {
         selector = ".play-mat:not(.play-mat-opponent) .field-slot .card-wrapper"
         break
       case "enemy_board":
-        // 相手フィールド全体 (全体対象スペルなど)
-        selector = ".play-mat-opponent"
+        // 相手フィールド全体 (ユニットゾーンのみ)
+        selector = ".play-mat-opponent .field-slots-area"
         break
       case "ally_board":
-        // 自分フィールド全体
-        selector = ".play-mat:not(.play-mat-opponent)" 
+        // 自分フィールド全体 (ユニットゾーンのみ)
+        selector = ".play-mat:not(.play-mat-opponent) .field-slots-area" 
         break
     }
 
