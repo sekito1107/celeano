@@ -93,7 +93,24 @@ export default class extends Controller {
 
   async animateReveal(log) {
     const cardId = log.details.card_id
-    const cardEl = document.querySelector(`#game-card-${cardId}`)
+    let cardEl = document.querySelector(`#game-card-${cardId}`)
+    if (!cardEl) return
+
+    // 相手のカードなどでスロット外にある場合、指定のスロットへ移動させる
+    if (!cardEl.closest(".field-slot")) {
+      const playerId = log.details.owner_player_id
+      const position = log.details.position
+
+      const fieldEl = document.querySelector(`[data-game--animation-player-id-value="${playerId}"]`)
+      if (fieldEl) {
+        const slotEl = fieldEl.querySelector(`[data-game--animation-target="slot"][data-position="${position}"]`)
+        if (slotEl) {
+          slotEl.innerHTML = "" // empty-slot などを削除
+          slotEl.appendChild(cardEl)
+        }
+      }
+    }
+
     this._ensureActive(cardEl)
     return this.applyAnimation(cardEl, "animate-reveal", 1200)
   }
