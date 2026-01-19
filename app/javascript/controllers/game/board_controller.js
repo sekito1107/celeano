@@ -29,13 +29,14 @@ export default class extends Controller {
 
   handleMessage(data) {
     if (data.type === "board_update") {
-        if (window.Turbo) {
-             window.Turbo.visit(window.location.href, { action: "replace" })
-        } else {
-             window.location.reload()
-        }
+      if (window.Turbo) {
+        window.Turbo.visit(window.location.href, { action: "replace" })
+      } else {
+        window.location.reload()
+      }
     } else if (data.type === "battle_logs") {
-        console.table(data.logs)
+      // NOTE: アニメーション実装までのプレースホルダー
+      console.table(data.logs)
     }
   }
 
