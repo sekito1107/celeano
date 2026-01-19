@@ -157,6 +157,8 @@ export default class extends Controller {
     
     // キャンセルカードのドロップ（手札エリアへのドロップを想定）
     if (cardType === "cancel") {
+        if (!cardId) return
+
         // ドロップ先が Handエリア かどうか判定
         if (event.currentTarget.closest('.hand-container') || event.currentTarget.classList.contains('hand-container')) {
              await this.performCardCancel(cardId)
