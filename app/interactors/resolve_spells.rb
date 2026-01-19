@@ -17,7 +17,9 @@ class ResolveSpells
         game_card.log_event!(:spell_activation, {
           card_name: game_card.card.name,
           key_code: game_card.card.key_code,
-          target_id: target&.id
+          target_id: target&.id,
+          target_ids: target ? [ target.id ] : [], # 将来的な複数対象への布石
+          target_type: "unit" # 現状はユニット対象のみだが拡張性を考慮
         })
 
         # ターゲットが存在するか確認（対象指定スペルかつ、対象が盤面にいない場合は不発）

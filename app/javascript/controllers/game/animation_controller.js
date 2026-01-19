@@ -245,9 +245,69 @@ export default class extends Controller {
 
   async animateSpell(log) {
     const cardId = log.details.card_id
-    const cardEl = document.querySelector(`#game-card-${cardId}`)
-    this._ensureActive(cardEl)
-    return this.applyAnimation(cardEl, "animate-spell", 1400)
+    const cardName = log.details.card_name || "SPELL CARD" // サーバーから渡ってくる想定
+    const keyCode = log.details.key_code // 画像パス生成用
+    
+    // 1. Cut-In Animation
+    const cutInContainer = document.createElement("div")
+    cutInContainer.className = "spell-cut-in-container"
+    
+    // カード画像パスの構築 (簡易的に)
+    // 実際にはRailsのHelper等でパスを知る必要があるが、ここでは固定かkey_code利用
+    const imagePath = keyCode ? `/assets/cards/${keyCode}.jpg` : "/assets/cards/card_back_ancient.png"
+
+    cutInContainer.innerHTML = `
+      <div class="spell-cut-in-content">
+        <div class="spell-cut-in-image" style="background-image: url('${imagePath}');"></div>
+        <div class="spell-cut-in-text">${cardName}</div>
+      </div>
+    `
+    document.body.appendChild(cutInContainer)
+    
+    // Trigger Animation
+    requestAnimationFrame(() => cutInContainer.classList.add("animate"))
+
+    // 2. Target Highlighting (タイミングを少し遅らせる)
+    this.delay(500).then(() => {
+        this._highlightTargets(log)
+    })
+
+    // 3. Wait and Cleanup
+    await this.delay(2000)
+    cutInContainer.remove()
+  }
+
+  _highlightTargets(log) {
+      const details = log.details
+      let targets = []
+
+      // 複数対象 (target_ids) があれば優先、なければ単体 (target_id)
+      const targetIds = details.target_ids || (details.target_id ? [details.target_id] : [])
+      const targetType = details.target_type || "unit"
+
+      if (targetType === "unit") {
+          targetIds.forEach(id => {
+              const el = document.querySelector(`#game-card-${id}`)
+              if (el) targets.push(el)
+          })
+      } else if (targetType === "player") {
+           // プレイヤー対象の場合 (target_ids には player_id が入っている想定)
+           targetIds.forEach(playerId => {
+               const userId = this._findUserIdByPlayerId(playerId)
+               if (userId) {
+                   const el = document.querySelector(`[data-game--countdown-user-id-value="${userId}"] .hero-portrait-wrapper`)
+                   if (el) targets.push(el)
+               }
+           })
+      }
+
+      // Apply Glow
+      targets.forEach(el => el.classList.add("animate-target-glow"))
+
+      // Remove Glow after a while
+      setTimeout(() => {
+          targets.forEach(el => el.classList.remove("animate-target-glow"))
+      }, 1500)
   }
 
   async animatePayCost(log) {

@@ -123,6 +123,106 @@
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* Add glow */
 }
 
+
+/* --- Spell Cut-In Animation --- */
+.spell-cut-in-container {
+  position: fixed;
+  top: 30%;
+  left: -10%;
+  width: 120%;
+  height: 200px;
+  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(139, 0, 0, 0.9) 20%, rgba(139, 0, 0, 0.9) 80%, rgba(0,0,0,0) 100%);
+  z-index: 9999;
+  transform: skewX(-20deg) translateX(-150%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 2px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+  pointer-events: none; /* Click through */
+}
+
+.spell-cut-in-container.animate {
+  animation: cut-in-slide 2.0s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.spell-cut-in-content {
+  transform: skewX(20deg); /* Counter-skew text/image */
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  opacity: 0;
+  color: #fff;
+}
+
+.spell-cut-in-container.animate .spell-cut-in-content {
+  animation: cut-in-content-fade 2.0s ease-in-out forwards;
+}
+
+.spell-cut-in-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.spell-cut-in-text {
+  font-family: var(--font-display), serif;
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 #000, 0 0 10px rgba(255, 0, 0, 0.8);
+  letter-spacing: 0.1em;
+}
+
+@keyframes cut-in-slide {
+  0% { transform: skewX(-20deg) translateX(-150%); }
+  15% { transform: skewX(-20deg) translateX(0%); } /* Slide in fast */
+  85% { transform: skewX(-20deg) translateX(0%); } /* Stay */
+  100% { transform: skewX(-20deg) translateX(150%); } /* Slide out */
+}
+
+@keyframes cut-in-content-fade {
+  0% { opacity: 0; transform: skewX(20deg) translateX(-50px); }
+  20% { opacity: 1; transform: skewX(20deg) translateX(0); }
+  80% { opacity: 1; transform: skewX(20deg) translateX(0); }
+  100% { opacity: 0; transform: skewX(20deg) translateX(50px); }
+}
+
+/* --- Target Highlight Glow --- */
+.animate-target-glow {
+  position: relative;
+  z-index: 100 !important;
+}
+
+.animate-target-glow::after {
+  content: "";
+  position: absolute;
+  top: -10px; left: -10px; right: -10px; bottom: -10px;
+  border-radius: 8px; /* Standard card radius */
+  border: 3px solid #aaddff;
+  box-shadow: 
+    0 0 20px #00aaff,
+    inset 0 0 20px #00aaff;
+  animation: target-flash 0.5s ease-in-out 3; /* Flash 3 times */
+  pointer-events: none;
+}
+
+/* Round border for avatars */
+.hero-portrait-wrapper.animate-target-glow::after {
+  border-radius: 50%;
+  top: -5px; left: -5px; right: -5px; bottom: -5px;
+}
+
+@keyframes target-flash {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
 /* Accessibility: Support users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-reveal,
@@ -131,7 +231,10 @@
   .animate-damage,
   .animate-death,
   .animate-spell,
-  .damage-number {
+  .damage-number,
+  .spell-cut-in-container.animate,
+  .spell-cut-in-container.animate .spell-cut-in-content,
+  .animate-target-glow::after {
     animation-duration: 0.1s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.1s !important;
