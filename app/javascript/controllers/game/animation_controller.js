@@ -64,49 +64,48 @@ export default class extends Controller {
   // --- Animation Implementation ---
 
   async animateReveal(log) {
-    const cardId = log.details.game_card_id
+    const cardId = log.details.card_id
     return this.applyAnimation(`#game-card-${cardId}`, "animate-reveal", 600)
   }
 
   async animateAttack(log) {
     const attackerId = log.details.attacker_id
-    // attackerのDOM取得
     const attackerEl = document.querySelector(`#game-card-${attackerId}`)
     if (!attackerEl) return
 
-    // 攻撃方向の判定 (相手が上、自分が下)
-    // 実際には attacker.user_id 等で判定するのが確実
     const isOpponent = attackerEl.closest('.play-mat-opponent') !== null
     const directionClass = isOpponent ? "animate-attack-down" : "animate-attack-up"
 
-    return this.applyAnimation(attackerEl, directionClass, 400)
+    const attackAnim = this.applyAnimation(attackerEl, directionClass, 400)
+
+    // 攻撃ログのターゲットがユニットの場合、ダメージ演出を並行実行
+    if (log.details.target_type === "unit" && log.details.target_card_id) {
+        this.animateDamage({
+            details: {
+                card_id: log.details.target_card_id,
+                amount: log.details.damage
+            }
+        })
+    }
+
+    return attackAnim
   }
 
   async animateDamage(log) {
-    const targetId = log.details.game_card_id
+    const cardId = log.details.card_id
     const amount = log.details.amount
-    const currentHp = log.details.current_hp
 
     // カードの振動演出
-    const cardAnim = this.applyAnimation(`#game-card-${targetId}`, "animate-damage", 500)
-
-    // 数値のカウントダウン通知 (カスタムイベント)
-    this.dispatchToElement(`#game-card-${targetId}`, "game--card:update-hp", { 
-      detail: { newValue: currentHp } 
-    })
-
-    return cardAnim
+    return this.applyAnimation(`#game-card-${cardId}`, "animate-damage", 500)
   }
 
   async animateDeath(log) {
-    const cardId = log.details.game_card_id
-    // 墓地への移動演出（簡易版: フェードアウトと墓地への移動）
-    // 本来はFLIPが必要だが一旦クラス付与で対応
+    const cardId = log.details.card_id
     return this.applyAnimation(`#game-card-${cardId}`, "animate-death", 800)
   }
 
   async animateSpell(log) {
-    const cardId = log.details.game_card_id
+    const cardId = log.details.card_id
     return this.applyAnimation(`#game-card-${cardId}`, "animate-spell", 700)
   }
 

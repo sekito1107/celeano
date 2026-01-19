@@ -57,12 +57,12 @@ class Game::CardComponent < ApplicationComponent
     kwargs[:id] = "game-card-#{@card_entity.id}"
     kwargs[:data] = {
       controller: "game--card game--countdown",
-      game_card_id_value: @card_entity.id,
-      game_card_type_value: card_source&.card_type,
-      game_card_detail_html_value: detail_html,
-      game_card_selected_value: false,
-      game_countdown_current_value: @card_entity.respond_to?(:current_hp) ? @card_entity.current_hp : nil,
-      game_board_target: "card",
+      game__card_id_value: @card_entity.id,
+      game__card_type_value: card_source&.card_type,
+      game__card_detail_html_value: detail_html,
+      game__card_selected_value: false,
+      game__countdown_current_value: @card_entity.respond_to?(:current_hp) ? @card_entity.current_hp : nil,
+      game__board_target: "card",
       action: base_actions.join(" ") + " game--card:update-hp->game--countdown#updateValue"
     }
 

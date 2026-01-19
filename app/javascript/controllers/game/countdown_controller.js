@@ -9,7 +9,6 @@ export default class extends Controller {
   static targets = ["value", "bar"]
 
   connect() {
-    this.currentValue = this.currentValue || this.currentValue || this.currentValue // Wait, Stimulus values use this.currentValue
     this.displayValue = this.currentValue
   }
 
