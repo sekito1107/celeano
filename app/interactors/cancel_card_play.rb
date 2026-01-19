@@ -31,7 +31,8 @@ class CancelCardPlay
       # カードを手に戻す
       game_card.update!(
         location: :hand,
-        position: nil # フィールドの位置情報をクリア
+        position: nil, # フィールドの位置情報をクリア
+        target_game_card: nil # スペルのターゲット情報をクリア
       )
     end
   rescue ActiveRecord::RecordInvalid => e
