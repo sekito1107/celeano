@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_19_022403) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_19_063456) do
   create_table "battle_logs", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.json "details", default: {}, null: false
@@ -130,7 +130,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_19_022403) do
 
   create_table "moves", force: :cascade do |t|
     t.integer "action_type", null: false
-    t.integer "cost"
+    t.integer "cost", default: 0, null: false
     t.datetime "created_at", null: false
     t.integer "game_card_id", null: false
     t.integer "position"

@@ -30,7 +30,7 @@ RSpec.describe CreateMove, type: :interactor do
         expect(move).to be_persisted
         expect(move.game_card).to eq unit_game_card
         expect(move.action_type).to eq 'play'
-        expect(move.position).to eq 1
+        expect(move.position).to eq "center"
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe CreateMove, type: :interactor do
           turn: turn,
           game_player: game_player,
           game_card: unit_game_card,
-          position: 99
+          position: nil
         )
       end
 

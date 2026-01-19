@@ -19,7 +19,7 @@ class CreateMove
       game_card: context.game_card,
       action_type: resolve_action_type,
       position: resolve_position,
-      cost: context.paid_cost
+      cost: context.paid_cost || 0
     )
   end
 
