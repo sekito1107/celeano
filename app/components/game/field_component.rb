@@ -49,14 +49,12 @@ class Game::FieldComponent < ApplicationComponent
   def render_slot_card(card)
     return nil unless card
 
-    if opponent?
-      render Game::CardComponent.new(card_entity: card, variant: :field)
-    elsif card.location_resolving?
-      tag.div(**cancellation_attributes(card)) do
-        render Game::CardComponent.new(card_entity: card, variant: :field)
-      end
+    card_html = render Game::CardComponent.new(card_entity: card, variant: :field)
+
+    if !opponent? && card.location_resolving?
+      tag.div(**cancellation_attributes(card)) { card_html }
     else
-      render Game::CardComponent.new(card_entity: card, variant: :field)
+      card_html
     end
   end
 
@@ -138,14 +136,3 @@ class Game::FieldComponent < ApplicationComponent
     }
   end
 end
-  def render_slot_card(card)
-    return nil unless card
-
-    card_html = render Game::CardComponent.new(card_entity: card, variant: :field)
-
-    if !opponent? && card.location_resolving?
-      tag.div(**cancellation_attributes(card)) { card_html }
-    else
-      card_html
-    end
-  end
