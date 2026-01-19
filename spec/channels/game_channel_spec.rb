@@ -36,7 +36,7 @@ RSpec.describe GameChannel, type: :channel do
 
     context "認証されていないユーザーの場合" do
       before do
-        stub_connection current_user: other_user
+        stub_connection current_user: nil
       end
 
       it "購読が拒否されること" do
