@@ -99,7 +99,7 @@ RSpec.describe "CardPlays", type: :request do
       end
     end
   end
-    describe "DELETE /games/:game_id/card_plays/:game_card_id" do
+  describe "DELETE /games/:game_id/card_plays/:game_card_id" do
     let!(:move) { create(:move, turn: turn, user: player_user, game_card: game_card, cost: 1) }
 
     context "未ログインの場合" do
