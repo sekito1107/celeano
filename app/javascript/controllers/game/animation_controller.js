@@ -14,13 +14,16 @@ export default class extends Controller {
     if (!logs || logs.length === 0) return
 
     this.queue.push(...logs)
+    if (this.isAnimating) return
     
     this.isAnimating = true
-    await this.processQueue()
-    this.isAnimating = false
-
-    // 全てのアニメーション完了を通知
-    this.dispatch("finished", { bubbles: true })
+    try {
+      await this.processQueue()
+    } finally {
+      this.isAnimating = false
+      // 全てのアニメーション完了を通知
+      this.dispatch("finished", { bubbles: true })
+    }
   }
 
   async processQueue() {
