@@ -25,4 +25,9 @@ class Game::GameOverOverlayComponentPreview < ViewComponent::Preview
   def draw
     render(Game::GameOverOverlayComponent.new(result: :draw))
   end
+
+  # @label Draw (Mutual Insanity)
+  def mutual_insanity
+    render(Game::GameOverOverlayComponent.new(result: :draw, reason: :san))
+  end
 end

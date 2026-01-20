@@ -18,7 +18,7 @@ RSpec.describe PayResolvePhaseCosts, type: :interactor do
 
   describe '.call' do
     context 'when both players die from costs (Mutual Kill scenario)' do
-      it 'pays all costs silently first, flushes logs, then finishes game' do
+      it 'triggers Mutual Insanity (SAN Draw), flushes logs, then finishes game' do
         # Setup context
         context = Interactor::Context.new(
           game: game,
@@ -31,14 +31,16 @@ RSpec.describe PayResolvePhaseCosts, type: :interactor do
         expect(p1.reload.san).to eq(0)
         expect(p2.reload.san).to eq(0)
 
-        # 2. Game should be finished
+        # 2. Game should be finished with DRAW
         expect(game.reload.finished?).to be true
+        expect(game.finish_reason).to eq("SAN_DRAW")
+        expect(game.winner_id).to be_nil
+        expect(game.loser_id).to be_nil
 
         # 3. Logs should be flushed
         logs = game.battle_logs.order(:id)
 
         # Expect logs: Activation1 -> Pay1 -> Activation2 -> Pay2 -> GameEnd
-        # (Order depends on move creation order, assumed move1 then move2)
 
         # Activation 1
         expect(logs[0].event_type).to eq("spell_activation")
@@ -58,6 +60,8 @@ RSpec.describe PayResolvePhaseCosts, type: :interactor do
 
         # Game Finish
         expect(logs[4].event_type).to eq("game_finish")
+        expect(logs[4].details['reason']).to eq("SAN_DRAW")
+        expect(logs[4].details['is_draw']).to be true
       end
     end
 

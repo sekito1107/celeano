@@ -30,16 +30,26 @@ class Game::GameOverOverlayComponent < ApplicationComponent
     @result == :loss && @reason == :san
   end
 
+  def mutual_insanity?
+    @result == :draw && @reason == :san
+  end
+
   def container_classes
     classes = [ "game-over-overlay" ]
-    classes << "sanity-death" if sanity_death?
-    classes << @result.to_s unless sanity_death?
+    if mutual_insanity?
+      classes << "mutual-insanity"
+    elsif sanity_death?
+      classes << "sanity-death"
+    else
+      classes << @result.to_s
+    end
     classes.join(" ")
   end
 
   private
 
   def determine_result(game, user)
+    return nil unless game.finished?
     return :win if game.winner_id == user.id
     return :loss if game.loser_id == user.id
     :draw
@@ -50,6 +60,8 @@ class Game::GameOverOverlayComponent < ApplicationComponent
     when "SAN_DEATH" then :san
     when "HP_DEATH" then :hp
     when "DECK_DEATH" then :deck
+    when "SAN_DRAW" then :san
+    when "HP_DRAW" then :hp
     else :other
     end
   end

@@ -9,7 +9,9 @@ class Game < ApplicationRecord
     san_death: "SAN_DEATH",
     hp_death: "HP_DEATH",
     deck_death: "DECK_DEATH",
-    surrender: "SURRENDER"
+    surrender: "SURRENDER",
+    san_draw: "SAN_DRAW",
+    hp_draw: "HP_DRAW"
   }.freeze
 
   belongs_to :winner, class_name: "User", optional: true
@@ -43,6 +45,25 @@ class Game < ApplicationRecord
         reason: reason,
         winner_player_id: winner&.user_id,
         loser_player_id: loser.user_id
+      })
+    end
+  end
+
+  def finish_draw!(reason)
+    transaction do
+      update!(
+        status: :finished,
+        finish_reason: reason,
+        winner_id: nil,
+        loser_id: nil,
+        finished_at: Time.current
+      )
+
+      log_event!(:game_finish, {
+        reason: reason,
+        winner_player_id: nil,
+        loser_player_id: nil,
+        is_draw: true
       })
     end
   end

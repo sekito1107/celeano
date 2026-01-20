@@ -221,3 +221,71 @@
     opacity: 1;
   }
 }
+
+/* --- MUTUAL INSANITY (DRAW) VARIANT --- */
+.shatter-container.mutual-insanity-mode .shatter-overlay {
+  background: radial-gradient(circle, rgba(100, 0, 180, 0.2) 0%, rgba(10, 0, 20, 0.95) 90%);
+}
+
+.shatter-container.mutual-insanity-mode .shatter-vignette {
+  background: radial-gradient(circle, transparent 30%, #050010 110%);
+}
+
+.shatter-container.mutual-insanity-mode .shatter-text {
+  color: #d8b4fe;
+  text-shadow: 0 0 20px #4c1d95, 0 0 40px #000;
+  animation: draw-text-glitch 4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+.shatter-container.mutual-insanity-mode .shatter-subtitle {
+  color: #a78bfa;
+  text-shadow: 0 0 10px #4c1d95;
+}
+
+.shatter-container.mutual-insanity-mode .shatter-subsubtitle {
+  font-family: var(--font-display, serif);
+  font-size: 1.5rem;
+  color: #c4b5fd;
+  opacity: 0;
+  letter-spacing: 0.5em;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.shatter-container.mutual-insanity-mode.is-active .shatter-subsubtitle {
+  animation: subtitle-haunt 3s ease-out 1.5s forwards;
+}
+
+.shatter-container.mutual-insanity-mode .btn-return {
+  background: #0f0518;
+  border: 1px solid #6d28d9;
+  color: #c4b5fd;
+  box-shadow: 0 0 20px rgba(109, 40, 217, 0.4);
+}
+
+.shatter-container.mutual-insanity-mode .btn-return:hover {
+  background: #2e1065;
+  color: #fff;
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.8);
+}
+
+@keyframes draw-text-glitch {
+  0% { 
+    opacity: 0; 
+    transform: scale(4); 
+    filter: blur(20px) hue-rotate(90deg); 
+  }
+  10% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+    color: #fff;
+  }
+  15% { color: #d8b4fe; text-shadow: 5px 0 0 #4c1d95, -5px 0 0 #0ea5e9; transform: skewX(20deg); }
+  20% { text-shadow: 0 0 20px #000; transform: skewX(-10deg); }
+  21% { transform: skewX(0deg); }
+  40% { transform: scale(1.05); filter: contrast(1.5); }
+  42% { transform: scale(1.05) translateX(5px); filter: invert(1); }
+  44% { transform: scale(1.05) translateX(-5px); filter: invert(0); }
+  100% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 10px #6d28d9); }
+}

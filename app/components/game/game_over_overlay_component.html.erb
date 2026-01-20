@@ -1,5 +1,20 @@
 <div class="<%= container_classes %>">
-  <% if sanity_death? %>
+  <% if mutual_insanity? %>
+    <!-- Mutual Insanity (Draw) Structure -->
+    <div class="shatter-container is-active mutual-insanity-mode">
+      <div class="shatter-overlay"></div>
+      <div class="shatter-vignette"></div>
+      <div class="shatter-text-wrapper">
+        <div class="shatter-text">DRAW</div>
+        <div class="shatter-subtitle">MUTUAL INSANITY</div>
+        <div class="shatter-subsubtitle">狂気への共振</div>
+      </div>
+      
+      <div class="shatter-actions">
+        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
+      </div>
+    </div>
+  <% elsif sanity_death? %>
     <!-- New Shatter Effect Structure -->
     <div class="shatter-container is-active">
       <div class="shatter-overlay"></div>

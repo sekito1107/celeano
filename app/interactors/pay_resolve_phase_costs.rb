@@ -47,9 +47,15 @@ class PayResolvePhaseCosts
       # アニメーション補完: ゲーム終了前に「カード使用 -> コスト支払い」のログを強制出力する
       flush_fatal_logs(moves)
 
-      # 死亡処理 (相打ち対応はGameモデル側で行う想定だが、現状は順番にチェック)
-      dead_players.each do |player|
-        game.check_player_death!(player)
+      # 死亡処理
+      if dead_players.size >= 2
+        # 相打ち（Mutual Insanity: SAN Draw）
+        game.finish_draw!(Game::FINISH_REASONS[:san_draw])
+      else
+        # 通常の死亡処理
+        dead_players.each do |player|
+          game.check_player_death!(player)
+        end
       end
     end
   end
