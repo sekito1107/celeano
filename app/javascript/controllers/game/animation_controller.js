@@ -192,16 +192,13 @@ export default class extends Controller {
     if (!cardEl) return
 
     this._ensureActive(cardEl)
-    this.showDamageNumber(cardEl, amount)
+    this._showFloatingNumber(cardEl, `-${amount}`, "damage-number")
 
     if (currentHp !== undefined) {
-      console.log("[DEBUG] AnimationController: Dispatching game--card:update-hp", { cardId, currentHp })
       // カードのHPをカウントダウン更新
       cardEl.dispatchEvent(new CustomEvent("game--card:update-hp", {
         detail: { newValue: currentHp }
       }))
-    } else {
-      console.warn("[DEBUG] AnimationController: currentHp missing in log", log)
     }
 
     // カードの振動演出
@@ -214,28 +211,21 @@ export default class extends Controller {
     const currentHp = log.details.target_hp 
     const currentSan = log.details.target_san 
 
-    console.log("[DEBUG] AnimationController: animatePlayerDamage", { targetPlayerId, damage, currentHp, currentSan })
-
     const targetUserId = this._findUserIdByPlayerId(targetPlayerId)
-    if (!targetUserId) {
-        console.warn("[DEBUG] Target user ID not found", targetPlayerId)
-        return
-    }
+    if (!targetUserId) return
 
     const targetEl = document.querySelector(`[data-game--countdown-user-id-value="${targetUserId}"] .hero-portrait-wrapper`)
     if (targetEl) {
-        this.showDamageNumber(targetEl, damage)
+        this._showFloatingNumber(targetEl, `-${damage}`, "damage-number")
     }
 
     // StatusBarへ更新通知
     if (currentHp !== undefined) {
-        console.log("[DEBUG] Dispatching game--status:update-hp", { userId: targetUserId, currentHp })
         window.dispatchEvent(new CustomEvent("game--status:update-hp", {
             detail: { userId: parseInt(targetUserId), newValue: currentHp }
         }))
     }
     if (currentSan !== undefined) {
-        console.log("[DEBUG] Dispatching game--status:update-san", { userId: targetUserId, currentSan })
         window.dispatchEvent(new CustomEvent("game--status:update-san", {
             detail: { userId: parseInt(targetUserId), newValue: currentSan }
         }))
@@ -270,8 +260,6 @@ export default class extends Controller {
     const currentPlayerId = this.currentPlayerIdValue
     const isSelf = (ownerPlayerId === currentPlayerId)
 
-    console.log("[DEBUG] CutIn Check:", { ownerPlayerId, currentPlayerId, isSelf })
-
     // 1. Cut-In Animation
     const cutInContainer = document.createElement("div")
     cutInContainer.className = "spell-cut-in-container"
@@ -302,7 +290,6 @@ export default class extends Controller {
 
   _highlightTargets(log) {
       const details = log.details
-      console.log("[DEBUG] _highlightTargets called", details)
       let targets = []
 
       // 複数対象 (target_ids) があれば優先、なければ単体 (target_id)
@@ -335,7 +322,7 @@ export default class extends Controller {
            })
       }
       
-      console.log("[DEBUG] Targets found for glow:", targets)
+      
       if (targets.length === 0) return
 
       // Apply Glow
@@ -364,7 +351,7 @@ export default class extends Controller {
     // SANコストの支払いでも数値を出す
     const targetEl = document.querySelector(`[data-game--countdown-user-id-value="${userId}"] .hero-portrait-wrapper`)
     if (targetEl && amount > 0) {
-        this.showDamageNumber(targetEl, amount)
+        this._showFloatingNumber(targetEl, `-${amount}`, "damage-number")
     }
 
     await this.delay(300)
@@ -382,7 +369,6 @@ export default class extends Controller {
     this._ensureActive(cardEl)
 
     if (modifierType && modifierType.includes("attack") && currentAttack !== undefined) {
-         console.log("[DEBUG] Dispatching game--card:update-attack", { cardId, currentAttack })
          cardEl.dispatchEvent(new CustomEvent("game--card:update-attack", {
              detail: { newValue: currentAttack }
          }))
@@ -407,7 +393,7 @@ export default class extends Controller {
     if (!cardEl) return
 
     this._ensureActive(cardEl)
-    this.showHealNumber(cardEl, amount)
+    this._showFloatingNumber(cardEl, `+${amount}`, "heal-number")
 
     if (newHp !== undefined) {
          cardEl.dispatchEvent(new CustomEvent("game--card:update-hp", {
@@ -433,33 +419,18 @@ export default class extends Controller {
     if (frontSide) frontSide.classList.remove("hidden")
   }
 
-  showDamageNumber(el, amount) {
-    if (!el || !amount) return
+  _showFloatingNumber(el, text, className) {
+    if (!el || !text) return
 
-    const damageEl = document.createElement("div")
-    damageEl.className = "damage-number"
-    damageEl.textContent = `-${amount}`
+    const numberEl = document.createElement("div")
+    numberEl.className = className
+    numberEl.textContent = text
     
-    el.appendChild(damageEl)
+    el.appendChild(numberEl)
     
     // アニメーション終了後に削除
     setTimeout(() => {
-        damageEl.remove()
-    }, 1500)
-  }
-
-  showHealNumber(el, amount) {
-    if (!el || !amount) return
-
-    const healEl = document.createElement("div")
-    healEl.className = "heal-number"
-    healEl.textContent = `+${amount}`
-    
-    el.appendChild(healEl)
-    
-    // アニメーション終了後に削除
-    setTimeout(() => {
-        healEl.remove()
+        numberEl.remove()
     }, 1500)
   }
 
