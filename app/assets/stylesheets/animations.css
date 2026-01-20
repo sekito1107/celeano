@@ -1,0 +1,385 @@
+/* Reveal */
+.animate-reveal {
+  animation: reveal 1.2s ease-out forwards;
+}
+
+@keyframes reveal {
+  0% { transform: var(--card-base-transform) scale(0.8); opacity: 0; }
+  100% { transform: var(--card-base-transform) scale(1); opacity: 1; }
+}
+
+/* Attack */
+.animate-attack-up {
+  animation: attack-up 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-attack-down {
+  animation: attack-down 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes attack-up {
+  0% { transform: var(--card-base-transform) translateY(0); }
+  50% { transform: var(--card-base-transform) translateY(-80px) scale(1.1); z-index: 100; }
+  100% { transform: var(--card-base-transform) translateY(0); }
+}
+
+@keyframes attack-down {
+  0% { transform: var(--card-base-transform) translateY(0); }
+  50% { transform: var(--card-base-transform) translateY(80px) scale(1.1); z-index: 100; }
+  100% { transform: var(--card-base-transform) translateY(0); }
+}
+
+/* Damage */
+.animate-damage {
+  animation: damage 1.0s ease-in-out;
+}
+
+@keyframes damage {
+  0%, 100% { transform: var(--card-base-transform) translateX(0); filter: none; }
+  10%, 30%, 50%, 70%, 90% { 
+    transform: var(--card-base-transform) translateX(-6px); 
+    filter: brightness(1.2) sepia(0.5) hue-rotate(-50deg);
+    box-shadow: inset 0 0 40px rgba(255, 0, 0, 0.6);
+  }
+  20%, 40%, 60%, 80% { transform: var(--card-base-transform) translateX(6px); }
+}
+
+/* Death */
+.animate-death {
+  animation: death 1.5s ease-in forwards;
+}
+
+@keyframes death {
+  0% { transform: var(--card-base-transform) scale(1); opacity: 1; }
+  20% { transform: var(--card-base-transform) scale(1.2); filter: brightness(2) saturate(0); }
+  100% { 
+    transform: var(--card-base-transform) scale(0.1) translateY(300px); 
+    opacity: 0; 
+  }
+}
+
+/* Spell Activation */
+.animate-spell {
+  animation: spell-glow 1.4s ease-out;
+}
+
+@keyframes spell-glow {
+  0% { transform: var(--card-base-transform) scale(1); box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
+  50% { 
+    transform: var(--card-base-transform) scale(1.15); 
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.8); 
+    filter: brightness(1.8);
+  }
+  100% { transform: var(--card-base-transform) scale(1); box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+/* Damage Number Pop-up */
+.damage-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ff3333;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 900;
+  font-size: 3.5rem;
+  text-shadow: 
+    0 0 10px #000,
+    0 0 20px #800,
+    2px 2px 0 #000;
+  pointer-events: none;
+  z-index: 10000;
+  white-space: nowrap;
+  animation: damage-popup 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes damage-popup {
+  0% { 
+    transform: translate(-50%, -30%) scale(0.5); 
+    opacity: 0; 
+  }
+  15% { 
+    transform: translate(-50%, -70%) scale(1.4); 
+    opacity: 1; 
+  }
+  30% {
+    transform: translate(-50%, -60%) scale(1.2);
+  }
+  100% { 
+    transform: translate(-50%, -150%) scale(1); 
+    opacity: 0; 
+  }
+}
+
+/* Heal Number Pop-up */
+.heal-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #33ff33;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 900;
+  font-size: 3.5rem;
+  text-shadow: 
+    0 0 10px #000,
+    0 0 20px #080,
+    2px 2px 0 #000;
+  pointer-events: none;
+  z-index: 10000;
+  white-space: nowrap;
+  animation: damage-popup 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Scaling for Countdown */
+.animate-pop-scale {
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: scale(2.0) !important; /* Increased scale and forced */
+  transform-origin: center center;
+  color: #ff3333;
+  z-index: 1000; /* Ensure on top */
+  display: inline-block;
+  position: relative;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* Add glow */
+}
+
+
+/* --- Spell Cut-In Animation --- */
+/* --- Spell Cut-In Animation --- */
+/* --- Spell Cut-In Animation --- */
+.spell-cut-in-container {
+  position: fixed;
+  width: 100%;
+  height: 250px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0; /* Initially hidden */
+}
+
+.spell-cut-in-container.is-self {
+  top: 55%; /* Low position for player */
+}
+
+.spell-cut-in-container.is-opponent {
+  top: 15%; /* High position for opponent */
+}
+
+/* Background Strip */
+.spell-cut-in-bg {
+  position: absolute;
+  top: 0;
+  left: -20%;
+  width: 140%;
+  height: 100%;
+  background: #000;
+  background-size: cover;
+  background-position: center;
+  transform: skewX(-30deg) translateX(-150%); /* Default start position (Left) */
+  box-shadow: 0 0 20px rgba(0,0,0,0.8);
+  border-top: 4px solid #fff;
+  border-bottom: 2px solid #ff3333;
+  filter: brightness(0.6) sepia(0.5) hue-rotate(-50deg) saturate(1.5);
+}
+
+.spell-cut-in-bg::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(50,0,0,0.5) 50%, rgba(0,0,0,0.8) 100%);
+  pointer-events: none;
+}
+
+.spell-cut-in-container.animate { opacity: 1; }
+
+.spell-cut-in-container.is-self.animate .spell-cut-in-bg {
+  animation: cut-in-slide-bg-self 2.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+.spell-cut-in-container.is-opponent.animate .spell-cut-in-bg {
+  transform: skewX(30deg) translateX(150%); /* Opponent starts Right */
+  animation: cut-in-slide-bg-opponent 2.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+
+/* Content Layout */
+.spell-cut-in-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  z-index: 10;
+  perspective: 1000px;
+}
+
+/* Remove row-reverse to keep text readable/consistent order */
+/*.spell-cut-in-container.is-opponent .spell-cut-in-content {
+  flex-direction: row-reverse; 
+}*/
+
+/* Card Art Style */
+.spell-cut-in-image {
+  width: 300px;
+  height: 420px;
+  background-size: cover;
+  background-position: center top;
+  border: 4px solid #fff;
+  border-radius: 12px;
+  box-shadow: 10px 10px 30px rgba(0,0,0,0.8);
+  opacity: 0;
+}
+
+/* Self Spell Image Animation */
+.spell-cut-in-container.is-self .spell-cut-in-image {
+  transform: translateX(-200px) rotateY(40deg) rotateZ(-10deg) scale(0.8);
+}
+.spell-cut-in-container.is-self.animate .spell-cut-in-image {
+  animation: cut-in-image-fly-self 2.0s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 0.1s;
+}
+
+/* Opponent Spell Image Animation */
+/* Adjust start position since we are not reversing row */
+.spell-cut-in-container.is-opponent .spell-cut-in-image {
+  transform: translateX(-200px) rotateY(-40deg) rotateZ(10deg) scale(0.8);
+}
+.spell-cut-in-container.is-opponent.animate .spell-cut-in-image {
+  animation: cut-in-image-fly-opponent 2.0s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 0.1s;
+}
+
+/* Text Style */
+.spell-cut-in-text {
+  font-family: var(--font-display), "Impact", sans-serif;
+  font-size: 5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+  font-style: italic;
+  text-shadow: 4px 4px 0 #8b0000, 8px 8px 0 rgba(0,0,0,0.5);
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.spell-cut-in-container.is-self .spell-cut-in-text {
+  transform: translateX(200px) skewX(-20deg);
+}
+.spell-cut-in-container.is-self.animate .spell-cut-in-text {
+  animation: cut-in-text-slide-self 2.0s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 0.2s;
+}
+/* Buff Animation */
+.animate-buff .simple-frame {
+  animation: buff-bounce 0.8s ease-out;
+}
+
+@keyframes buff-bounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); filter: brightness(1.2); }
+  100% { transform: scale(1); }
+}
+.spell-cut-in-container.is-opponent .spell-cut-in-text {
+  transform: translateX(200px) skewX(-20deg);
+}
+.spell-cut-in-container.is-opponent.animate .spell-cut-in-text {
+  animation: cut-in-text-slide-opponent 2.0s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: 0.2s;
+}
+
+/* --- Keyframes --- */
+
+/* BG Slides */
+@keyframes cut-in-slide-bg-self {
+  0% { transform: skewX(-30deg) translateX(-150%); }
+  15% { transform: skewX(-30deg) translateX(0%); }
+  85% { transform: skewX(-30deg) translateX(0%); }
+  100% { transform: skewX(-30deg) translateX(150%); }
+}
+
+@keyframes cut-in-slide-bg-opponent {
+  0% { transform: skewX(30deg) translateX(150%); }
+  15% { transform: skewX(30deg) translateX(0%); }
+  85% { transform: skewX(30deg) translateX(0%); }
+  100% { transform: skewX(30deg) translateX(-150%); }
+}
+
+/* Image Fly */
+@keyframes cut-in-image-fly-self {
+  0% { opacity: 0; transform: translateX(-300px) rotateY(40deg) rotateZ(-20deg) scale(0.5); }
+  20% { opacity: 1; transform: translateX(0) rotateY(0deg) rotateZ(-5deg) scale(1); }
+  85% { opacity: 1; transform: translateX(20px) rotateY(0deg) rotateZ(0deg) scale(1.05); } 
+  100% { opacity: 0; transform: translateX(100px) scale(1.2); }
+}
+
+@keyframes cut-in-image-fly-opponent {
+  0% { opacity: 0; transform: translateX(300px) rotateY(-40deg) rotateZ(20deg) scale(0.5); }
+  20% { opacity: 1; transform: translateX(0) rotateY(0deg) rotateZ(5deg) scale(1); }
+  85% { opacity: 1; transform: translateX(-20px) rotateY(0deg) rotateZ(0deg) scale(1.05); } 
+  100% { opacity: 0; transform: translateX(-100px) scale(1.2); }
+}
+
+/* Text Slide */
+@keyframes cut-in-text-slide-self {
+  0% { opacity: 0; transform: translateX(300px) skewX(-20deg); }
+  20% { opacity: 1; transform: translateX(0) skewX(-20deg); }
+  85% { opacity: 1; transform: translateX(-20px) skewX(-20deg); text-shadow: 4px 4px 0 #ff0000; }
+  100% { opacity: 0; transform: translateX(-100px) skewX(-20deg); }
+}
+
+@keyframes cut-in-text-slide-opponent {
+  0% { opacity: 0; transform: translateX(-300px) skewX(-20deg); }
+  20% { opacity: 1; transform: translateX(0) skewX(-20deg); }
+  85% { opacity: 1; transform: translateX(20px) skewX(-20deg); text-shadow: 4px 4px 0 #ff0000; }
+  100% { opacity: 0; transform: translateX(100px) skewX(-20deg); }
+}
+
+/* --- Target Highlight Glow --- */
+/* --- Target Highlight Glow --- */
+.animate-target-glow {
+  position: relative;
+  z-index: 100 !important;
+  box-shadow: 0 0 30px #00aaff, inset 0 0 20px #00aaff !important;
+  border-color: #aaddff !important; /* Optional: brighten border */
+  animation: target-flash 0.5s ease-in-out 3;
+}
+
+/* Ensure round glow for avatars */
+.hero-portrait-wrapper.animate-target-glow {
+  border-radius: 50%;
+  box-shadow: 0 0 40px #00aaff, inset 0 0 30px #00aaff !important;
+}
+
+@keyframes target-flash {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50% { opacity: 1; filter: brightness(1.5) drop-shadow(0 0 10px #00aaff); }
+}
+
+/* Accessibility: Support users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-reveal,
+  .animate-attack-up,
+  .animate-attack-down,
+  .animate-damage,
+  .animate-death,
+  .animate-spell,
+  .damage-number,
+  .spell-cut-in-container.animate,
+  .spell-cut-in-container.animate .spell-cut-in-content,
+  .animate-target-glow::after {
+    animation-duration: 0.1s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.1s !important;
+  }
+  
+  .animate-damage {
+    animation: none !important;
+    background-color: rgba(255, 0, 0, 0.4) !important;
+  }
+
+  .damage-number {
+    transform: translate(-50%, -100%) !important;
+    opacity: 1 !important;
+  }
+}

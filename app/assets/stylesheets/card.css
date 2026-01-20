@@ -1,10 +1,12 @@
 /* Card Component Styles - Abyssal Library Theme (Integrated Asset) */
 
 .card-wrapper {
+  --card-base-transform: rotate(0deg);
   position: relative;
   width: var(--card-width);
   height: var(--card-height);
   border-radius: 10px; /* Precise radius for integrated frames */
+  transform: var(--card-base-transform);
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
   user-select: none;
   box-shadow: 0 4px 6px rgba(0,0,0,0.6);
@@ -662,3 +664,41 @@
   justify-content: center;
   align-items: center;
 }
+
+/* Card Back Side (Hidden State) */
+.card-back-side {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #2d1b4e 0%, #0d0a1b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.back-pattern {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 10px 10px;
+  opacity: 0.5;
+}
+
+.back-logo {
+  font-family: var(--font-display), serif;
+  font-size: 4rem;
+  color: rgba(203, 181, 119, 0.15); /* Faint gold logo */
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+.state-hidden {
+  border: 1px dashed rgba(203, 181, 119, 0.3) !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+

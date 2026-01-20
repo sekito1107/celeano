@@ -350,14 +350,14 @@
 
 /* Opponent Field Cards: Rotate Upright relative to screen */
 .play-mat-opponent .field-slot .card-wrapper {
-  transform: rotate(180deg);
+  --card-base-transform: rotate(180deg);
 }
 
 /* Opponent Field Hover: Maintain Rotation */
 .play-mat-opponent .field-slot:hover .card-wrapper {
-  transform: rotate(180deg) translateY(-20px) scale(1.1);
+  transform: var(--card-base-transform) translateY(-20px) scale(1.1);
   z-index: 100;
-  box-shadow: 0 -10px 20px rgba(0,0,0,0.8); /* Shadow needs flip too */
+  box-shadow: 0 -10px 20px rgba(0,0,0,0.8);
 }
 
 /* Fix orientation for opponent's deck and field areas */
@@ -375,8 +375,7 @@
 
 /* Maintain rotation for selected opponent cards */
 .play-mat-opponent .field-slot .card-wrapper.selected {
-  transform: rotate(180deg) translateY(-32px) scale(1.15) !important;
-  /* Box shadow and border color are handled by card.css */
+  transform: var(--card-base-transform) translateY(-32px) scale(1.15) !important;
 } 
 
 /* Fix Labels separately to ensure they are above the slot visually */
@@ -406,7 +405,8 @@
 }
 
 /* Player Field Hover: Pop up */
-.play-mat:not(.play-mat-opponent) .field-slot:hover .card-wrapper {
+/* Disable visual hover pop-up when a card is selected (has-selection) */
+.game-board:not(.has-selection) .play-mat:not(.play-mat-opponent) .field-slot:hover .card-wrapper {
   transform: translateY(-20px) scale(1.1);
   z-index: 100;
   box-shadow: 0 10px 20px rgba(0,0,0,0.8);
@@ -1025,6 +1025,63 @@
 
 @media (prefers-reduced-motion: reduce) {
   .field-pending-cost {
+    animation: none;
+  }
+}
+
+/* Global Override: Disable all hover animations when a card is selected */
+/* Allows the selected card itself to remain 'popped' (via .selected class) */
+.game-board.has-selection .card-interactive:hover .card-wrapper:not(.selected),
+.game-board.has-selection .field-slot:hover .card-wrapper:not(.selected),
+.game-board.has-selection .hand-card-wrapper:hover .card-wrapper:not(.selected) {
+  transform: var(--card-base-transform, rotate(0deg)) !important;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.6) !important; /* Reset to default shadow */
+  z-index: 1 !important;
+}
+
+/* --- Valid Target Highlighting --- */
+.target-highlight {
+  box-shadow: 0 0 15px 5px rgba(100, 220, 255, 0.5) !important;
+  border-color: rgba(100, 220, 255, 0.8) !important;
+  animation: target-highlight-pulse 0.8s infinite alternate; /* Faster blink */
+  z-index: 50 !important; /* Ensure it's above other elements but below selected card */
+  cursor: pointer; /* Suggest interactivity */
+  transition: all 0.2s;
+}
+
+/* Adjust for Card Wrappers (which have rounded corners and specific shadows) */
+.card-wrapper.target-highlight {
+  box-shadow: 0 0 20px 8px rgba(100, 220, 255, 0.6) !important;
+}
+
+/* Adjust for Opponent Play Mat (Whole Area - Deprecated but kept for fallback) */
+.play-mat-opponent.target-highlight {
+  box-shadow: inset 0 0 50px rgba(100, 220, 255, 0.3) !important;
+  border: 2px solid rgba(100, 220, 255, 0.5) !important;
+}
+
+/* Specific Highlight for Unit Zones (Ally or Enemy) */
+.field-slots-area.target-highlight {
+  box-shadow: 0 0 30px 10px rgba(100, 220, 255, 0.4) !important;
+  border-color: rgba(100, 220, 255, 0.9) !important;
+  background-color: rgba(100, 220, 255, 0.1) !important;
+}
+
+@keyframes target-highlight-pulse {
+  from {
+    box-shadow: 0 0 5px 0px rgba(100, 220, 255, 0.1);
+    border-color: rgba(100, 220, 255, 0.2);
+    filter: brightness(1.0);
+  }
+  to {
+    box-shadow: 0 0 25px 10px rgba(100, 220, 255, 0.8);
+    border-color: rgba(100, 220, 255, 1.0);
+    filter: brightness(1.2); /* Make the element itself brighter */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .target-highlight {
     animation: none;
   }
 }

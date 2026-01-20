@@ -29,11 +29,16 @@ module CardEffects
           source_name: context.source_card.card.name
         )
 
+        # ログに最新のステータスを含めるためリロード
+        target.modifiers.reload
+
         context.log_effect(:effect_modifier_added, {
           target_id: target.id,
           modifier_type: modifier_type,
           value: params[:value],
-          duration: params[:duration]
+          duration: params[:duration],
+          current_attack: target.total_attack,
+          current_hp: target.current_hp
         })
       end
     end

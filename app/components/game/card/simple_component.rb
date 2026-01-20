@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 class Game::Card::SimpleComponent < Game::Card::BaseComponent
-      def initialize(card_entity:, variant: :hand, **html_attributes)
+      def initialize(card_entity:, variant: :hand, hidden: false, **html_attributes)
         super(card_entity: card_entity)
         @variant = variant
+        @hidden = hidden
         @html_attributes = html_attributes
+      end
+
+      def hidden?
+        @hidden
       end
 
       def variant_field?
@@ -43,6 +48,7 @@ class Game::Card::SimpleComponent < Game::Card::BaseComponent
         classes << "state-stunned" if stunned?
         classes << "state-poisoned" if poisoned?
         classes << "scheduled-summon" if scheduled?
+        classes << "state-hidden" if hidden?
         classes.join(" ")
       end
 end

@@ -1,53 +1,61 @@
 <%= tag.div class: wrapper_classes, **@html_attributes do %>
   
   <div class="simple-frame mockup-style">
-    <%# Full Art %>
-    <%= image_tag "cards/#{image_name}", class: "simple-art" %>
-    
-    <%# Top Left: Cost %>
-    <div class="simple-cost-circle">
-      <%= cost %>
+    <%# Card Back (Visible when hidden) %>
+    <div class="card-back-side <%= 'hidden' unless hidden? %>">
+      <div class="back-pattern"></div>
+      <div class="back-logo">C</div>
     </div>
 
-    <%# Top Right: Badges %>
-    <div class="simple-badges">
-      <% if guardian? %><span class="badge-icon">🛡️</span><% end %>
-      <% if haste? %><span class="badge-icon">⚡</span><% end %>
-      <% if stunned? %><span class="badge-icon" title="Stunned">💫</span><% end %>
-      <% if poisoned? %><span class="badge-icon" title="Poisoned">☠️</span><% end %>
-    </div>
-
-    <%# Middle-Low: Name Strip %>
-    <div class="simple-name-strip">
-      <span class="name-text"><%= name %></span>
-    </div>
-
-    <%# Bottom: Stats %>
-    <% if unit? %>
-      <div class="simple-stats-row">
-        <div class="stat-group attack-group <%= attack_buffed? ? 'text-buffed' : '' %>">
-          <span class="stat-icon">⚔️</span>
-          <span class="stat-value"><%= total_attack %></span>
-        </div>
-
-        <% if has_threshold? %>
-          <div class="stat-group threshold-group">
-            <span class="stat-icon threshold-icon">👁️</span>
-            <span class="stat-value"><%= threshold %></span>
-          </div>
-        <% end %>
-
-        <div class="stat-group hp-group <%= damaged? ? 'text-damaged' : '' %>">
-          <span class="stat-icon">♥️</span>
-          <span class="stat-value"><%= hp %></span>
-        </div>
+    <%# Card Front (Hidden when hidden) %>
+    <div class="card-front-side <%= 'hidden' if hidden? %>">
+      <%# Full Art %>
+      <%= image_tag "cards/#{image_name}", class: "simple-art" %>
+      
+      <%# Top Left: Cost %>
+      <div class="simple-cost-circle">
+        <%= cost %>
       </div>
-    <% end %>
-    
-    <%# Status Effect Overlay %>
-    <% if poisoned? %>
-      <div class="simple-poison-overlay"></div>
-    <% end %>
 
+      <%# Top Right: Badges %>
+      <div class="simple-badges">
+        <% if guardian? %><span class="badge-icon">🛡️</span><% end %>
+        <% if haste? %><span class="badge-icon">⚡</span><% end %>
+        <% if stunned? %><span class="badge-icon" title="Stunned">💫</span><% end %>
+        <% if poisoned? %><span class="badge-icon" title="Poisoned">☠️</span><% end %>
+      </div>
+
+      <%# Middle-Low: Name Strip %>
+      <div class="simple-name-strip">
+        <span class="name-text"><%= name %></span>
+      </div>
+
+      <%# Bottom: Stats %>
+      <% if unit? %>
+        <div class="simple-stats-row">
+          <div class="stat-group attack-group <%= attack_buffed? ? 'text-buffed' : '' %>">
+            <span class="stat-icon">⚔️</span>
+            <span class="stat-value" data-game--countdown-target="attack"><%= total_attack %></span>
+          </div>
+
+          <% if has_threshold? %>
+            <div class="stat-group threshold-group">
+              <span class="stat-icon threshold-icon">👁️</span>
+              <span class="stat-value"><%= threshold %></span>
+            </div>
+          <% end %>
+
+          <div class="stat-group hp-group <%= damaged? ? 'text-damaged' : '' %>">
+            <span class="stat-icon">♥️</span>
+            <span class="stat-value" data-game--countdown-target="hp"><%= hp %></span>
+          </div>
+        </div>
+      <% end %>
+      
+      <%# Status Effect Overlay %>
+      <% if poisoned? %>
+        <div class="simple-poison-overlay"></div>
+      <% end %>
+    </div>
   </div>
 <% end %>

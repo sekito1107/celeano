@@ -29,11 +29,22 @@ module CardEffects
         target.take_damage!(amount)
         context.game.check_player_death!(target) if target.is_a?(GamePlayer)
 
-        context.log_effect(:effect_damage, {
-          target_id: target.id,
-          target_type: target.class.name,
-          amount: amount
-        })
+        if target.is_a?(GameCard)
+          context.log_effect(:take_damage, {
+            card_id: target.id,
+            amount: amount,
+            current_hp: target.current_hp,
+            target_type: "unit"
+          })
+        elsif target.is_a?(GamePlayer)
+          context.log_effect(:take_damage, {
+            target_player_id: target.id,
+            amount: amount,
+            current_hp: target.hp,
+            current_san: target.san, # 余分にあっても困らない
+            target_type: "player"
+          })
+        end
       end
     end
   end

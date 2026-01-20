@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Game::CardComponent < ApplicationComponent
-  def initialize(card_entity:, variant: :hand)
+  def initialize(card_entity:, variant: :hand, hidden: false)
     @card_entity = card_entity
     @variant = variant
+    @hidden = hidden
   end
 
   def call
@@ -54,14 +55,18 @@ class Game::CardComponent < ApplicationComponent
 
     card_source = @card_entity.respond_to?(:card) ? @card_entity.card : @card_entity
 
+    kwargs[:id] = "game-card-#{@card_entity.id}"
     kwargs[:data] = {
-      controller: "game--card",
+      controller: "game--card game--countdown",
       game__card_id_value: @card_entity.id,
-      game__card_type_value: card_source&.card_type, # unit or spell
+      game__card_type_value: card_source&.card_type,
       game__card_detail_html_value: detail_html,
       game__card_selected_value: false,
+      game__card_target_type_hint_value: card_source&.target_type,
+      game__countdown_hp_value: @card_entity.respond_to?(:current_hp) ? @card_entity.current_hp : nil,
+      game__countdown_attack_value: @card_entity.respond_to?(:total_attack) ? @card_entity.total_attack : nil,
       game__board_target: "card",
-      action: base_actions.join(" ")
+      action: base_actions.join(" ") + " game--card:update-hp->game--countdown#updateHp game--card:update-attack->game--countdown#updateAttack"
     }
 
     # Set draggable HTML attribute explicitly
@@ -77,6 +82,7 @@ class Game::CardComponent < ApplicationComponent
     end
 
     kwargs[:variant] = @variant if component_class == Game::Card::SimpleComponent
+    kwargs[:hidden] = @hidden
     render component_class.new(**kwargs)
   end
 end

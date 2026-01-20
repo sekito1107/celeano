@@ -1,11 +1,13 @@
 <%= stylesheet_link_tag "game_board", "data-turbo-track": "reload" %>
 <%= stylesheet_link_tag "status_bar", "data-turbo-track": "reload" %>
 <%= stylesheet_link_tag "card", "data-turbo-track": "reload" %>
+<%= stylesheet_link_tag "animations", "data-turbo-track": "reload" %>
 
 <div class="game-board" 
-     data-controller="game--board" 
+     data-controller="game--board game--animation" 
      data-game--board-game-id-value="<%= @game.id %>"
-     data-action="click->game--board#deselectAll dragover->game--board#dragover drop->game--board#drop game--card:showDetail@window->game--board#showDetail game--card:hideDetail@window->game--board#hideDetail game--card:selectCard@window->game--board#selectCard">
+     data-game--animation-current-player-id-value="<%= @game_player&.id %>"
+     data-action="click->game--board#deselectAll dragover->game--board#dragover drop->game--board#drop game--card:showDetail@window->game--board#showDetail game--card:hideDetail@window->game--board#hideDetail game--card:selectCard@window->game--board#selectCard game--board:logs-received->game--animation#playLogs">
   <div class="game-overlay"></div>
   
   <%# Animation Layer (Pointer events none, top z-index) %>
