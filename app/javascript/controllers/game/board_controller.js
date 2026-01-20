@@ -66,6 +66,10 @@ export default class extends Controller {
         if (data.board_update) {
           const onFinished = () => {
             this.element.removeEventListener("game--animation:finished", onFinished)
+            
+            // 次の画面（リロード後）でPLANNING PHASEカットインを出すためにフラグをセット
+            sessionStorage.setItem("pendingPhaseCutIn", "PLANNING PHASE")
+            
             // フェーズ完了時は必ずリロードして最新の盤面（新ターン等）にする
             this.refreshBoard()
           }

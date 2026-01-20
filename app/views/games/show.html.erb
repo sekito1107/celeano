@@ -13,6 +13,8 @@
   <%# Animation Layer (Pointer events none, top z-index) %>
   <div id="animation-layer" class="pointer-events-none absolute inset-0 z-50"></div>
   
+  <%= render Game::PhaseCutInComponent.new %>
+  
   <%# Master-Detail Preview Container %>
   <div id="card-preview-container" data-game--board-target="preview"></div>
 
