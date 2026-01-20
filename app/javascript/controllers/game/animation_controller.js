@@ -9,11 +9,20 @@ export default class extends Controller {
   connect() {
     this.isAnimating = false
     this.queue = []
+    
+    // Check for pending phase cut-in (set by BoardController before reload)
+    const pendingCutIn = sessionStorage.getItem("pendingPhaseCutIn")
+    if (pendingCutIn) {
+      sessionStorage.removeItem("pendingPhaseCutIn") // Always clean up
+      
+      // Prevent showing Planning Phase cut-in if game is over
+      if (!document.querySelector(".game-over-overlay")) {
+        this.showPhaseCutIn(pendingCutIn)
+      }
+    }
   }
 
-  // ... (connect, etc - existing code)
-
-
+  // ... (existing code)
 
   // BoardControllerから呼び出される
   async playLogs(event) {
@@ -25,6 +34,9 @@ export default class extends Controller {
     
     this.isAnimating = true
     try {
+      // Automatic Battle Phase Start
+      await this.showPhaseCutIn("BATTLE PHASE")
+      
       while (this.queue.length > 0) {
         await this.processQueue()
       }
@@ -33,6 +45,27 @@ export default class extends Controller {
       // 全てのアニメーション完了を通知
       this.dispatch("finished", { bubbles: true })
     }
+  }
+
+  async showPhaseCutIn(text) {
+    const container = document.getElementById("phase-cut-in")
+    const textEl = container ? container.querySelector(".phase-text") : null
+    
+    if (!container || !textEl) return
+
+    textEl.textContent = text
+    container.classList.remove("hidden")
+    
+    // Trigger Reflow
+    void container.offsetWidth
+    
+    container.classList.add("animate-in")
+    
+    // Wait for animation duration (2.5s)
+    await this.delay(2500)
+    
+    container.classList.remove("animate-in")
+    container.classList.add("hidden")
   }
 
   async processQueue() {

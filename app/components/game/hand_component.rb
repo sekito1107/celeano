@@ -13,4 +13,8 @@ class Game::HandComponent < ApplicationComponent
   def viewer_is_owner?
     @viewer == @game_player.user
   end
+
+  def render?
+    @game_player.present?
+  end
 end

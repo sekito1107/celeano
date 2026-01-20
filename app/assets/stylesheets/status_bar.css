@@ -154,8 +154,17 @@
   overflow: hidden;
 }
 
+.btn-ready:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+  pointer-events: none;
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
 /* Hover Glow */
-.btn-ready:not(.btn-warning):hover {
+.btn-ready:not(:disabled):hover {
   border-color: #2dd4bf; /* Teal accent */
   box-shadow: 
     0 0 15px rgba(45, 212, 191, 0.3),

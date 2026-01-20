@@ -1,0 +1,100 @@
+<div class="debug-container" style="padding: 2rem; overflow-y: auto; height: 100vh;">
+  <h1 style="font-family: var(--font-logo); font-size: 3rem; margin-bottom: 2rem;">Animation Debug</h1>
+
+  <section style="margin-bottom: 3rem;">
+    <h2>Madness Glow</h2>
+    <div style="display: flex; gap: 2rem; margin-top: 1rem;">
+      <div class="card-mock" style="width: 150px; height: 210px; background: #333; border: 1px solid #555; border-radius: 8px; position: relative;">
+        Normal Card
+      </div>
+      <div class="card-mock madness-glow" style="width: 150px; height: 210px; background: #333; border: 1px solid #555; border-radius: 8px; position: relative;">
+        Madness Triggered
+        <div style="position: absolute; bottom: 10px; left: 10px; font-size: 0.8rem; color: #f00;">Glowing</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-bottom: 3rem;">
+    <h2>Shatter Effect (Sanity Death)</h2>
+    <button id="trigger-shatter" class="btn-primary" style="width: auto; display: inline-flex;">Trigger Shatter Effect (Reload to reset)</button>
+  </section>
+
+  <section style="margin-bottom: 3rem;">
+    <h2>Battle Animations</h2>
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+      <div class="anim-box">
+        <h3>Attack Up</h3>
+        <div id="anim-attack-up" class="card-mock" style="width: 100px; height: 140px; background: #444; border-radius: 6px;"></div>
+        <button class="anim-btn" data-target="anim-attack-up" data-anim="animate-attack-up" style="margin-top: 10px; background: #222; color: #fff; padding: 5px;">Play</button>
+      </div>
+
+       <div class="anim-box">
+        <h3>Attack Down</h3>
+        <div id="anim-attack-down" class="card-mock" style="width: 100px; height: 140px; background: #444; border-radius: 6px;"></div>
+        <button class="anim-btn" data-target="anim-attack-down" data-anim="animate-attack-down" style="margin-top: 10px; background: #222; color: #fff; padding: 5px;">Play</button>
+      </div>
+
+      <div class="anim-box">
+        <h3>Damage</h3>
+        <div id="anim-damage" class="card-mock" style="width: 100px; height: 140px; background: #444; border-radius: 6px;"></div>
+        <button class="anim-btn" data-target="anim-damage" data-anim="animate-damage" style="margin-top: 10px; background: #222; color: #fff; padding: 5px;">Play</button>
+      </div>
+
+       <div class="anim-box">
+        <h3>Death</h3>
+        <div id="anim-death" class="card-mock" style="width: 100px; height: 140px; background: #444; border-radius: 6px;"></div>
+        <button class="anim-btn" data-target="anim-death" data-anim="animate-death" style="margin-top: 10px; background: #222; color: #fff; padding: 5px;">Play</button>
+      </div>
+
+      <div class="anim-box">
+        <h3>Spell Activation</h3>
+        <div id="anim-spell" class="card-mock" style="width: 100px; height: 140px; background: #444; border-radius: 6px;"></div>
+        <button class="anim-btn" data-target="anim-spell" data-anim="animate-spell" style="margin-top: 10px; background: #222; color: #fff; padding: 5px;">Play</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Shatter Container Mock -->
+<div id="shatter-container" class="shatter-container">
+  <div class="shatter-overlay"></div>
+  <div class="shatter-vignette"></div>
+  <div class="shatter-text-wrapper">
+    <div class="shatter-text">Descended Into Madness</div>
+    <div class="shatter-subtitle">狂気に堕ちた</div>
+  </div>
+  <div class="shatter-actions">
+    <button class="btn-return" style="background: #000; border: 1px solid #8b0000; color: #ff0000;">Return to Lobby</button>
+  </div>
+</div>
+
+<%= javascript_tag nonce: true do %>
+  document.addEventListener('turbo:load', () => {
+    if (document.body.dataset.animDebugBound === "true") return
+    document.body.dataset.animDebugBound = "true"
+
+    // Shatter Trigger
+    const triggerShatter = document.getElementById('trigger-shatter');
+    const shatterContainer = document.getElementById('shatter-container');
+    if (triggerShatter && shatterContainer) {
+      triggerShatter.addEventListener('click', function() {
+        shatterContainer.classList.add('is-active');
+      });
+    }
+
+    // Animation Buttons
+    document.querySelectorAll('.anim-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const animClass = btn.dataset.anim;
+        const target = document.getElementById(targetId);
+        
+        if (target) {
+          target.classList.remove(animClass);
+          void target.offsetWidth; // Trigger reflow
+          target.classList.add(animClass);
+        }
+      });
+    });
+  });
+<% end %>

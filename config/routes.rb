@@ -29,4 +29,7 @@ Rails.application.routes.draw do
   namespace :api do
     resource :deck, only: [ :update ]
   end
+  if Rails.env.development? || Rails.env.test?
+    get "debug/animations" => "debug#animations"
+  end
 end

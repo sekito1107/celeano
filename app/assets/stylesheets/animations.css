@@ -367,7 +367,9 @@
   .damage-number,
   .spell-cut-in-container.animate,
   .spell-cut-in-container.animate .spell-cut-in-content,
-  .animate-target-glow::after {
+  .animate-target-glow::after,
+  .animate-buff,
+  .animate-move-to-graveyard {
     animation-duration: 0.1s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.1s !important;
@@ -383,3 +385,19 @@
     opacity: 1 !important;
   }
 }
+
+/* Move to Graveyard (Dynamic) */
+/* Requires --delta-x and --delta-y set by JS */
+.animate-move-to-graveyard {
+  animation: move-to-graveyard 0.8s ease-in-out forwards;
+}
+
+@keyframes move-to-graveyard {
+  to {
+    transform: translate(var(--delta-x, 0), var(--delta-y, 0)) scale(0.2) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Draw Card Animation (Managed by JS Web Animations API) */
+/* .animate-draw class is no longer used but kept as comment or removed */

@@ -24,7 +24,8 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%# Explicitly load stylesheets to ensure Propshaft finds them and order is correct %>
+    <%= stylesheet_link_tag "application", "animations", "phase_transitions", "madness_glow", "shatter_effect", "card", "game_board", "home", "lobby", "matchmaking", "status_bar", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 

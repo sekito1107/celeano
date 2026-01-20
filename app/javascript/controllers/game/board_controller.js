@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { api } from "utils/api"
 import { createConsumer } from "@rails/actioncable"
+import { FetchRequest } from "@rails/request.js"
 
 // Connects to data-controller="game--board"
 export default class extends Controller {
@@ -65,6 +66,10 @@ export default class extends Controller {
         if (data.board_update) {
           const onFinished = () => {
             this.element.removeEventListener("game--animation:finished", onFinished)
+            
+            // 次の画面（リロード後）でPLANNING PHASEカットインを出すためにフラグをセット
+            sessionStorage.setItem("pendingPhaseCutIn", "PLANNING PHASE")
+            
             // フェーズ完了時は必ずリロードして最新の盤面（新ターン等）にする
             this.refreshBoard()
           }
@@ -351,12 +356,21 @@ export default class extends Controller {
 
   // 準備完了トグル
   async ready(event) {
+    if (event) event.preventDefault()
+
+    // Use FetchRequest directly to support Turbo Stream response (api.js enforces JSON)
+    const request = new FetchRequest("post", `/games/${this.gameIdValue}/ready_states`, {
+      responseKind: "turbo-stream"
+    })
+
     try {
-        const response = await api.post(`/games/${this.gameIdValue}/ready_states`, {})
-        // 成功してもリロードしない。ActionCableの ready_update または game_update を待つ。
+      const response = await request.perform()
+      if (!response.ok) {
+        throw new Error("Request failed")
+      }
     } catch (error) {
-        console.error("Ready toggle failed:", error)
-        alert(error.message || "処理に失敗しました")
+      console.error("Ready toggle failed:", error)
+      // Do not alert, let it fail silently or update UI if needed
     }
   }
   // キャンセルAPI実行

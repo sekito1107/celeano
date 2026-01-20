@@ -1,12 +1,16 @@
 <div class="<%= container_classes %>">
   <% if sanity_death? %>
-    <div class="shatter-layer"></div>
-    <div class="overlay-content">
-      <h1 class="game-over-title insane-title">DESCENDED INTO MADNESS</h1>
-      <p class="game-over-message">Your mind has fractured beyond repair...</p>
+    <!-- New Shatter Effect Structure -->
+    <div class="shatter-container is-active">
+      <div class="shatter-overlay"></div>
+      <div class="shatter-vignette"></div>
+      <div class="shatter-text-wrapper">
+        <div class="shatter-text">DESCENDED INTO MADNESS</div>
+        <div class="shatter-subtitle">狂気に堕ちた</div>
+      </div>
       
-      <div class="game-over-actions">
-        <%= link_to "Return to Void", lobby_path, class: "btn-insane" %>
+      <div class="shatter-actions">
+        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
       </div>
     </div>
   <% else %>

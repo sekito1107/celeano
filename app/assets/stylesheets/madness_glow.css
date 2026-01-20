@@ -1,0 +1,36 @@
+/* Madness Glow Effect */
+/* Used for cards that have triggered their madness effect */
+
+.madness-glow {
+  position: relative;
+}
+
+.madness-glow::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 8px; /* Match card border radius */
+  box-shadow: 0 0 15px rgba(139, 0, 0, 0.6);
+  z-index: -1;
+  animation: pulse-glow 2s infinite ease-in-out;
+  pointer-events: none;
+}
+
+/* For round elements like avatars if needed */
+.madness-glow.is-round::after {
+  border-radius: 50%;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+    opacity: 0.8;
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(139, 0, 0, 0.9);
+    opacity: 1;
+  }
+}
