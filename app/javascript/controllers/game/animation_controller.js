@@ -161,10 +161,11 @@ export default class extends Controller {
     const directionClass = isOpponent ? "animate-attack-down" : "animate-attack-up"
 
     const attackAnim = this.applyAnimation(attackerEl, directionClass, 800)
+    let damageAnim = Promise.resolve()
 
     // ダメージ情報の処理
     if (log.details.target_type === "unit" && log.details.target_card_id) {
-        this.delay(300).then(() => {
+        damageAnim = this.delay(300).then(() => 
             this.animateDamage({
                 details: {
                     card_id: log.details.target_card_id,
@@ -172,15 +173,13 @@ export default class extends Controller {
                     current_hp: log.details.target_hp // サーバーから返却される想定
                 }
             })
-        })
+        )
     } else if (log.details.target_type === "player" && log.details.target_player_id) {
         // プレイヤーへの攻撃の場合も数値を出す
-        this.delay(300).then(() => {
-            this.animatePlayerDamage(log)
-        })
+        damageAnim = this.delay(300).then(() => this.animatePlayerDamage(log))
     }
 
-    return attackAnim
+    return Promise.all([attackAnim, damageAnim])
   }
 
   async animateDamage(log) {
@@ -235,6 +234,7 @@ export default class extends Controller {
   async animateDeath(log) {
     const cardId = log.details.card_id
     const cardEl = document.querySelector(`#game-card-${cardId}`)
+    if (!cardEl) return
     const anim = this.applyAnimation(cardEl, "animate-death", 1500)
     
     // アニメーション完了後、リロードまで一瞬表示が戻るのを防ぐため非表示にする
@@ -265,13 +265,27 @@ export default class extends Controller {
     cutInContainer.className = "spell-cut-in-container"
     cutInContainer.classList.add(isSelf ? "is-self" : "is-opponent")
 
-    cutInContainer.innerHTML = `
-      <div class="spell-cut-in-bg" style="background-image: url('${imagePath}');"></div>
-      <div class="spell-cut-in-content">
-        <div class="spell-cut-in-image" style="background-image: url('${imagePath}');"></div>
-        <div class="spell-cut-in-text">${cardName}</div>
-      </div>
-    `
+    cutInContainer.innerHTML = ""
+
+    const bgEl = document.createElement("div")
+    bgEl.className = "spell-cut-in-bg"
+    bgEl.style.backgroundImage = `url('${encodeURI(imagePath)}')`
+    cutInContainer.appendChild(bgEl)
+
+    const contentEl = document.createElement("div")
+    contentEl.className = "spell-cut-in-content"
+
+    const imageEl = document.createElement("div")
+    imageEl.className = "spell-cut-in-image"
+    imageEl.style.backgroundImage = `url('${encodeURI(imagePath)}')`
+
+    const textEl = document.createElement("div")
+    textEl.className = "spell-cut-in-text"
+    textEl.textContent = cardName
+
+    contentEl.appendChild(imageEl)
+    contentEl.appendChild(textEl)
+    cutInContainer.appendChild(contentEl)
     document.body.appendChild(cutInContainer)
     
     // Trigger Animation
@@ -344,9 +358,12 @@ export default class extends Controller {
     const amount = log.details.amount
 
     // StatusBarに対してカウントダウン通知
-    window.dispatchEvent(new CustomEvent("game--status:update-san", {
-        detail: { userId, newValue: newSan }
-    }))
+    // StatusBarに対してカウントダウン通知
+    if (newSan !== undefined) {
+        window.dispatchEvent(new CustomEvent("game--status:update-san", {
+            detail: { userId, newValue: newSan }
+        }))
+    }
 
     // SANコストの支払いでも数値を出す
     const targetEl = document.querySelector(`[data-game--countdown-user-id-value="${userId}"] .hero-portrait-wrapper`)
