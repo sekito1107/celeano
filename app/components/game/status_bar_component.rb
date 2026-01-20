@@ -3,12 +3,10 @@
 class Game::StatusBarComponent < ApplicationComponent
   def initialize(game_player:, controls: false)
     @game_player = game_player
-    @controls = controls
+    # Controls logic moved to FieldComponent
   end
 
-  def controls?
-    @controls
-  end
+  # def controls? - Removed
 
   def ready?
     !!@game_player.ready

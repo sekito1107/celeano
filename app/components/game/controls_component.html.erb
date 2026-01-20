@@ -1,0 +1,9 @@
+<div id="field-controls" class="field-controls-area">
+  <button class="btn btn-primary btn-ready"
+          data-action="click->game--board#ready"
+          aria-label="<%= ready_label %>"
+          aria-pressed="<%= @game_player.ready %>"
+          <%= 'disabled' if disabled? %>>
+    <%= ready_text %>
+  </button>
+</div>

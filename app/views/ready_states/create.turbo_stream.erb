@@ -6,3 +6,7 @@
     <%= render Game::StatusBarComponent.new(game_player: @game_player, controls: true) %>
   </div>
 <% end %>
+
+<%= turbo_stream.replace "field-controls" do %>
+  <%= render Game::ControlsComponent.new(game_player: @game_player) %>
+<% end %>

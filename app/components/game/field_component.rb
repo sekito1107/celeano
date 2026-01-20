@@ -1,15 +1,20 @@
 # frozen_string_literal: true
 
 class Game::FieldComponent < ApplicationComponent
-  def initialize(game_player:, viewer: nil, current_turn: nil)
+  def initialize(game_player:, viewer:, current_turn:, controls: false)
     @game_player = game_player
     @viewer = viewer
     @current_turn = current_turn
+    @controls = controls
   end
 
   def opponent?
     return false unless @viewer
     @game_player.user_id != @viewer.id
+  end
+
+  def controls?
+    @controls
   end
 
   def viewer_is_player?

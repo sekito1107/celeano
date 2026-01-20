@@ -109,27 +109,8 @@
   100% { box-shadow: 0 0 10px rgba(139, 0, 0, 0.2); }
 }
 
-/* Fixed Controls for Ready Button */
-.status-controls-fixed {
-  position: fixed;
-  left: calc(2rem + 180px); /* Positioned relative to status bar */
-  bottom: 2.5rem; /* Slightly lifted */
-  z-index: 50;
-  display: flex;
-  align-items: center;
-}
-
-/* Connecting Line (Optional aesthetic touch) */
-.status-controls-fixed::before {
-  content: "";
-  position: absolute;
-  left: -20px;
-  top: 50%;
-  width: 20px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2));
-  z-index: -1;
-}
+/* Fixed Controls for Ready Button - Removed (Moved to Board Flow) */
+/* .status-controls-fixed removed */
 
 .btn-ready {
   min-width: 140px;

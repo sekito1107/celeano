@@ -39,8 +39,8 @@
 /* Reserved Spells Zone (Ritual Area) */
 .reserved-spells-zone {
   position: absolute;
-  right: 2rem;
-  bottom: calc(var(--hand-area-height) + 5rem); /* Dynamic positioning above hand */
+  right: 16rem; /* Placed to the Left of the Graveyard Stack (Inner Right) */
+  bottom: 14rem; /* Aligned with bottom of Right Stack */
   width: 140px;
   min-height: 180px;
   border: 1px dashed rgba(255, 255, 255, 0.2);
@@ -52,6 +52,8 @@
   padding: 1rem 0;
   z-index: 10;
   backdrop-filter: blur(4px);
+  
+  left: auto; /* Ensure reset */
 }
 
 .zone-label {
@@ -144,6 +146,10 @@
 
 /* プレイエリア（マット） */
 .play-mat {
+  width: 100%; /* Ensure full width for rotation center */
+  max-width: 100%;
+  margin: 0;
+  box-sizing: border-box;
   background-color: rgba(20, 20, 25, 0.2);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -198,22 +204,65 @@
   box-shadow: -2px 0 5px rgba(0,0,0,0.5);
 }
 
-/* Field Container - Compact but larger cards */
+/* Field Container - Absolute Sidebars to guarantee perfect center alignment */
 .field-container {
   /* Increased size to fill available space */
-  --card-width: 130px; /* Increased from 114px */
-  --card-height: 182px; /* Increased from 160px */
+  --card-width: 130px; 
+  --card-height: 182px;
   --slot-gap: 0.75rem;
+  box-sizing: border-box; /* Ensure padding doesn't affect width calculation */
 
-  display: grid;
-  grid-template-columns: 280px auto 280px; /* SYMMETRY IS REQUIRED for unit alignment */
+  display: flex; /* Flex center for the middle content */
   justify-content: center;
-  gap: 1rem; /* Reduced gap slightly */
+  align-items: flex-end; /* Align bottom edges */
+  position: relative; /* Anchor for absolute sidebars */
   width: 100%;
-  max-width: 1150px; /* Tighter width to pull sides in away from Detail Panel */
+  max-width: 1200px; /* Increased from 1060px to 1200px to avoid overlap */
   margin: 0 auto;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem; /* Padding for potential overlap safety */
+  min-height: 250px; /* Ensure height for absolute children */
+}
+
+/* Left Group: Deck & Status - Absolute Positioned Left */
+.field-left-group {
+  position: absolute;
+  left: 1rem; /* Relaxed from 0.5rem */
+  bottom: 5rem; /* Revert to 5rem as requested for Deck */
+  display: flex;
+  flex-direction: row;
   align-items: center;
+  gap: 1.5rem; /* Increased gap */
+  z-index: 10;
+}
+
+/* Offset Status Area to be higher than Deck */
+.field-left-group .field-status-area {
+  transform: translateY(-1.5rem);
+}
+
+/* Right Group: Graveyard & Banished - Absolute Positioned Right */
+.field-right-stack {
+  position: absolute;
+  right: 4rem; /* Revert to 4rem (standard) */
+  bottom: -0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Field Center Wrapper - Flow Content Centered by Flex Container */
+.field-center-wrapper {
+  /* No special positioning needed, flex parent centers it */
+  grid-column: auto; /* Reset grid prop */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 5; /* Lower than sides if overlap happens */
 }
 
 .field-deck-area {
@@ -225,13 +274,33 @@
   height: var(--card-height);
 }
 
-.field-right-stack {
+.field-status-area {
   display: flex;
-  flex-direction: row; /* Horizontal */
-  gap: 1rem;
-  align-items: center;
   justify-content: center;
-  /* Width will be 2 * card-width + gap */
+  align-items: center;
+  margin-top: 2rem; /* Align slightly lower or center? Center is fine. */
+}
+
+/* Helpers for Right Stack content */
+.field-right-zones {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem; /* Compact horizontal gap */
+}
+
+.field-controls-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.25rem; /* Tight spacing between zones and button */
+}
+
+.btn-ready {
+  width: 100%;
+  max-width: 160px; /* Slightly smaller max width */
+  font-size: 0.9rem; /* Slightly smaller text */
+  padding: 0.4rem 1rem;
 }
 
 .field-graveyard-area,
@@ -266,7 +335,6 @@
   border-radius: 16px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6); /* Lift it off the mat */
   position: relative;
-  /* Removed margin to save space */
 }
 /* Shine effect for the stage */
 .field-slots-area::before {
@@ -314,24 +382,18 @@
   justify-content: center;
   overflow: visible;
   pointer-events: auto; /* Enable interaction with cards */
+  perspective: 1000px;
 }
 
 /* Fan Effect Logic */
 .play-mat-opponent .hand-card-wrapper.opponent-card {
-  /*
-     Calculate rotation based on index (--i) and total (--total).
-     Center is (total - 1) / 2.
-     Offset = i - center.
-     Rotate = offset * 5deg.
-     TranslateY = abs(offset) * 5px (arch effect).
-  */
   --center: calc((var(--total) - 1) / 2);
   --offset: calc(var(--i) - var(--center));
   --rotate-deg: calc(var(--offset) * 8deg); /* Fan spread angle */
   --y-offset: calc(max(var(--offset), -1 * var(--offset)) * 12px); /* Arch height */
 
   transform-origin: center bottom 200px; /* Rotate from a distant point */
-  transform: rotate(var(--rotate-deg)) translateY(var(--y-offset));
+  transform: rotate(var(--rotate-deg)) translateY(var(--y-offset)) !important; /* Force override */
   margin-left: -40px; /* Overlap heavily */
   
   /* Reset previous shadow/hover */
@@ -339,13 +401,18 @@
 }
 
 .play-mat-opponent {
+  width: 100%; /* Force full width */
+  left: 0;
+  right: 0;
+  margin: 0;
   border-bottom: none;
   border-top: 1px solid var(--game-border-color);
   transform: rotate(180deg);
-  padding: 2rem 0; /* padding reset */
-  margin-top: 0;
-  width: 100%;
+  transform-origin: center center; /* Ensure precise center rotation */
+  padding: 0 0 2rem 0; /* Adjusted padding: Top 0 (Visual Bottom) moves field closer to center */
   z-index: 0; /* Push to background */
+  
+  /* Force Flex Centering REMOVED */
 }
 
 /* Opponent Field Cards: Rotate Upright relative to screen */
@@ -360,8 +427,9 @@
   box-shadow: 0 -10px 20px rgba(0,0,0,0.8);
 }
 
-/* Fix orientation for opponent's deck and field areas */
+/* Fix orientation for opponent's deck, status, and field areas */
 .play-mat-opponent .deck-placeholder,
+.play-mat-opponent .field-status-area,
 .play-mat-opponent .field-graveyard-area,
 .play-mat-opponent .field-banished-area,
 .play-mat-opponent .deck-count {
@@ -391,6 +459,22 @@
      If user says "Still inverted", maybe my Area rotation didn't work.
      I will reinforce the rule.
   */
+}
+
+/* Fix Opponent Layout Asymmetry Correctly */
+/* Since the mat is rotated 180deg, Left becomes Visual Right, Right becomes Visual Left */
+/* Player: Left=1rem, Right=4rem. */
+/* To align vertically: Opponent Visual Right should be 4rem (Physical Left=4rem) */
+/* Opponent Visual Left should be 1rem (Physical Right=1rem) */
+
+.play-mat-opponent .field-left-group {
+  left: 1.5rem !important; /* Shifted Right (closer to edge, was 4rem) */
+  bottom: 1rem !important; /* Raised visually (Decreased bottom) */
+}
+
+.play-mat-opponent .field-right-stack {
+  right: 3rem !important; /* Shifted Right (away from edge, was 1rem) */
+  bottom: 2rem !important; /* Raised visually (Decreased bottom) */
 }
 
 /* Explicitly fix icons inside empty states if Area rotation fails */
@@ -668,21 +752,8 @@
   }
 }
 
-/* Status Bar Positioning */
-.status-bar-wrapper {
-  position: fixed;
-  z-index: 20;
-}
-
-.opponent-status {
-  top: 2rem;
-  right: 2rem;
-}
-
-.player-status {
-  bottom: 2rem;
-  left: 2rem;
-}
+/* Status Bar Positioning - Legacy Removed */
+/* .status-bar-wrapper, .opponent-status, .player-status classes are no longer used for positioning */
 
 /* Interactive Areas */
 .field-graveyard-area, .field-banished-area {

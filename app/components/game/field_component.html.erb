@@ -1,12 +1,21 @@
 <div class="field-container" 
      data-game--animation-target="field" 
      data-game--animation-player-id-value="<%= @game_player.id %>">
-  <div class="field-deck-area" data-game--animation-target="deck">
-    <div class="deck-placeholder">
-      <div class="deck-count"><%= deck_count %></div>
+  
+  <%# Left Group: Deck & Status Bar %>
+  <div class="field-left-group">
+    <div class="field-deck-area" data-game--animation-target="deck">
+      <div class="deck-placeholder">
+        <div class="deck-count"><%= deck_count %></div>
+      </div>
+    </div>
+
+    <div class="field-status-area">
+      <%= render Game::StatusBarComponent.new(game_player: @game_player) %>
     </div>
   </div>
 
+  <%# Center Group: Field Slots %>
   <div class="field-center-wrapper">
     <div class="field-slots-area">
       <%= tag.div class: "field-slot left-slot",
@@ -52,74 +61,81 @@
     <% end %>
   </div>
 
+  <%# Right Group: Graveyard & Banished & Controls %>
   <div class="field-right-stack">
-    <!-- Graveyard -->
-    <div class="field-area-wrapper" data-controller="card-list-modal">
-      <div class="field-graveyard-area" 
-           data-action="click->card-list-modal#open"
-           data-game--animation-target="graveyard">
-        <div class="field-label">Grave</div>
-        <% if graveyard_top_card %>
-          <%= render Game::CardComponent.new(card_entity: graveyard_top_card, variant: :field) %>
-        <% else %>
-          <div class="empty-graveyard">
-            <span class="icon">💀</span>
+    <div class="field-right-zones">
+      <!-- Graveyard -->
+      <div class="field-area-wrapper" data-controller="card-list-modal">
+        <div class="field-graveyard-area" 
+             data-action="click->card-list-modal#open"
+             data-game--animation-target="graveyard">
+          <div class="field-label">Grave</div>
+          <% if graveyard_top_card %>
+            <%= render Game::CardComponent.new(card_entity: graveyard_top_card, variant: :field) %>
+          <% else %>
+            <div class="empty-graveyard">
+              <span class="icon">💀</span>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="game-modal-overlay hidden" data-card-list-modal-target="modal" data-action="click->card-list-modal#close">
+          <div class="game-modal">
+            <div class="modal-content <%= 'modal-opponent' if opponent? %>">
+              <div class="modal-header">
+                <h2><%= opponent? ? "Opponent Graveyard" : "Graveyard" %> (<%= graveyard_cards.count %>)</h2>
+                <button class="modal-close-btn" data-action="click->card-list-modal#closeButton">×</button>
+              </div>
+              <div class="modal-grid">
+                <% graveyard_cards.each do |card| %>
+                  <%= render Game::CardComponent.new(card_entity: card, variant: :list) %>
+                <% end %>
+                <% if graveyard_cards.empty? %>
+                  <div class="modal-empty-msg">No cards in Graveyard.</div>
+                <% end %>
+              </div>
+            </div>
           </div>
-        <% end %>
+        </div>
       </div>
 
-      <div class="game-modal-overlay hidden" data-card-list-modal-target="modal" data-action="click->card-list-modal#close">
-        <div class="game-modal">
-          <div class="modal-content <%= 'modal-opponent' if opponent? %>">
-            <div class="modal-header">
-              <h2><%= opponent? ? "Opponent Graveyard" : "Graveyard" %> (<%= graveyard_cards.count %>)</h2>
-              <button class="modal-close-btn" data-action="click->card-list-modal#closeButton">×</button>
+      <!-- Banished -->
+      <div class="field-area-wrapper" data-controller="card-list-modal">
+        <div class="field-banished-area" data-action="click->card-list-modal#open">
+          <div class="field-label">Void</div>
+          <% if banished_top_card %>
+            <%= render Game::CardComponent.new(card_entity: banished_top_card, variant: :field) %>
+          <% else %>
+            <div class="empty-banished">
+              <span class="icon">🌀</span>
             </div>
-            <div class="modal-grid">
-              <% graveyard_cards.each do |card| %>
-                <%= render Game::CardComponent.new(card_entity: card, variant: :list) %>
-              <% end %>
-              <% if graveyard_cards.empty? %>
-                <div class="modal-empty-msg">No cards in Graveyard.</div>
-              <% end %>
+          <% end %>
+        </div>
+
+        <div class="game-modal-overlay hidden" data-card-list-modal-target="modal" data-action="click->card-list-modal#close">
+          <div class="game-modal">
+            <div class="modal-content <%= 'modal-opponent' if opponent? %>">
+              <div class="modal-header">
+                <h2><%= opponent? ? "Opponent Banished" : "Banished Zone" %> (<%= banished_cards.count %>)</h2>
+                <button class="modal-close-btn" data-action="click->card-list-modal#closeButton">×</button>
+              </div>
+              <div class="modal-grid">
+                <% banished_cards.each do |card| %>
+                  <%= render Game::CardComponent.new(card_entity: card, variant: :list) %>
+                <% end %>
+                <% if banished_cards.empty? %>
+                  <div class="modal-empty-msg">No banished cards.</div>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Banished -->
-    <div class="field-area-wrapper" data-controller="card-list-modal">
-      <div class="field-banished-area" data-action="click->card-list-modal#open">
-        <div class="field-label">Void</div>
-        <% if banished_top_card %>
-          <%= render Game::CardComponent.new(card_entity: banished_top_card, variant: :field) %>
-        <% else %>
-          <div class="empty-banished">
-            <span class="icon">🌀</span>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="game-modal-overlay hidden" data-card-list-modal-target="modal" data-action="click->card-list-modal#close">
-        <div class="game-modal">
-          <div class="modal-content <%= 'modal-opponent' if opponent? %>">
-            <div class="modal-header">
-              <h2><%= opponent? ? "Opponent Banished" : "Banished Zone" %> (<%= banished_cards.count %>)</h2>
-              <button class="modal-close-btn" data-action="click->card-list-modal#closeButton">×</button>
-            </div>
-            <div class="modal-grid">
-              <% banished_cards.each do |card| %>
-                <%= render Game::CardComponent.new(card_entity: card, variant: :list) %>
-              <% end %>
-              <% if banished_cards.empty? %>
-                <div class="modal-empty-msg">No banished cards.</div>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    
+    <% if controls? %>
+      <%= render Game::ControlsComponent.new(game_player: @game_player) %>
+    <% end %>
   </div>
 
   <% if opponent? %>

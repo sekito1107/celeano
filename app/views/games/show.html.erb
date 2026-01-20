@@ -18,13 +18,6 @@
   <%# Master-Detail Preview Container %>
   <div id="card-preview-container" data-game--board-target="preview"></div>
 
-  <!-- Opponent Area -->
-  <div id="opponent-status" class="status-bar-wrapper opponent-status">
-    <% if @opponent_game_player %>
-      <%= render Game::StatusBarComponent.new(game_player: @opponent_game_player) %>
-    <% end %>
-  </div>
-
   <div class="play-mat play-mat-opponent" 
        data-action="dragover->game--board#dragover drop->game--board#drop click->game--board#playCard">
     <% if @opponent_game_player %>
@@ -41,14 +34,9 @@
     <% end %>
   </div>
 
-  <!-- Player Area -->
-  <div id="player-status" class="status-bar-wrapper player-status">
-    <%= render Game::StatusBarComponent.new(game_player: @game_player, controls: true) %>
-  </div>
-
   <div class="play-mat">
     <div id="player-field">
-      <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user, current_turn: @current_turn) %>
+      <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user, current_turn: @current_turn, controls: true) %>
     </div>
     
     <div id="reserved-spells">

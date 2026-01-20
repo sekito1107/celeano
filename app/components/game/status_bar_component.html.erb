@@ -28,16 +28,4 @@
     </div>
   </div>
 
-  <% if controls? %>
-    <%# Ready Button: Fixed position to ensure visibility on top of all layers %>
-    <div class="status-controls-fixed">
-      <button class="btn btn-primary btn-ready"
-              data-action="click->game--board#ready"
-              aria-label="<%= ready? ? 'Waiting for opponent' : 'Confirm ready state' %>"
-              aria-pressed="<%= ready? %>"
-              <%= 'disabled' if ready? %>>
-        <%= ready? ? "WAIT" : "READY" %>
-      </button>
-    </div>
-  <% end %>
 </div>
