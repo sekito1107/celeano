@@ -18,6 +18,9 @@ class ResolveDamage
       # Phase 3: ダメージ適用
       apply_all_damage(damage_results)
 
+      # Phase 4: 死亡判定（相打ちチェック）
+      process_deaths(game)
+
       context.damage_results = damage_results
     end
   end
@@ -48,6 +51,7 @@ class ResolveDamage
 
   def apply_all_damage(damage_results)
     damage_results.each do |result|
+      # ゲーム終了済みなら即中断
       break if context.game.reload.finished?
       apply_single_attack(result)
     end
@@ -73,7 +77,26 @@ class ResolveDamage
       damage: damage
     }.merge(target_info))
 
-    context.game.check_player_death!(target) if target.is_a?(GamePlayer)
+    # NOTE: 個別の死亡判定は行わず、最後に一括で行うため check_player_death! は呼び出さない
+  end
+
+  def process_deaths(game)
+    return if game.reload.finished?
+
+    dead_players = game.game_players.select { |p| p.hp <= 0 }
+
+    if dead_players.any?
+      if dead_players.size >= 2
+        # HP Draw (Mutual Destruction)
+        game.finish_draw!(Game::FINISH_REASONS[:hp_draw])
+      else
+        # Normal HP Death
+        dead_players.each do |player|
+          game.check_player_death!(player)
+          break if game.finished? # 一人が死んだら終了（現在は1vs1前提）
+        end
+      end
+    end
   end
 
   def build_target_info(target, target_type)
