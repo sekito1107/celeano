@@ -1,14 +1,22 @@
-<div class="hand-container" data-controller="hand" data-action="dragover->game--board#dragover drop->game--board#drop">
+<div class="hand-container" 
+     data-controller="game--hand" 
+     data-action="dragover->game--board#dragover drop->game--board#drop"
+     data-game--hand-is-opponent-value="<%= !viewer_is_owner? %>">
   <% if viewer_is_owner? %>
     <% cards.each do |game_card| %>
-      <div class="hand-card-wrapper card-interactive">
+      <div class="hand-card-wrapper card-interactive" 
+           data-game--hand-target="card"
+           <%= 'data-new-draw="true"'.html_safe if recently_drawn?(game_card) %>>
         <%= render Game::CardComponent.new(card_entity: game_card) %>
       </div>
     <% end %>
   <% else %>
-    <% count = cards.count %>
-    <% count.times do |i| %>
-      <div class="hand-card-wrapper opponent-card" style="--i: <%= i %>; --total: <%= count %>;">
+    <%# Opponent hand: iterate actual cards to check for new draws, but render back %>
+    <% cards.each_with_index do |game_card, i| %>
+      <div class="hand-card-wrapper opponent-card" 
+           style="--i: <%= i %>; --total: <%= cards.count %>;"
+           data-game--hand-target="card"
+           <%= 'data-new-draw="true"' if recently_drawn?(game_card) %>>
         <div class="card-back"></div>
       </div>
     <% end %>

@@ -396,3 +396,6 @@
     opacity: 0;
   }
 }
+
+/* Draw Card Animation (Managed by JS Web Animations API) */
+/* .animate-draw class is no longer used but kept as comment or removed */
