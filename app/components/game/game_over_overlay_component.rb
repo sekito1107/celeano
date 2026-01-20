@@ -53,14 +53,6 @@ class Game::GameOverOverlayComponent < ApplicationComponent
     classes.join(" ")
   end
 
-  def determine_reason_class
-    case @reason
-    when :hp then "hp-death"
-    when :deck then "deck-death"
-    else "standard"
-    end
-  end
-
   private
 
   def determine_result(game, user)
@@ -78,6 +70,14 @@ class Game::GameOverOverlayComponent < ApplicationComponent
     when "SAN_DRAW" then :san
     when "HP_DRAW" then :hp
     else :other
+    end
+  end
+
+  def determine_reason_class
+    case @reason
+    when :hp then "hp-death"
+    when :deck then "deck-death"
+    else "standard"
     end
   end
 end
