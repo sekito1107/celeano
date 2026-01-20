@@ -199,12 +199,24 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .shatter-container.is-active,
   .shatter-container.is-active *,
-  .shatter-text-wrapper,
+  .shatter-overlay,
+  .shatter-vignette,
   .shatter-text,
   .shatter-subtitle,
-  .btn-return {
-    animation-duration: 0.1s !important;
-    transition-duration: 0.1s !important;
+  .shatter-actions {
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+  
+  .shatter-container.is-active {
+    opacity: 1;
+  }
+  
+  .shatter-actions {
+    opacity: 1;
   }
 }
