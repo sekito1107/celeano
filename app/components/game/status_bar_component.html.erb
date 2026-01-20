@@ -13,18 +13,18 @@
          data-game--countdown-player-id-value="<%= @game_player.id %>"
          data-game--countdown-user-id-value="<%= @game_player.user_id %>"
          data-game--countdown-max-value="<%= max_hp %>"
-         data-action="game--status:update-hp@window->game--countdown#updateFromEvent">
+         data-action="game--status:update-hp@window->game--countdown#updateHpFromEvent">
       <div class="stat-value" data-game--countdown-target="hp"><%= hp %></div>
     </div>
     
     <div class="stat-badge san-badge"
          data-controller="game--countdown"
-         data-game--countdown-hp-value="<%= san %>"
+         data-game--countdown-san-value="<%= san %>"
          data-game--countdown-player-id-value="<%= @game_player.id %>"
          data-game--countdown-user-id-value="<%= @game_player.user_id %>"
          data-game--countdown-max-value="<%= max_san %>"
-         data-action="game--status:update-san@window->game--countdown#updateFromEvent">
-      <div class="stat-value" data-game--countdown-target="hp"><%= san %></div>
+         data-action="game--status:update-san@window->game--countdown#updateSanFromEvent">
+      <div class="stat-value" data-game--countdown-target="san"><%= san %></div>
     </div>
   </div>
 

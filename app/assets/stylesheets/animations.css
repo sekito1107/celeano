@@ -367,7 +367,9 @@
   .damage-number,
   .spell-cut-in-container.animate,
   .spell-cut-in-container.animate .spell-cut-in-content,
-  .animate-target-glow::after {
+  .animate-target-glow::after,
+  .animate-buff,
+  .animate-move-to-graveyard {
     animation-duration: 0.1s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.1s !important;

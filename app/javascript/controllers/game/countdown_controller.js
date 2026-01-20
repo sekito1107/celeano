@@ -3,24 +3,34 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static values = { 
     hp: Number,
+    san: Number, // Added SAN support
     attack: Number,
     max: Number,
     userId: Number 
   }
-  static targets = ["hp", "attack", "bar"]
+  static targets = ["hp", "san", "attack", "bar"]
 
   connect() {
-    this.hpDisplay = this.hpValue
-    this.attackDisplay = this.attackValue
+    if (this.hasHpValue) this.hpDisplay = this.hpValue
+    if (this.hasSanValue) this.sanDisplay = this.sanValue
+    if (this.hasAttackValue) this.attackDisplay = this.attackValue
   }
 
-  // 外部からの更新（StatusBar等） - HPのみサポート維持
-  updateFromEvent(event) {
+  // 外部からの更新（StatusBar等） - HP
+  updateHpFromEvent(event) {
     const { userId, newValue } = event.detail
     // 自分のStatusBarでなければ無視
     if (this.hasUserIdValue && this.userIdValue !== userId) return
     
     this.updateHp({ detail: { newValue } })
+  }
+
+  // 外部からの更新（StatusBar等） - SAN
+  updateSanFromEvent(event) {
+    const { userId, newValue } = event.detail
+    if (this.hasUserIdValue && this.userIdValue !== userId) return
+    
+    this.updateSan({ detail: { newValue } })
   }
 
   // カード自身のHP更新
@@ -39,6 +49,16 @@ export default class extends Controller {
      this.hpValue = newValue // Sync value
   }
 
+  // SAN更新
+  updateSan(event) {
+    const { newValue } = event.detail
+    this.animateTo(this.sanTarget, this.sanDisplay, newValue, (v) => {
+      this.sanDisplay = v
+      this.sanTarget.textContent = v
+    })
+    this.sanValue = newValue
+  }
+
   // 攻撃力更新
   updateAttack(event) {
     const { newValue } = event.detail
@@ -50,6 +70,8 @@ export default class extends Controller {
   }
 
   animateTo(element, start, end, updateCallback) {
+    // Initial setup if start is undefined (e.g. first connect)
+    if (start === undefined) start = end 
     if (start === end) return
 
     const diff = end - start
