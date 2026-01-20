@@ -112,6 +112,9 @@ export default class extends Controller {
       case "effect_modifier_added":
         await this.animateModifierAdded(log)
         break
+      case "effect_heal":
+        await this.animateHeal(log)
+        break
       default:
         // 未実装のイベントは0.1秒待機して飛ばす（ログが詰まらないように）
         await this.delay(100)
@@ -393,6 +396,26 @@ export default class extends Controller {
     return this.applyAnimation(cardEl, "animate-buff", 800)
   }
 
+  async animateHeal(log) {
+    const cardId = log.details.target_id
+    const amount = log.details.amount
+    const newHp = log.details.new_hp
+    const cardEl = document.querySelector(`#game-card-${cardId}`)
+    
+    if (!cardEl) return
+
+    this._ensureActive(cardEl)
+    this.showHealNumber(cardEl, amount)
+
+    if (newHp !== undefined) {
+         cardEl.dispatchEvent(new CustomEvent("game--card:update-hp", {
+             detail: { newValue: newHp }
+         }))
+    }
+
+    return this.applyAnimation(cardEl, "animate-buff", 800)
+  }
+
   // --- Utilities ---
 
   _ensureActive(cardEl) {
@@ -420,6 +443,21 @@ export default class extends Controller {
     // アニメーション終了後に削除
     setTimeout(() => {
         damageEl.remove()
+    }, 1500)
+  }
+
+  showHealNumber(el, amount) {
+    if (!el || !amount) return
+
+    const healEl = document.createElement("div")
+    healEl.className = "heal-number"
+    healEl.textContent = `+${amount}`
+    
+    el.appendChild(healEl)
+    
+    // アニメーション終了後に削除
+    setTimeout(() => {
+        healEl.remove()
     }, 1500)
   }
 

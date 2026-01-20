@@ -111,6 +111,26 @@
   }
 }
 
+/* Heal Number Pop-up */
+.heal-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #33ff33;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 900;
+  font-size: 3.5rem;
+  text-shadow: 
+    0 0 10px #000,
+    0 0 20px #080,
+    2px 2px 0 #000;
+  pointer-events: none;
+  z-index: 10000;
+  white-space: nowrap;
+  animation: damage-popup 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
 /* Scaling for Countdown */
 .animate-pop-scale {
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
