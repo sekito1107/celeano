@@ -24,12 +24,17 @@ export default class extends Controller {
     // Turbo Streamの一時停止制御
     this.onBeforeStreamRender = this.handleBeforeStreamRender.bind(this)
     document.addEventListener("turbo:before-stream-render", this.onBeforeStreamRender)
+
+    // リフレッシュフラグの確実なリセット
+    this.onTurboLoad = () => { this._refreshing = false }
+    document.addEventListener("turbo:load", this.onTurboLoad)
   }
 
   disconnect() {
     this.channel?.unsubscribe()
     this.consumer?.disconnect()
     document.removeEventListener("turbo:before-stream-render", this.onBeforeStreamRender)
+    document.removeEventListener("turbo:load", this.onTurboLoad)
   }
 
   handleBeforeStreamRender(event) {
@@ -99,9 +104,6 @@ export default class extends Controller {
     } else {
       window.location.reload()
     }
-    
-    // 予備的にフラグを戻す
-    setTimeout(() => { this._refreshing = false }, 2000)
   }
 
   // 詳細表示の更新（イベント受信）
