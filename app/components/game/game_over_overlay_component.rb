@@ -73,6 +73,23 @@ class Game::GameOverOverlayComponent < ApplicationComponent
     end
   end
 
+  def overlay_content
+    case
+    when mutual_insanity?
+      { mode: "mutual-insanity-mode", title: "DRAW", subtitle: "MUTUAL INSANITY", subsubtitle: "狂気への共振" }
+    when mutual_destruction?
+      { mode: "mutual-destruction-mode", title: "DRAW", subtitle: "MUTUAL DESTRUCTION", subsubtitle: "焦土と灰燼" }
+    when sanity_death?
+      { mode: "sanity-death-mode", title: "DEFEAT", subtitle: "DESCENDED INTO MADNESS", subsubtitle: "発狂" }
+    when @result == :win
+      { mode: "victory-mode", title: "VICTORY", subtitle: "THE THREAT SUBSIDES", subsubtitle: "脅威の排除" }
+    when @result == :loss
+      { mode: "defeat-mode", title: "DEFEAT", subtitle: "FATAL INJURY", subsubtitle: "肉体の崩壊" }
+    else
+      { mode: nil, title: "GAME OVER", subtitle: nil, subsubtitle: nil }
+    end
+  end
+
   def determine_reason_class
     case @reason
     when :hp then "hp-death"

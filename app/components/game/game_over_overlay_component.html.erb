@@ -1,88 +1,20 @@
+<% content = overlay_content %>
 <div class="<%= container_classes %>">
-  <% if mutual_insanity? %>
-    <!-- Mutual Insanity (SAN Draw) -->
-    <div class="shatter-container is-active mutual-insanity-mode">
-      <div class="shatter-overlay"></div>
-      <div class="shatter-vignette"></div>
-      <div class="shatter-text-wrapper">
-        <div class="shatter-text">DRAW</div>
-        <div class="shatter-subtitle">MUTUAL INSANITY</div>
-        <div class="shatter-subsubtitle">狂気への共振</div>
-      </div>
-      
-      <div class="shatter-actions">
-        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
-      </div>
+  <div class="shatter-container is-active <%= content[:mode] %>">
+    <div class="shatter-overlay"></div>
+    <div class="shatter-vignette"></div>
+    <div class="shatter-text-wrapper">
+      <div class="shatter-text"><%= content[:title] %></div>
+      <% if content[:subtitle] %>
+        <div class="shatter-subtitle"><%= content[:subtitle] %></div>
+      <% end %>
+      <% if content[:subsubtitle] %>
+        <div class="shatter-subsubtitle"><%= content[:subsubtitle] %></div>
+      <% end %>
     </div>
-
-  <% elsif mutual_destruction? %>
-    <!-- Mutual Destruction (HP Draw) -->
-    <div class="shatter-container is-active mutual-destruction-mode">
-      <div class="shatter-overlay"></div>
-      <div class="shatter-vignette"></div>
-      <div class="shatter-text-wrapper">
-        <div class="shatter-text">DRAW</div>
-        <div class="shatter-subtitle">MUTUAL DESTRUCTION</div>
-        <div class="shatter-subsubtitle">焦土と灰燼</div>
-      </div>
-      
-      <div class="shatter-actions">
-        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
-      </div>
+    
+    <div class="shatter-actions">
+      <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
     </div>
-
-  <% elsif sanity_death? %>
-    <!-- Sanity Death (Loss) -->
-    <div class="shatter-container is-active sanity-death-mode">
-      <div class="shatter-overlay"></div>
-      <div class="shatter-vignette"></div>
-      <div class="shatter-text-wrapper">
-        <div class="shatter-text">DEFEAT</div>
-        <div class="shatter-subtitle">DESCENDED INTO MADNESS</div>
-        <div class="shatter-subsubtitle">発狂</div>
-      </div>
-      <div class="shatter-actions">
-        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
-      </div>
-    </div>
-
-  <% elsif @result == :win %>
-    <!-- Victory (Ascension) -->
-    <div class="shatter-container is-active victory-mode">
-      <div class="shatter-overlay"></div>
-      <div class="shatter-vignette"></div>
-      <div class="shatter-text-wrapper">
-        <div class="shatter-text">VICTORY</div>
-        <div class="shatter-subtitle">THE THREAT SUBSIDES</div>
-        <div class="shatter-subsubtitle">脅威の排除</div>
-      </div>
-      <div class="shatter-actions">
-        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
-      </div>
-    </div>
-
-  <% elsif @result == :loss %>
-    <!-- Defeat (Annihilation) -->
-    <div class="shatter-container is-active defeat-mode">
-      <div class="shatter-overlay"></div>
-      <div class="shatter-vignette"></div>
-      <div class="shatter-text-wrapper">
-        <div class="shatter-text">DEFEAT</div>
-        <div class="shatter-subtitle">FATAL INJURY</div>
-        <div class="shatter-subsubtitle">肉体の崩壊</div>
-      </div>
-      <div class="shatter-actions">
-        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
-      </div>
-    </div>
-
-  <% else %>
-    <!-- Fallback -->
-    <div class="shatter-container is-active">
-      <div class="shatter-text">GAME OVER</div>
-      <div class="shatter-actions">
-        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
-      </div>
-    </div>
-  <% end %>
+  </div>
 </div>
