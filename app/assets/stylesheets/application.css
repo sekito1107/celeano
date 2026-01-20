@@ -4,6 +4,11 @@
  * Theme: Abyssal Library (Final Refinement) - Fog Animation & Logo Tweaks
  */
 
+/* @import "reset.css"; - Removed as it does not exist */
+/* Since reset.css is not in the list, skipping it or assuming base styles handle it */
+
+/* @import statements removed - loaded via layout */
+
 /* ===========================================
    CSS Variables - Abyssal Dark Theme
    =========================================== */
