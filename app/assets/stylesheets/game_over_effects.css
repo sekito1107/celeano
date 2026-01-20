@@ -51,25 +51,7 @@
 
 /* ... (skip unchanged) ... */
 
-/* --- MODE: MUTUAL DESTRUCTION (HP DRAW) --- */
-.mutual-destruction-mode .shatter-overlay {
-  background: radial-gradient(circle, rgba(67, 20, 7, 0.4) 0%, rgba(20, 10, 5, 0.95) 100%); /* Orange/Black ash */
-}
-.mutual-destruction-mode .shatter-vignette {
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    rgba(0, 0, 0, 0.1) 10px,
-    rgba(0, 0, 0, 0.1) 20px
-  );
-  animation: ash-drift 20s linear infinite;
-}
-.mutual-destruction-mode .shatter-text {
-  color: #fb923c; /* Orange-400 - Slightly darker/redder than Victory Gold */
-  text-shadow: 0 0 10px #9a3412, 0 0 30px #000; /* Darker glow */
-  animation: ember-glitch 4s ease-out forwards;
-}
+
 
 .shatter-subtitle {
   font-family: var(--font-display, serif);
