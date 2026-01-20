@@ -214,6 +214,7 @@
   
   .shatter-container.is-active {
     opacity: 1;
+    pointer-events: auto;
   }
   
   .shatter-actions {
