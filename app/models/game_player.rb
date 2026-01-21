@@ -69,7 +69,11 @@ class GamePlayer < ApplicationRecord
     game_card = deck.first
     return nil unless game_card
 
-    current_max_position = hand.maximum(:position_in_stack)
+    current_max_position = if association(:game_cards).loaded?
+      hand.map(&:position_in_stack).compact.max
+    else
+      hand.maximum(:position_in_stack)
+    end
     next_index = (current_max_position || -1) + 1
 
     game_card.move_to_hand!(next_index)
