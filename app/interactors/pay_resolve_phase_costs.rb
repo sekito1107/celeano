@@ -88,7 +88,8 @@ class PayResolvePhaseCosts
           key_code: game_card.card.key_code,
           position: move.position,
           owner_player_id: game_card.game_player_id,
-          user_id: cost_info[:user_id]
+          user_id: cost_info[:user_id],
+          cost: cost_info[:amount] # Add cost for visual display
         })
       end
 

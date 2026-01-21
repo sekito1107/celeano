@@ -111,6 +111,26 @@
   }
 }
 
+/* SAN Damage Number Pop-up */
+.san-damage-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #00aaff;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 900;
+  font-size: 3.5rem;
+  text-shadow: 
+    0 0 10px #000,
+    0 0 20px #0055aa,
+    2px 2px 0 #000;
+  pointer-events: none;
+  z-index: 10000;
+  white-space: nowrap;
+  animation: damage-popup 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
 /* Heal Number Pop-up */
 .heal-number {
   position: absolute;
@@ -142,6 +162,19 @@
   position: relative;
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* Add glow */
 }
+
+/* Scaling for SAN (Blue) */
+.animate-pop-scale-san {
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: scale(2.0) !important; /* Increased scale and forced */
+  transform-origin: center center;
+  color: #00aaff;
+  z-index: 1000; /* Ensure on top */
+  display: inline-block;
+  position: relative;
+  text-shadow: 0 0 10px rgba(0, 170, 255, 0.8); /* Add glow */
+}
+
 
 
 /* --- Spell Cut-In Animation --- */
@@ -401,3 +434,63 @@
 
 /* Draw Card Animation (Managed by JS Web Animations API) */
 /* .animate-draw class is no longer used but kept as comment or removed */
+
+/* --- Summon Cost Flash (Combined Reveal) --- */
+.animate-reveal-flash {
+  animation: reveal-with-flash 1.2s ease-out forwards;
+}
+
+/* --- Cost Circle Pulse --- */
+.animate-cost-pulse {
+  animation: cost-pulse 0.8s ease-out forwards;
+}
+
+@keyframes cost-pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 170, 255, 0); }
+  30% { transform: scale(3.5); box-shadow: 0 0 20px rgba(0, 170, 255, 1); background-color: rgba(0, 170, 255, 0.5); z-index: 100; border-color: #fff; }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 170, 255, 0); }
+}
+
+@keyframes reveal-with-flash {
+  0% { 
+    transform: var(--card-base-transform) scale(0.8); 
+    opacity: 0; 
+    filter: brightness(1); 
+  }
+  30% {
+    filter: brightness(2) drop-shadow(0 0 20px rgba(0, 170, 255, 0.8));
+    opacity: 1;
+  }
+  100% { 
+    transform: var(--card-base-transform) scale(1); 
+    opacity: 1; 
+    filter: brightness(1); 
+  }
+}
+
+/* --- Sanity Drain Particles (Refined) --- */
+.sanity-particle {
+  position: fixed; /* Fixed to viewport to prevent scroll/transform issues */
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #aaddff 0%, #00aaff 60%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 0 0 10px rgba(0, 170, 255, 0.6);
+  opacity: 0; /* Start hidden */
+  filter: blur(1px);
+  /* Animation is applied by JS or class */
+  animation: sanity-drain-mist 1.0s ease-out forwards;
+}
+
+@keyframes sanity-drain-mist {
+  0% { 
+    transform: translate(0, 0) scale(1); 
+    opacity: 0.8; 
+  }
+  100% { 
+    transform: translate(var(--drain-x, 0), 80px) scale(2); 
+    opacity: 0; 
+  }
+}

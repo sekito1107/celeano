@@ -57,7 +57,7 @@ export default class extends Controller {
     this.animateTo(this.sanTarget, this.sanDisplay, newValue, (v) => {
       this.sanDisplay = v
       this.sanTarget.textContent = v
-    })
+    }, "animate-pop-scale-san")
     this.sanValue = newValue
   }
 
@@ -72,7 +72,7 @@ export default class extends Controller {
     this.attackValue = newValue // Sync value
   }
 
-  animateTo(element, start, end, updateCallback) {
+  animateTo(element, start, end, updateCallback, animationClass = "animate-pop-scale") {
     // Initial setup if start is undefined (e.g. first connect)
     if (start === undefined) start = end 
     if (start === end) return
@@ -83,7 +83,7 @@ export default class extends Controller {
 
     // アニメーション開始：拡大
     if (element) {
-      element.classList.add("animate-pop-scale")
+      element.classList.add(animationClass)
     }
 
     const step = (currentTime) => {
@@ -100,7 +100,7 @@ export default class extends Controller {
         updateCallback(end)
         
         if (element) {
-          element.classList.remove("animate-pop-scale")
+          element.classList.remove(animationClass)
         }
       }
     }

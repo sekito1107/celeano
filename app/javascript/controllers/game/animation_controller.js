@@ -162,20 +162,6 @@ export default class extends Controller {
   // --- Animation Implementation ---
 
   async animateReveal(log) {
-    // Embedded Cost Handling
-    if (log.details.cost !== undefined && log.details.current_san !== undefined) {
-        const userId = log.details.user_id || this._findUserIdByPlayerId(log.details.owner_player_id)
-        if (userId != null) {
-          this.animatePayCost({
-            details: {
-              user_id: Number(userId),
-              amount: log.details.cost,
-              current_san: log.details.current_san
-            }
-          })
-        }
-    }
-  
     const cardId = log.details.card_id
     let cardEl = document.querySelector(`#game-card-${cardId}`)
     if (!cardEl) return
@@ -196,7 +182,39 @@ export default class extends Controller {
     }
 
     this._ensureActive(cardEl)
-    return this.applyAnimation(cardEl, "animate-reveal", 1200)
+    
+    // 統合アニメーション: 出現＋フラッシュ
+    // 召喚コスト演出: コスト円を強調
+    const costCircle = cardEl.querySelector(".simple-cost-circle")
+    if (costCircle) {
+        // ダイス表記(1d6など)から確定コスト(3など)に書き換え
+        if (log.details.cost !== undefined) {
+             costCircle.textContent = log.details.cost
+        }
+        this.applyAnimation(costCircle, "animate-cost-pulse", 800)
+    }
+    
+    // 統合アニメーション: 出現＋フラッシュ
+    const revealAnim = this.applyAnimation(cardEl, "animate-reveal-flash", 1200)
+
+    // 遅延させてコスト支払いを演出 (カードが出現してから、正気度が抜ける)
+    await this.delay(800)
+
+    // Embedded Cost Handling (Delayed)
+    if (log.details.cost !== undefined && log.details.current_san !== undefined) {
+        const userId = log.details.user_id || this._findUserIdByPlayerId(log.details.owner_player_id)
+        if (userId != null) {
+          this.animatePayCost({
+            details: {
+              user_id: Number(userId),
+              amount: log.details.cost,
+              current_san: log.details.current_san
+            }
+          })
+        }
+    }
+
+    return revealAnim
   }
 
   async animateAttack(log) {
@@ -264,7 +282,22 @@ export default class extends Controller {
 
     const targetEl = document.querySelector(`[data-game--countdown-user-id-value="${targetUserId}"] .hero-portrait-wrapper`)
     if (targetEl) {
-        this._showFloatingNumber(targetEl, `-${damage}`, "damage-number")
+        // ダメージ数値の表示
+        // もしHPが変動せずSANのみ変動している場合、あるいはdamageが0でSANが減っている場合などを考慮
+        // 現状、サーバーからのdamageはHPダメージを指すことが一般的だが、
+        // SANダメージの場合は別途判定したい。
+        // ここでは、damage > 0 ならばHPダメージ（赤）、damage == 0 かつ currentSan < target_san (old) ???
+        // 引数の log.details には old_san は含まれていないため、damage > 0 なら赤、それ以外でSAN由来なら青、としたいが
+        // サーバー側で「SANダメージ」として damage フィールドを使っている場合は赤になってしまう。
+        
+        // とりあえず、標準的なHPダメージは赤。
+        if (damage > 0) {
+           this._showFloatingNumber(targetEl, `-${damage}`, "damage-number")
+        }
+        
+        // もしここでSAN減少も同時に表示したい場合（例：HPとSAN両方減る）、重ねて表示するか、
+        // あるいはSANダメージ専用のイベントがあるか。
+        // 現状の実装では animatePlayerDamage は主にHPダメージ用。
     }
 
     // StatusBarへ更新通知
@@ -415,23 +448,28 @@ export default class extends Controller {
       }, 1500)
   }
 
+
+
   async animatePayCost(log) {
     const userId = log.details.user_id
     const newSan = log.details.current_san
     const amount = log.details.amount
 
-    // StatusBarに対してカウントダウン通知
-    // StatusBarに対してカウントダウン通知
     if (newSan !== undefined) {
         window.dispatchEvent(new CustomEvent("game--status:update-san", {
             detail: { userId, newValue: newSan }
         }))
     }
 
-    // SANコストの支払いでも数値を出す
-    const targetEl = document.querySelector(`[data-game--countdown-user-id-value="${userId}"] .hero-portrait-wrapper`)
+    // data属性を持つ要素(.stat-badge)を探し、その親(.hero-portrait-wrapper)を取得する
+    const badgeEl = document.querySelector(`[data-game--countdown-user-id-value="${userId}"]`)
+    const targetEl = badgeEl ? badgeEl.closest(".hero-portrait-wrapper") : null
+
     if (targetEl && amount > 0) {
-        this._showFloatingNumber(targetEl, `-${amount}`, "damage-number")
+        this._showFloatingNumber(targetEl, `-${amount}`, "san-damage-number")
+        
+        // SAN減少演出: 粒子が抜け落ちる
+        this._animateSanityDrain(targetEl, amount)
     }
 
     await this.delay(300)
@@ -482,6 +520,46 @@ export default class extends Controller {
     }
 
     return this.applyAnimation(cardEl, "animate-buff", 800)
+  }
+
+  // --- Sanity Drain Animation ---
+  _animateSanityDrain(sourceEl, amount) {
+     if (!sourceEl) return
+     
+     // Amountに応じて粒子数を調整 (例: 1コストにつき3個, 最大15個)
+     const particleCount = Math.min(amount * 3, 15)
+     
+     const rect = sourceEl.getBoundingClientRect()
+     // 中心座標 (Viewport Relative)
+     const centerX = rect.left + rect.width / 2
+     const centerY = rect.top + rect.height / 2
+     
+     for (let i = 0; i < particleCount; i++) {
+         const particle = document.createElement("div")
+         particle.className = "sanity-particle"
+         
+         // ランダムな開始位置のばらつき (広めに散らす)
+         const offsetX = (Math.random() - 0.5) * 60 
+         const offsetY = (Math.random() - 0.5) * 60
+         
+         particle.style.left = `${centerX + offsetX}px`
+         particle.style.top = `${centerY + offsetY}px`
+         
+         // 落下方向のランダム性 (左右に漂う)
+         const drainX = (Math.random() - 0.5) * 100
+         particle.style.setProperty("--drain-x", `${drainX}px`)
+         
+         // アニメーション時間のばらつき
+         const duration = 0.8 + Math.random() * 0.6
+         particle.style.animationDuration = `${duration}s`
+         
+         document.body.appendChild(particle)
+         
+         // クリーンアップ
+         setTimeout(() => {
+             particle.remove()
+         }, duration * 1000)
+     }
   }
 
   // --- Utilities ---
