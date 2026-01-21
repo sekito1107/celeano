@@ -3,6 +3,17 @@ class Game < ApplicationRecord
 
   enum :status, { matching: 0, playing: 1, finished: 2 }, default: :matching
 
+  scope :with_full_details, -> {
+    includes(
+      game_players: {
+        game_cards: [
+          :modifiers,
+          { card: :keywords }
+        ]
+      }
+    )
+  }
+
   before_validation :set_seed, on: :create
 
   FINISH_REASONS = {

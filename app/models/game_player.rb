@@ -26,15 +26,27 @@ class GamePlayer < ApplicationRecord
   end
 
   def deck
-    game_cards.where(location: :deck).order(:position_in_stack)
+    if association(:game_cards).loaded?
+      game_cards.select(&:location_deck?).sort_by { |c| c.position_in_stack || 0 }
+    else
+      game_cards.where(location: :deck).order(:position_in_stack)
+    end
   end
 
   def hand
-    game_cards.where(location: :hand).order(:position_in_stack)
+    if association(:game_cards).loaded?
+      game_cards.select(&:location_hand?).sort_by { |c| c.position_in_stack || 0 }
+    else
+      game_cards.where(location: :hand).order(:position_in_stack)
+    end
   end
 
   def graveyard
-    game_cards.where(location: :graveyard).order(:updated_at, :id)
+    if association(:game_cards).loaded?
+      game_cards.select(&:location_graveyard?).sort_by { |gc| [ gc.updated_at, gc.id ] }
+    else
+      game_cards.where(location: :graveyard).order(:updated_at, :id)
+    end
   end
 
   def pay_cost!(amount, silent: false)
