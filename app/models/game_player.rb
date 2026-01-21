@@ -26,15 +26,27 @@ class GamePlayer < ApplicationRecord
   end
 
   def deck
-    game_cards.where(location: :deck).order(:position_in_stack)
+    if association(:game_cards).loaded?
+      game_cards.select(&:location_deck?).sort_by { |c| c.position_in_stack.to_i }
+    else
+      game_cards.where(location: :deck).order(:position_in_stack)
+    end
   end
 
   def hand
-    game_cards.where(location: :hand).order(:position_in_stack)
+    if association(:game_cards).loaded?
+      game_cards.select(&:location_hand?).sort_by { |c| c.position_in_stack.to_i }
+    else
+      game_cards.where(location: :hand).order(:position_in_stack)
+    end
   end
 
   def graveyard
-    game_cards.where(location: :graveyard).order(:updated_at, :id)
+    if association(:game_cards).loaded?
+      game_cards.select(&:location_graveyard?).sort_by { |gc| [ gc.updated_at, gc.id ] }
+    else
+      game_cards.where(location: :graveyard).order(:updated_at, :id)
+    end
   end
 
   def pay_cost!(amount, silent: false)
@@ -57,7 +69,11 @@ class GamePlayer < ApplicationRecord
     game_card = deck.first
     return nil unless game_card
 
-    current_max_position = hand.maximum(:position_in_stack)
+    current_max_position = if association(:game_cards).loaded?
+      hand.map(&:position_in_stack).compact.max
+    else
+      hand.maximum(:position_in_stack)
+    end
     next_index = (current_max_position || -1) + 1
 
     game_card.move_to_hand!(next_index)
