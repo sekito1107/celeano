@@ -12,5 +12,6 @@
   "scripts": {
     "lint:js": "eslint \"app/javascript/**/*.{js,mjs,cjs}\"",
     "lint:fix": "eslint \"app/javascript/**/*.{js,mjs,cjs}\" --fix && prettier --write \"app/javascript/**/*.{js,mjs,cjs}\""
-  }
+  },
+  "packageManager": "yarn@4.12.0"
 }
