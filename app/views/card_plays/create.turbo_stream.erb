@@ -9,7 +9,7 @@
 
 <%= turbo_stream.replace "player-field" do %>
   <div id="player-field">
-    <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user) %>
+    <%= render Game::FieldComponent.new(game_player: @game_player, viewer: current_user, current_turn: @turn) %>
   </div>
 <% end %>
 

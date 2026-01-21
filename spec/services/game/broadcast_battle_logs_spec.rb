@@ -8,16 +8,16 @@ RSpec.describe Game::BroadcastBattleLogs do
 
   describe ".call" do
     it "盤面更新とバトルログをブロードキャストすること" do
-      expect(GameChannel).to receive(:broadcast_to).with(game, { type: "board_update" })
       expect(GameChannel).to receive(:broadcast_to).with(
         game,
-        {
-          type: "battle_logs",
-          logs: array_including(
+        hash_including(
+          type: "game_update",
+          board_update: true,
+          battle_logs: array_including(
             hash_including(event_type: "attack", details: { "foo" => "bar" }),
             hash_including(event_type: "damage", details: { "amount" => 10 })
           )
-        }
+        )
       )
 
       described_class.call(game: game, logs: [ log1, log2 ])

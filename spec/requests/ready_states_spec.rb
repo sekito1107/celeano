@@ -39,11 +39,7 @@ RSpec.describe "ReadyStates", type: :request do
             expect(flash[:notice]).to eq("準備完了状態を変更しました")
           end
 
-          it "JSON形式で成功レスポンスを返すこと" do
-            post game_ready_states_path(game), as: :json
-            expect(response).to have_http_status(:ok)
-            expect(JSON.parse(response.body)["message"]).to eq("準備完了状態を変更しました")
-          end
+          # JSON test removed as JSON format is no longer supported
 
           it "Turbo Streamリクエストに対して成功レスポンスを返すこと" do
             post game_ready_states_path(game), as: :turbo_stream
@@ -65,11 +61,7 @@ RSpec.describe "ReadyStates", type: :request do
             expect(flash[:notice]).to eq("ターン終了")
           end
 
-          it "JSON形式でターン終了メッセージを返すこと" do
-            post game_ready_states_path(game), as: :json
-            expect(response).to have_http_status(:ok)
-            expect(JSON.parse(response.body)["message"]).to eq("ターン終了")
-          end
+          # JSON test removed as JSON format is no longer supported
         end
       end
 
@@ -84,12 +76,7 @@ RSpec.describe "ReadyStates", type: :request do
             expect(flash[:alert]).to eq("操作が許可されていません")
           end
 
-          it "JSONリクエストに対してエラーレスポンスを返すこと" do
-            post game_ready_states_path(game), as: :json
-
-            expect(response).to have_http_status(:unprocessable_content)
-            expect(JSON.parse(response.body)["status"]).to eq("error")
-          end
+          # JSON test removed as JSON format is no longer supported
         end
 
         context "ゲームに参加していないユーザーの場合" do

@@ -23,9 +23,20 @@ RSpec.describe PayUnitCosts do
       move_unit
     end
 
-    it "pays only unit costs" do
-      expect(game_player).to receive(:pay_cost!).with(3)
-      described_class.call(game: game)
+    it "pays only unit costs silently and records pending costs" do
+      # Expect SAN to decrease by unit cost (3) only
+      result = nil
+      expect {
+        result = described_class.call(game: game)
+      }.to change { game_player.reload.san }.by(-3)
+
+      # Ensure no logs are created immediately (verifies silent: true)
+      expect(game.battle_logs).to be_empty
+
+      # Verify pending costs are recorded in context
+      expect(result.pending_costs.values).to include(
+        a_hash_including(amount: 3, user_id: user.id)
+      )
     end
   end
 end

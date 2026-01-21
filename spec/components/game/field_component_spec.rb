@@ -12,8 +12,26 @@ RSpec.describe Game::FieldComponent, type: :component do
     create_list(:game_card, 5, :deck, game: game, game_player: game_player, user: user)
   end
 
+  let!(:turn) { create(:turn, game: game, turn_number: 1) }
+
+  before do
+    allow(game).to receive(:current_turn_number).and_return(1)
+  end
+
+  let!(:turn) { create(:turn, game: game, turn_number: 1) }
+
+  before do
+    allow(game).to receive(:current_turn_number).and_return(1)
+  end
+
+  let!(:turn) { create(:turn, game: game, turn_number: 1) }
+
+  before do
+    allow(game).to receive(:current_turn_number).and_return(1)
+  end
+
   it "デッキ枚数が正しく表示されること" do
-    render_inline(described_class.new(game_player: game_player))
+    render_inline(described_class.new(game_player: game_player, viewer: user, current_turn: turn))
 
     expect(page).to have_css(".field-deck-area .deck-count", text: "5")
   end
@@ -25,7 +43,7 @@ RSpec.describe Game::FieldComponent, type: :component do
     before { game_player.reload }
 
     it "正しいスロットにカードが表示されること" do
-      render_inline(described_class.new(game_player: game_player))
+      render_inline(described_class.new(game_player: game_player, viewer: user, current_turn: turn))
 
       expect(page).to have_css(".field-slot.left-slot .card-wrapper") # CardComponent renders a wrapper
       # 実際にはCardComponentの出力には特定のクラスがないかもしれません。
@@ -48,7 +66,7 @@ RSpec.describe Game::FieldComponent, type: :component do
     before { game_player.reload }
 
     it "墓地の一番上のカードが表示されること" do
-      render_inline(described_class.new(game_player: game_player))
+      render_inline(described_class.new(game_player: game_player, viewer: user, current_turn: turn))
 
       expect(page).to have_css(".field-graveyard-area")
       expect(page).not_to have_css(".field-graveyard-area .empty-graveyard")
@@ -57,7 +75,7 @@ RSpec.describe Game::FieldComponent, type: :component do
 
   context "墓地が空の場合" do
     it "墓地のプレースホルダーが表示されること" do
-      render_inline(described_class.new(game_player: game_player))
+      render_inline(described_class.new(game_player: game_player, viewer: user, current_turn: turn))
 
       expect(page).to have_css(".field-graveyard-area .empty-graveyard")
     end
@@ -67,7 +85,7 @@ RSpec.describe Game::FieldComponent, type: :component do
     let!(:turn) { create(:turn, game: game, turn_number: 1) }
 
     it "召喚数と上限が正しく表示されること" do
-      render_inline(described_class.new(game_player: game_player))
+      render_inline(described_class.new(game_player: game_player, viewer: user, current_turn: turn))
       expect(page).to have_css(".unit-summon-info .value", text: "0 / 1")
     end
 
@@ -80,7 +98,7 @@ RSpec.describe Game::FieldComponent, type: :component do
       end
 
       it "召喚数が更新されること" do
-        render_inline(described_class.new(game_player: game_player))
+        render_inline(described_class.new(game_player: game_player, viewer: user, current_turn: turn))
         expect(page).to have_css(".unit-summon-info .value", text: "1 / 1")
       end
     end
@@ -103,7 +121,7 @@ RSpec.describe Game::FieldComponent, type: :component do
       end
 
       it "スロットにカードが表示され、scheduled-summonクラスが付与されていること" do
-        render_inline(described_class.new(game_player: game_player, viewer: user))
+        render_inline(described_class.new(game_player: game_player, viewer: user, current_turn: turn))
 
         expect(page).to have_css(".field-slot.center-slot .card-wrapper")
         expect(page).to have_css(".field-slot.center-slot .card-wrapper.scheduled-summon")
@@ -115,7 +133,7 @@ RSpec.describe Game::FieldComponent, type: :component do
       let(:opponent_player) { create(:game_player, game: game, user: opponent) }
 
       it "スロットは空として表示されること" do
-        render_inline(described_class.new(game_player: game_player, viewer: opponent))
+        render_inline(described_class.new(game_player: game_player, viewer: opponent, current_turn: turn))
 
         expect(page).to have_css(".field-slot.center-slot .empty-slot")
         expect(page).not_to have_css(".field-slot.center-slot .card-wrapper")
@@ -139,7 +157,7 @@ RSpec.describe Game::FieldComponent, type: :component do
 
     context "自身が閲覧する場合" do
       it "合計消費コストが表示されること" do
-        render_inline(described_class.new(game_player: game_player, viewer: user))
+        render_inline(described_class.new(game_player: game_player, viewer: user, current_turn: turn))
         expect(page).to have_css(".field-pending-cost", text: "2")
         expect(page).to have_css(".field-pending-cost .label", text: "SAN COST:")
       end
@@ -149,7 +167,7 @@ RSpec.describe Game::FieldComponent, type: :component do
       let(:opponent) { create(:user) }
 
       it "コスト消費は表示されないこと" do
-        render_inline(described_class.new(game_player: game_player, viewer: opponent))
+        render_inline(described_class.new(game_player: game_player, viewer: opponent, current_turn: turn))
         expect(page).not_to have_css(".field-pending-cost")
       end
     end
