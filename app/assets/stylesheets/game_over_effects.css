@@ -1,0 +1,274 @@
+/* Game Over Effects (formerly Shatter Effect) */
+/* Full screen overlays and animations for all game termination states */
+
+.shatter-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 0;
+  background-color: #000;
+}
+
+.shatter-container.is-active {
+  animation: bg-fade-in 0.1s forwards;
+  pointer-events: auto;
+}
+
+/* --- COMMON ELEMENTS --- */
+
+.shatter-overlay, .shatter-vignette {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+.shatter-text-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shatter-text {
+  font-family: var(--font-display, 'Cinzel', serif);
+  font-size: 6rem;
+  font-weight: 800; /* Extra Bold for emphasis */
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  opacity: 0;
+}
+
+/* ... (skip unchanged) ... */
+
+
+
+.shatter-subtitle {
+  font-family: var(--font-display, serif);
+  font-size: 2.5rem;
+  letter-spacing: 0.8em;
+  font-weight: 300;
+  opacity: 0;
+}
+
+.shatter-subsubtitle {
+  font-family: var(--font-display, serif);
+  font-size: 1.5rem;
+  opacity: 0;
+  letter-spacing: 0.5em; /* Specific Japanese spacing */
+  margin-top: 0.5rem;
+}
+
+.shatter-actions {
+  position: absolute;
+  bottom: 15%;
+  width: 100%;
+  text-align: center;
+  z-index: 20;
+  opacity: 0;
+}
+
+/* --- MODE: SANITY DEATH (MADNESS) --- */
+.sanity-death-mode .shatter-overlay {
+  background: radial-gradient(circle, rgba(139,0,0,0.2) 0%, rgba(50,0,0,0.9) 90%);
+  mix-blend-mode: multiply;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+.sanity-death-mode .shatter-vignette {
+  background: radial-gradient(circle, transparent 40%, #000 120%);
+  animation: vignette-pulse 3s ease-in-out infinite alternate;
+}
+.sanity-death-mode .shatter-text {
+  color: #8b0000;
+  text-shadow: 0 0 20px #000;
+  animation: text-emerge-glitch 5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+.sanity-death-mode .shatter-subtitle,
+.sanity-death-mode .shatter-subsubtitle {
+  color: #d0d0d0;
+  text-shadow: 0 0 10px #8b0000;
+  animation: subtitle-haunt 3s ease-out 1s forwards;
+}
+
+/* --- MODE: MUTUAL INSANITY (SAN DRAW) --- */
+.mutual-insanity-mode .shatter-overlay {
+  background: radial-gradient(circle, rgba(76, 29, 149, 0.2) 0%, rgba(5, 0, 10, 0.95) 90%);
+}
+.mutual-insanity-mode .shatter-vignette {
+  background: radial-gradient(circle, transparent 30%, #050010 110%);
+}
+.mutual-insanity-mode .shatter-text {
+  color: #d8b4fe;
+  text-shadow: 0 0 20px #4c1d95, 0 0 40px #000;
+  animation: draw-text-glitch 4s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+.mutual-insanity-mode .shatter-subtitle,
+.mutual-insanity-mode .shatter-subsubtitle {
+  color: #a78bfa;
+  text-shadow: 0 0 10px #4c1d95;
+  animation: subtitle-haunt-purple 3s ease-out 1.5s forwards;
+}
+
+/* --- MODE: VICTORY (ASCENSION) --- */
+.victory-mode .shatter-overlay {
+  background: radial-gradient(circle, rgba(234, 179, 8, 0.15) 0%, rgba(0, 0, 0, 0.8) 100%);
+  animation: shine-pulse 4s ease-in-out infinite;
+}
+.victory-mode .shatter-vignette {
+  display: none;
+}
+.victory-mode .shatter-text {
+  color: #fde047; /* Yellow-300 */
+  text-shadow: 0 0 20px rgba(234, 179, 8, 0.8), 0 0 40px rgba(250, 204, 21, 0.4);
+  animation: ascension-rise 2s ease-out forwards;
+}
+.victory-mode .shatter-subtitle,
+.victory-mode .shatter-subsubtitle {
+  color: #fef08a; /* Yellow-200 */
+  text-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+  animation: ascension-fade-in 3s ease-out 1s forwards;
+}
+
+/* --- MODE: DEFEAT (ANNIHILATION - HP DEATH) --- */
+.defeat-mode .shatter-overlay {
+  background: radial-gradient(circle, rgba(153, 27, 27, 0.3) 0%, rgba(0, 0, 0, 0.9) 100%); /* Red-800 base */
+}
+.defeat-mode .shatter-text {
+  color: #991b1b; /* Red-800 */
+  text-shadow: 0 4px 10px #000;
+  transform: scale(2); /* Start huge */
+  animation: impact-slam 0.4s cubic-bezier(0.5, 0, 0.3, 1) forwards; /* Hard slam */
+}
+.defeat-mode .shatter-subtitle,
+.defeat-mode .shatter-subsubtitle {
+  color: #fca5a5; /* Red-300 */
+  text-shadow: 0 0 5px #7f1d1d;
+  animation: blood-drip 3s ease-out 1s forwards;
+}
+
+/* --- MODE: MUTUAL DESTRUCTION (HP DRAW) --- */
+.mutual-destruction-mode .shatter-overlay {
+  background: radial-gradient(circle, rgba(67, 20, 7, 0.4) 0%, rgba(20, 10, 5, 0.95) 100%); /* Orange/Black ash */
+}
+.mutual-destruction-mode .shatter-vignette {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(0, 0, 0, 0.1) 10px,
+    rgba(0, 0, 0, 0.1) 20px
+  );
+  animation: ash-drift 20s linear infinite;
+}
+.mutual-destruction-mode .shatter-text {
+  color: #fdba74; /* Orange-300 */
+  text-shadow: 0 0 10px #c2410c, 0 0 30px #000; /* Orange-700 glow */
+  animation: ember-glitch 4s ease-out forwards;
+}
+.mutual-destruction-mode .shatter-subtitle,
+.mutual-destruction-mode .shatter-subsubtitle {
+  color: #fed7aa; /* Orange-200 */
+  text-shadow: 0 0 10px #9a3412;
+  animation: ash-reveal 3s ease-out 1.5s forwards;
+}
+
+
+/* --- BUTTONS --- */
+.shatter-actions {
+  animation: button-fade-in 1s ease-out 3s forwards;
+}
+.btn-return {
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 1rem 3rem;
+  font-family: var(--font-display, serif);
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.btn-return:hover {
+  background: rgba(255,255,255,0.1);
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.5);
+}
+
+/* Variant Buttons */
+.sanity-death-mode .btn-return { border-color: #8b0000; color: #fca5a5; }
+.mutual-insanity-mode .btn-return { border-color: #6d28d9; color: #d8b4fe; }
+.victory-mode .btn-return { border-color: #fbbf24; color: #fde047; box-shadow: 0 0 10px rgba(251, 191, 36, 0.3); }
+.defeat-mode .btn-return { border-color: #7f1d1d; color: #991b1b; }
+.mutual-destruction-mode .btn-return { border-color: #c2410c; color: #fdba74; }
+
+
+/* --- ANIMATIONS --- */
+
+@keyframes bg-fade-in { to { opacity: 1; } }
+@keyframes button-fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Sanity / Horror */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+@keyframes vignette-pulse { from { opacity: 0.6; } to { opacity: 0.9; } }
+@keyframes text-emerge-glitch { 
+  0% { opacity: 0; transform: scale(3) skew(20deg); filter: blur(10px); } 
+  100% { opacity: 1; transform: scale(1) skew(0deg); filter: blur(0); }
+}
+@keyframes subtitle-haunt { from { opacity: 0; transform: translateY(20px); filter: blur(5px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes subtitle-haunt-purple { from { opacity: 0; transform: translateY(20px); filter: blur(5px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes draw-text-glitch {
+  0% { opacity: 0; transform: scale(2); filter: hue-rotate(90deg); }
+  50% { transform: skewX(-10deg); filter: invert(1); }
+  100% { opacity: 1; transform: scale(1); filter: none; }
+}
+
+/* Victory */
+@keyframes ascension-rise {
+  0% { opacity: 0; transform: translateY(50px) scale(0.8); }
+  100% { opacity: 1; transform: translateY(0) scale(1); text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+}
+@keyframes ascension-fade-in { from { opacity: 0; letter-spacing: 2em; } to { opacity: 1; letter-spacing: 0.8em; } }
+@keyframes shine-pulse { 0%, 100% { opacity: 0.8; } 50% { opacity: 1.0; } }
+
+/* Defeat */
+@keyframes impact-slam {
+  0% { opacity: 0; transform: scale(3); }
+  70% { opacity: 1; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes blood-drip { 
+  0% { opacity: 0; transform: translateY(-20px); color: #fff; } 
+  100% { opacity: 1; transform: translateY(0); color: #fca5a5; }
+}
+
+/* Mutual Destruction */
+@keyframes ember-glitch {
+  0% { opacity: 0; filter: contrast(200%); transform: scale(1.1); }
+  20% { opacity: 1; filter: sepia(100%); }
+  40% { transform: translate(-2px, 2px); }
+  60% { transform: translate(2px, -2px); }
+  80% { opacity: 0.8; }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes ash-reveal {
+  0% { opacity: 0; filter: grayscale(100%); }
+  100% { opacity: 1; filter: grayscale(0%); }
+}
+@keyframes ash-drift { from { background-position: 0 0; } to { background-position: 100px 100px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .shatter-container.is-active, .shatter-text, .shatter-subtitle, .shatter-subsubtitle, .shatter-actions { opacity: 1 !important; transform: none !important; }
+}

@@ -34,14 +34,21 @@ class Game::GameOverOverlayComponent < ApplicationComponent
     @result == :draw && @reason == :san
   end
 
+  def mutual_destruction?
+    @result == :draw && @reason == :hp
+  end
+
   def container_classes
     classes = [ "game-over-overlay" ]
     if mutual_insanity?
       classes << "mutual-insanity"
+    elsif mutual_destruction?
+      classes << "mutual-destruction"
     elsif sanity_death?
       classes << "sanity-death"
     else
       classes << @result.to_s
+      classes << determine_reason_class
     end
     classes.join(" ")
   end
@@ -63,6 +70,31 @@ class Game::GameOverOverlayComponent < ApplicationComponent
     when "SAN_DRAW" then :san
     when "HP_DRAW" then :hp
     else :other
+    end
+  end
+
+  def overlay_content
+    case
+    when mutual_insanity?
+      { mode: "mutual-insanity-mode", title: "DRAW", subtitle: "MUTUAL INSANITY", subsubtitle: "狂気への共振" }
+    when mutual_destruction?
+      { mode: "mutual-destruction-mode", title: "DRAW", subtitle: "MUTUAL DESTRUCTION", subsubtitle: "焦土と灰燼" }
+    when sanity_death?
+      { mode: "sanity-death-mode", title: "DEFEAT", subtitle: "DESCENDED INTO MADNESS", subsubtitle: "発狂" }
+    when @result == :win
+      { mode: "victory-mode", title: "VICTORY", subtitle: "THE THREAT SUBSIDES", subsubtitle: "脅威の排除" }
+    when @result == :loss
+      { mode: "defeat-mode", title: "DEFEAT", subtitle: "FATAL INJURY", subsubtitle: "肉体の崩壊" }
+    else
+      { mode: nil, title: "GAME OVER", subtitle: nil, subsubtitle: nil }
+    end
+  end
+
+  def determine_reason_class
+    case @reason
+    when :hp then "hp-death"
+    when :deck then "deck-death"
+    else "standard"
     end
   end
 end

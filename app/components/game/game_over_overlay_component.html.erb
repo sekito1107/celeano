@@ -1,40 +1,20 @@
+<% content = overlay_content %>
 <div class="<%= container_classes %>">
-  <% if mutual_insanity? %>
-    <!-- Mutual Insanity (Draw) Structure -->
-    <div class="shatter-container is-active mutual-insanity-mode">
-      <div class="shatter-overlay"></div>
-      <div class="shatter-vignette"></div>
-      <div class="shatter-text-wrapper">
-        <div class="shatter-text">DRAW</div>
-        <div class="shatter-subtitle">MUTUAL INSANITY</div>
-        <div class="shatter-subsubtitle">狂気への共振</div>
-      </div>
-      
-      <div class="shatter-actions">
-        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
-      </div>
+  <div class="shatter-container is-active <%= content[:mode] %>">
+    <div class="shatter-overlay"></div>
+    <div class="shatter-vignette"></div>
+    <div class="shatter-text-wrapper">
+      <div class="shatter-text"><%= content[:title] %></div>
+      <% if content[:subtitle] %>
+        <div class="shatter-subtitle"><%= content[:subtitle] %></div>
+      <% end %>
+      <% if content[:subsubtitle] %>
+        <div class="shatter-subsubtitle"><%= content[:subsubtitle] %></div>
+      <% end %>
     </div>
-  <% elsif sanity_death? %>
-    <!-- New Shatter Effect Structure -->
-    <div class="shatter-container is-active">
-      <div class="shatter-overlay"></div>
-      <div class="shatter-vignette"></div>
-      <div class="shatter-text-wrapper">
-        <div class="shatter-text">DESCENDED INTO MADNESS</div>
-        <div class="shatter-subtitle">狂気に堕ちた</div>
-      </div>
-      
-      <div class="shatter-actions">
-        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
-      </div>
+    
+    <div class="shatter-actions">
+      <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
     </div>
-  <% else %>
-    <div class="overlay-content">
-      <h1 class="game-over-title"><%= title %></h1>
-      
-      <div class="game-over-actions">
-        <%= link_to "Return to Lobby", lobby_path, class: "btn-return" %>
-      </div>
-    </div>
-  <% end %>
+  </div>
 </div>

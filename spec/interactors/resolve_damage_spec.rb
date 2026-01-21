@@ -4,7 +4,7 @@ RSpec.describe ResolveDamage, type: :interactor do
   let(:game) { create(:game, seed: 12345) }
   let(:user) { create(:user) }
   let(:opponent_user) { create(:user) }
-  let!(:player) { create(:game_player, game: game, user: user) }
+  let!(:player) { create(:game_player, game: game, user: user, hp: 20) }
   let!(:opponent) { create(:game_player, game: game, user: opponent_user, hp: 20) }
   let!(:turn) { create(:turn, game: game, turn_number: 1) }
 
@@ -138,7 +138,7 @@ RSpec.describe ResolveDamage, type: :interactor do
 
         expect {
           described_class.call(attack_plan: attack_plan, game: game, turn: turn)
-        }.to change { BattleLog.where(event_type: "attack").count }.by(1)
+        }.to change { BattleLog.where(event_type: "attack").count }.by(2)
 
         # ゲームは終了している
         game.reload
@@ -146,6 +146,42 @@ RSpec.describe ResolveDamage, type: :interactor do
 
         # 敗北判定のログが出ているか確認
         expect(BattleLog.exists?(event_type: 'game_finish')).to be true
+      end
+    end
+
+    context '双方が同時に致命傷を受ける場合（相打ち / HP Draw）' do
+      let!(:attacker_p1) do
+        create(:game_card, game: game, user: user, game_player: player,
+               card: unit_card, location: :board, position: :left, current_attack: "20")
+      end
+      let!(:attacker_p2) do
+        create(:game_card, game: game, user: opponent_user, game_player: opponent,
+               card: unit_card, location: :board, position: :right, current_attack: "20")
+      end
+
+      # 攻撃プラン: P1のユニット -> P2本体, P2のユニット -> P1本体
+      let(:attack_plan) do
+        [
+          { attacker: attacker_p1, target: opponent, target_type: :player },
+          { attacker: attacker_p2, target: player, target_type: :player }
+        ]
+      end
+
+      it 'HP DRAW（相打ち）としてゲームが終了する' do
+        opponent.update!(hp: 20)
+
+        described_class.call(attack_plan: attack_plan, game: game, turn: turn)
+
+        game.reload
+        expect(game.finished?).to be true
+        expect(game.finish_reason).to eq("HP_DRAW")
+        expect(game.winner_id).to be_nil
+        expect(game.loser_id).to be_nil
+
+        # ログ確認
+        finish_log = BattleLog.find_by(event_type: "game_finish")
+        expect(finish_log.details['reason']).to eq("HP_DRAW")
+        expect(finish_log.details['is_draw']).to be true
       end
     end
 
