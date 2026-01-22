@@ -174,13 +174,13 @@ export default class extends Controller {
   async animateReveal(log) {
     const cardId = log.details.card_id;
     let cardEl = document.querySelector(`#game-card-${cardId}`);
-    
+
     // 如果要素找不到且日志中含有HTML，则动态生成（适用于对手召唤时DOM未同步的情况）
     if (!cardEl && log.details.card_html) {
       const template = document.createElement('div');
       template.innerHTML = log.details.card_html.trim();
       cardEl = template.firstChild;
-      
+
       const playerId = log.details.owner_player_id;
       const position = log.details.position;
       const fieldEl = document.querySelector(
