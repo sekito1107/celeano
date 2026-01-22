@@ -43,7 +43,12 @@ class RevealCards
         )
       end
 
-      game_card.log_event!(:unit_revealed, log_details)
+      # Render card HTML for dynamic reveal (fixes DOM sync issues)
+      card_html = ApplicationController.render(
+        Game::CardComponent.new(card_entity: game_card, variant: :field)
+      )
+
+      game_card.log_event!(:unit_revealed, log_details.merge(card_html: card_html))
 
       # 召喚時効果をトリガー
       game_card.trigger(:on_play)

@@ -30,7 +30,8 @@
 }
 
 /* Damage */
-.animate-damage {
+/* Damage: Target simple-frame to avoid conflict with wrapper-level movement */
+.animate-damage .simple-frame {
   animation: damage 1.0s ease-in-out;
 }
 
@@ -394,21 +395,22 @@
   .animate-reveal,
   .animate-attack-up,
   .animate-attack-down,
-  .animate-damage,
+  .animate-damage .simple-frame,
+  .animate-reveal-flash .simple-frame,
   .animate-death,
   .animate-spell,
   .damage-number,
   .spell-cut-in-container.animate,
   .spell-cut-in-container.animate .spell-cut-in-content,
   .animate-target-glow::after,
-  .animate-buff,
+  .animate-buff .simple-frame,
   .animate-move-to-graveyard {
     animation-duration: 0.1s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.1s !important;
   }
   
-  .animate-damage {
+  .animate-damage .simple-frame {
     animation: none !important;
     background-color: rgba(255, 0, 0, 0.4) !important;
   }
@@ -436,7 +438,7 @@
 /* .animate-draw class is no longer used but kept as comment or removed */
 
 /* --- Summon Cost Flash (Combined Reveal) --- */
-.animate-reveal-flash {
+.animate-reveal-flash .simple-frame {
   animation: reveal-with-flash 1.2s ease-out forwards;
 }
 
