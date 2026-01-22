@@ -88,6 +88,7 @@ export default class extends Controller {
 
   async playCombatPhase(combatLogs) {
     // 画面上の列（Column）ごとにウェーブを分ける
+    // 0: Viewer's Left, 1: Viewer's Center, 2: Viewer's Right
     const waves = [[], [], []];
 
     combatLogs.forEach((log) => {
@@ -99,18 +100,20 @@ export default class extends Controller {
         log.details.attacker_position,
         attackerEl
       );
-      if (waveIndex !== -1) {
+
+      if (waveIndex >= 0 && waveIndex <= 2) {
         waves[waveIndex].push(log);
-      } else {
-        waves[0].push(log);
       }
     });
 
-    for (const waveLogs of waves) {
+    // 常にWave 0 (左) -> Wave 1 (中) -> Wave 2 (右) の順で再生
+    for (let i = 0; i < waves.length; i++) {
+      const waveLogs = waves[i];
       if (waveLogs.length > 0) {
         // 同じ列の攻撃を同時に再生
         await Promise.all(waveLogs.map((log) => this.playLog(log)));
-        await this.delay(800); // Slower wave transition
+        // ウェーブ間の待機時間を統一
+        await this.delay(800);
       }
     }
   }
@@ -171,9 +174,32 @@ export default class extends Controller {
   async animateReveal(log) {
     const cardId = log.details.card_id;
     let cardEl = document.querySelector(`#game-card-${cardId}`);
+    
+    // 如果要素找不到且日志中含有HTML，则动态生成（适用于对手召唤时DOM未同步的情况）
+    if (!cardEl && log.details.card_html) {
+      const template = document.createElement('div');
+      template.innerHTML = log.details.card_html.trim();
+      cardEl = template.firstChild;
+      
+      const playerId = log.details.owner_player_id;
+      const position = log.details.position;
+      const fieldEl = document.querySelector(
+        `[data-game--animation-player-id-value="${playerId}"]`
+      );
+      if (fieldEl) {
+        const slotEl = fieldEl.querySelector(
+          `[data-game--animation-target="slot"][data-position="${position}"]`
+        );
+        if (slotEl) {
+          slotEl.innerHTML = '';
+          slotEl.appendChild(cardEl);
+        }
+      }
+    }
+
     if (!cardEl) return;
 
-    // 相手のカードなどでスロット外にある場合、指定のスロットへ移動させる
+    // 既にスロット内にある場合でも、位置を確認して移動させる（念のため）
     if (!cardEl.closest('.field-slot')) {
       const playerId = log.details.owner_player_id;
       const position = log.details.position;

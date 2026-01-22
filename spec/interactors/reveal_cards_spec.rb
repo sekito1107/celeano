@@ -44,6 +44,8 @@ RSpec.describe RevealCards, type: :interactor do
         log = BattleLog.last
         expect(log.event_type).to eq 'unit_revealed'
         expect(log.details['card_id']).to eq resolving_unit.id
+        expect(log.details['card_html']).to be_present
+        expect(log.details['card_html']).to include("game-card-#{resolving_unit.id}")
       end
 
       it 'on_play効果がトリガーされる' do

@@ -30,7 +30,8 @@
 }
 
 /* Damage */
-.animate-damage {
+/* Damage: Target simple-frame to avoid conflict with wrapper-level movement */
+.animate-damage .simple-frame {
   animation: damage 1.0s ease-in-out;
 }
 
@@ -436,7 +437,7 @@
 /* .animate-draw class is no longer used but kept as comment or removed */
 
 /* --- Summon Cost Flash (Combined Reveal) --- */
-.animate-reveal-flash {
+.animate-reveal-flash .simple-frame {
   animation: reveal-with-flash 1.2s ease-out forwards;
 }
 
