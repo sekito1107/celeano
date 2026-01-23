@@ -38,4 +38,4 @@ end
 gem "bcrypt", "~> 3.1"
 
 gem "capybara", "~> 3.40", group: :test
-gem "selenium-webdriver", "~> 4.39", group: :test
+gem "selenium-webdriver", "~> 4.40", group: :test
